@@ -1,7 +1,9 @@
+import Nav from './components/Nav';
+
 function App() {
 	return (
 		<>
-			<h1>Kanban</h1>
+			<Nav />
 		</>
 	);
 }
