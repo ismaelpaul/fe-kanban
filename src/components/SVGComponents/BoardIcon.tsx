@@ -2,7 +2,7 @@ interface BoardProps {
 	iconClass?: string;
 }
 
-const Board = ({ iconClass }: BoardProps) => {
+const BoardIcon = ({ iconClass }: BoardProps) => {
 	return (
 		<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
 			<path
@@ -14,4 +14,4 @@ const Board = ({ iconClass }: BoardProps) => {
 	);
 };
 
-export default Board;
+export default BoardIcon;
