@@ -1,9 +1,11 @@
-import Nav from './components/Nav';
+import Columns from './components/Columns/Columns';
+import Nav from './components/Nav/Nav';
 
 function App() {
 	return (
 		<>
 			<Nav />
+			<Columns />
 		</>
 	);
 }
