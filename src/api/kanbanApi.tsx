@@ -22,3 +22,14 @@ export const getAllBoards = async () => {
 		return err.response?.data;
 	}
 };
+
+export const getColumnsByBoardId = async (boardId: number) => {
+	try {
+		const response = await kanbanApi.get(`/boards/${boardId}/columns`);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
