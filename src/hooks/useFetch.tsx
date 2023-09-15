@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 interface UseFetchProps {
-	queryKey: string;
+	queryKey: string | readonly unknown[];
 	queryFn: () => void;
 }
 const useFetch = ({ queryKey, queryFn }: UseFetchProps) => {
