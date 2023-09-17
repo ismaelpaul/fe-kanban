@@ -1,11 +1,13 @@
-import Columns from './components/Columns/Columns';
+import ColumnsList from './components/Columns/ColumnsList';
 import Nav from './components/Nav/Nav';
 
 function App() {
 	return (
 		<>
 			<Nav />
-			<Columns />
+			<main>
+				<ColumnsList />
+			</main>
 		</>
 	);
 }
