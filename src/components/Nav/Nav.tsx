@@ -19,16 +19,18 @@ const Nav = () => {
 		queryFn: getAllBoards,
 	});
 
+	const firstBoard = (data as { boards: { name: string }[] } | undefined)
+		?.boards[0]?.name;
+
 	useEffect(() => {
 		const urlSearchParams = new URLSearchParams(window.location.search);
-		const boardName = urlSearchParams.get('boardName') || 'Board';
+		const boardName = urlSearchParams.get('boardName') || firstBoard;
 		console.log(window.location.search);
-		console.log(boardName, '<<<< ');
 
 		if (boardName) {
 			setSelectedBoard(boardName);
 		}
-	}, []);
+	}, [firstBoard]);
 
 	if (isLoading) {
 		return <span>Loading...</span>;
