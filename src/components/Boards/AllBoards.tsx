@@ -4,7 +4,7 @@ import DarkTheme from '../SVGComponents/DarkTheme';
 import ToggleTheme from '../SVGComponents/ToggleTheme';
 import { Board } from '../../interfaces/IBoard';
 import BoardIcon from '../SVGComponents/BoardIcon';
-import useBoardStore from '../../store';
+import useBoardStore from '../../store/boardStore';
 
 type AllBoardsProps = {
 	boards: Board[];
