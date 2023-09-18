@@ -44,3 +44,14 @@ export const getTasksByColumnId = async (columnId: number) => {
 		return err.response?.data;
 	}
 };
+
+export const getSubtasksByTaskId = async (taskId: number) => {
+	try {
+		const response = await kanbanApi.get(`/tasks/${taskId}/subtasks`);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
