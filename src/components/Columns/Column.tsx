@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SingleColumn } from '../../interfaces/IColumn';
 import TaskList from '../Tasks/TaskList';
 
@@ -6,6 +7,7 @@ interface ColumnProps {
 	index: number;
 }
 const Column = ({ column, index }: ColumnProps) => {
+	const [tasksLength, setTasksLength] = useState(0);
 	let bgColor;
 
 	if (index === 0) {
@@ -22,11 +24,11 @@ const Column = ({ column, index }: ColumnProps) => {
 					className={` ${bgColor} w-[0.938rem] h-[0.938rem] rounded-full`}
 				></div>
 				<h1 className="text-s-heading text-medium-grey tracking-2.4px">
-					{column.name.toUpperCase() + '()'}
+					{column.name.toUpperCase()} ({tasksLength})
 				</h1>
 			</div>
 			<div className="flex flex-col gap-5 py-8">
-				<TaskList columnId={column.column_id} />
+				<TaskList columnId={column.column_id} setTasksLength={setTasksLength} />
 			</div>
 		</div>
 	);
