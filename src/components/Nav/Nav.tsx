@@ -25,7 +25,6 @@ const Nav = () => {
 	useEffect(() => {
 		const urlSearchParams = new URLSearchParams(window.location.search);
 		const boardName = urlSearchParams.get('boardName') || firstBoard;
-		console.log(window.location.search);
 
 		if (boardName) {
 			setSelectedBoard(boardName);
@@ -45,7 +44,7 @@ const Nav = () => {
 	const btnBoardsText = selectedBoard;
 	const btnBoardsClass = 'text-l-heading';
 
-	const btnAddTaskClass = 'bg-purple py-2.5 px-5 rounded-full';
+	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full`;
 
 	const toggleBoardsDropdown = () => {
 		setIsAllBoardsOpen(!isAllBoardsOpen);
