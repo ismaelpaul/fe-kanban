@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { getTasksByColumnId } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import Task from './Task';
@@ -6,14 +6,20 @@ import { ITasks } from '../../interfaces/ITask';
 
 interface TaskListProps {
 	columnId: number;
+	setTasksLength: (taskLenght: number) => void;
 }
-const TaskList = ({ columnId }: TaskListProps) => {
-	console.log(columnId, '<<<< colum id taskslist');
-
+const TaskList = ({ columnId, setTasksLength }: TaskListProps) => {
 	const { data, isLoading, isError } = useFetch({
 		queryKey: ['tasks', columnId],
 		queryFn: () => getTasksByColumnId(columnId),
 	});
+
+	useEffect(() => {
+		if (!isLoading && !isError && data) {
+			const { tasks }: ITasks = data;
+			setTasksLength(tasks.length);
+		}
+	}, [data, isLoading, isError, setTasksLength]);
 
 	if (isLoading) {
 		return <span>Loading...</span>;
@@ -29,7 +35,7 @@ const TaskList = ({ columnId }: TaskListProps) => {
 		<>
 			{tasks.map((task) => {
 				return (
-					<React.Fragment>
+					<React.Fragment key={task.task_id}>
 						<Task task={task} />
 					</React.Fragment>
 				);
