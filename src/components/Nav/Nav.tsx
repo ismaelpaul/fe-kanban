@@ -9,10 +9,12 @@ import AllBoards from '../Boards/AllBoards';
 import ChevronUp from '../SVGComponents/ChevronUp';
 import useFetch from '../../hooks/useFetch';
 import { Boards } from '../../interfaces/IBoard';
+import AddNewTaskModal from '../Tasks/AddNewTaskModal';
 
 const Nav = () => {
 	const [selectedBoard, setSelectedBoard] = useState<string>('');
 	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState<boolean>(false);
+	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
 
 	const { data, isLoading, isError } = useFetch({
 		queryKey: 'boards',
@@ -50,9 +52,13 @@ const Nav = () => {
 		setIsAllBoardsOpen(!isAllBoardsOpen);
 	};
 
+	const openAddNewTaskModal = () => {
+		setIsAddNewTaskModalOpen(true);
+	};
+
 	return (
 		<>
-			<div className="flex items-center justify-between h-16 px-4">
+			<div className="bg-white flex items-center justify-between h-16 px-4 fixed inset-0 z-40">
 				<div className="flex gap-4">
 					<LogoMobile />
 					<div className="flex items-center gap-2">
@@ -66,6 +72,7 @@ const Nav = () => {
 				</div>
 				<div className="flex items-center gap-4">
 					<Button
+						onClick={openAddNewTaskModal}
 						svgComponent={<AddTaskMobile />}
 						buttonClass={btnAddTaskClass}
 					/>
@@ -74,7 +81,7 @@ const Nav = () => {
 			</div>
 			{isAllBoardsOpen ? (
 				<>
-					<div className="bg-black h-screen opacity-50"></div>
+					<div className="fixed inset-0 bg-black opacity-50 z-30"></div>
 					<AllBoards
 						boards={boards}
 						selectedBoard={selectedBoard}
@@ -82,6 +89,11 @@ const Nav = () => {
 						setIsAllBoardsOpen={setIsAllBoardsOpen}
 					/>
 				</>
+			) : (
+				<></>
+			)}
+			{isAddNewTaskModalOpen ? (
+				<AddNewTaskModal setIsAddNewTaskModalOpen={setIsAddNewTaskModalOpen} />
 			) : (
 				<></>
 			)}
