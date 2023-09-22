@@ -1,13 +1,22 @@
 import { Switch } from '@headlessui/react';
 import { useState } from 'react';
+import useColorMode from '../../hooks/useColorMode';
 
 const ToggleTheme = () => {
-	const [enabled, setEnabled] = useState(false);
+	const [colorMode, setColorMode] = useColorMode();
+
+	const [enabled, setEnabled] = useState(colorMode === 'dark' ? true : false);
+
+	const handleToggle = () => {
+		(setColorMode as (value: string) => void)(!enabled ? 'dark' : 'light');
+		setEnabled(!enabled);
+	};
+
 	return (
 		<>
 			<Switch
 				checked={enabled}
-				onChange={setEnabled}
+				onChange={handleToggle}
 				className="bg-purple relative inline-flex h-6 w-11 items-center rounded-full"
 			>
 				<span
