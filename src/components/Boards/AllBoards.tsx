@@ -1,7 +1,7 @@
 import React from 'react';
 import LightTheme from '../SVGComponents/LightTheme';
 import DarkTheme from '../SVGComponents/DarkTheme';
-import ToggleTheme from '../SVGComponents/ToggleTheme';
+import ToggleTheme from '../ToggleTheme/ToggleTheme';
 import { Board } from '../../interfaces/IBoard';
 import BoardIcon from '../SVGComponents/BoardIcon';
 import useBoardStore from '../../store/boardStore';
@@ -33,7 +33,7 @@ const AllBoards = ({
 	};
 
 	return (
-		<div className="bg-white absolute w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem]">
+		<div className="bg-white dark:bg-dark-grey absolute w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-50">
 			<span className="inline-block text-medium-grey text-12px font-semiBold tracking-2.4px mb-[1.188rem] pl-6">
 				ALL BOARDS ({boards.length})
 			</span>
@@ -62,7 +62,7 @@ const AllBoards = ({
 				<BoardIcon iconClass={btnAddTaskClass} />
 				<span> + Create New Board</span>
 			</div>
-			<div className="bg-light-bg flex items-center justify-center gap-6 h-12 rounded-md mt-4 mx-4">
+			<div className="bg-light-bg dark:bg-dark-bg flex items-center justify-center gap-6 h-12 rounded-md mt-4 mx-4">
 				<LightTheme />
 				<ToggleTheme />
 				<DarkTheme />

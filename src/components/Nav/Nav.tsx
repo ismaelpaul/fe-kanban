@@ -12,8 +12,8 @@ import { Boards } from '../../interfaces/IBoard';
 import AddNewTaskModal from '../Tasks/AddNewTaskModal';
 
 const Nav = () => {
-	const [selectedBoard, setSelectedBoard] = useState<string>('');
-	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState<boolean>(false);
+	const [selectedBoard, setSelectedBoard] = useState('');
+	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
 
 	const { data, isLoading, isError } = useFetch({
@@ -44,7 +44,7 @@ const Nav = () => {
 	const { boards }: Boards = data || { boards: [] };
 
 	const btnBoardsText = selectedBoard;
-	const btnBoardsClass = 'text-l-heading';
+	const btnBoardsClass = 'text-l-heading dark:text-white';
 
 	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full`;
 
@@ -58,7 +58,7 @@ const Nav = () => {
 
 	return (
 		<>
-			<div className="bg-white flex items-center justify-between h-16 px-4 fixed inset-0 z-40">
+			<div className="bg-white dark:bg-dark-grey flex items-center justify-between h-16 px-4 fixed inset-0 z-40">
 				<div className="flex gap-4">
 					<LogoMobile />
 					<div className="flex items-center gap-2">
