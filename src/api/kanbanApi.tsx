@@ -55,3 +55,20 @@ export const getSubtasksByTaskId = async (taskId: number) => {
 		return err.response?.data;
 	}
 };
+
+export const updateSubtaskCompletionById = async (
+	subtaskId: number,
+	completionStatus: object
+) => {
+	try {
+		const response = await kanbanApi.patch(
+			`/subtasks/${subtaskId}`,
+			completionStatus
+		);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
