@@ -10,11 +10,17 @@ import ChevronUp from '../SVGComponents/ChevronUp';
 import useFetch from '../../hooks/useFetch';
 import { Boards } from '../../interfaces/IBoard';
 import AddNewTaskModal from '../Tasks/AddNewTaskModal';
+import KebabMenuModal from '../KebabMenu/KebabMenuModal';
 
 const Nav = () => {
 	const [selectedBoard, setSelectedBoard] = useState('');
 	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
+	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+
+	const kebabMenuEdit = 'Edit Board';
+	const kebabMenuDelete = 'Delete Board';
+	const kebabMenuPosition = 'top-16 right-4';
 
 	const { data, isLoading, isError } = useFetch({
 		queryKey: 'boards',
@@ -56,6 +62,10 @@ const Nav = () => {
 		setIsAddNewTaskModalOpen(true);
 	};
 
+	const handleKebabMenu = () => {
+		setIsKebabModalOpen(!isKebabModalOpen);
+	};
+
 	return (
 		<>
 			<div className="bg-white dark:bg-dark-grey flex items-center justify-between h-16 px-4 fixed inset-0 z-40">
@@ -76,7 +86,18 @@ const Nav = () => {
 						svgComponent={<AddTaskMobile />}
 						buttonClass={btnAddTaskClass}
 					/>
-					<KebabMenu />
+					<div onClick={handleKebabMenu}>
+						<KebabMenu />
+					</div>
+					{isKebabModalOpen ? (
+						<KebabMenuModal
+							editText={kebabMenuEdit}
+							deleteText={kebabMenuDelete}
+							menuPosition={kebabMenuPosition}
+						/>
+					) : (
+						<></>
+					)}
 				</div>
 			</div>
 			{isAllBoardsOpen ? (
