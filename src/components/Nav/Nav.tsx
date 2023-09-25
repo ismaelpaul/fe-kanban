@@ -11,12 +11,14 @@ import useFetch from '../../hooks/useFetch';
 import { Boards } from '../../interfaces/IBoard';
 import AddNewTaskModal from '../Tasks/AddNewTaskModal';
 import KebabMenuModal from '../KebabMenu/KebabMenuModal';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 const Nav = () => {
 	const [selectedBoard, setSelectedBoard] = useState('');
 	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const kebabMenuEdit = 'Edit Board';
 	const kebabMenuDelete = 'Delete Board';
@@ -94,12 +96,23 @@ const Nav = () => {
 							editText={kebabMenuEdit}
 							deleteText={kebabMenuDelete}
 							menuPosition={kebabMenuPosition}
+							setIsKebabMenuOpen={setIsKebabModalOpen}
+							setIsDeleteModalOpen={setIsDeleteModalOpen}
 						/>
 					) : (
 						<></>
 					)}
 				</div>
 			</div>
+			{isDeleteModalOpen ? (
+				<DeleteModal
+					itemName={selectedBoard}
+					parentComponent="Nav"
+					setIsDeleteModalOpen={setIsDeleteModalOpen}
+				/>
+			) : (
+				<></>
+			)}
 			{isAllBoardsOpen ? (
 				<>
 					<div className="fixed inset-0 bg-black opacity-50 z-30"></div>
