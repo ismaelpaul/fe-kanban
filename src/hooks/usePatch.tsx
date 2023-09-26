@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 
 interface PatchProps {
 	patchFn: (resourceId: number, updatedData: object) => Promise<void>;
@@ -7,18 +7,9 @@ interface PatchProps {
 	queryKey: string;
 }
 const usePatch = () => {
-	const queryClient = useQueryClient();
-
 	const patchMutation = useMutation(
 		async ({ patchFn, resourceId, updatedData }: PatchProps) => {
 			return patchFn(resourceId, updatedData);
-		},
-		{
-			onSuccess: (data, { queryKey }) => {
-				if (queryKey) {
-					queryClient.invalidateQueries(queryKey);
-				}
-			},
 		}
 	);
 
