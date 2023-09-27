@@ -12,6 +12,7 @@ import { Boards } from '../../interfaces/IBoard';
 import AddNewTaskModal from '../Tasks/AddNewTaskModal';
 import KebabMenuModal from '../KebabMenu/KebabMenuModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import AddNewBoardModal from '../Boards/AddNewBoardModal';
 
 const Nav = () => {
 	const [selectedBoard, setSelectedBoard] = useState('');
@@ -19,6 +20,7 @@ const Nav = () => {
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [isAddNewBoardkModalOpen, setIsAddNewBoardModalOpen] = useState(false);
 
 	const kebabMenuEdit = 'Edit Board';
 	const kebabMenuDelete = 'Delete Board';
@@ -121,6 +123,7 @@ const Nav = () => {
 						selectedBoard={selectedBoard}
 						setSelectedBoard={setSelectedBoard}
 						setIsAllBoardsOpen={setIsAllBoardsOpen}
+						setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
 					/>
 				</>
 			) : (
@@ -128,6 +131,13 @@ const Nav = () => {
 			)}
 			{isAddNewTaskModalOpen ? (
 				<AddNewTaskModal setIsAddNewTaskModalOpen={setIsAddNewTaskModalOpen} />
+			) : (
+				<></>
+			)}
+			{isAddNewBoardkModalOpen ? (
+				<AddNewBoardModal
+					setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
+				/>
 			) : (
 				<></>
 			)}
