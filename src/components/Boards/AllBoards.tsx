@@ -8,15 +8,17 @@ import useBoardStore from '../../store/boardStore';
 
 type AllBoardsProps = {
 	boards: Board[];
-	setSelectedBoard: React.Dispatch<React.SetStateAction<string>>;
+	setSelectedBoard: (arg: string) => void;
 	selectedBoard: string;
-	setIsAllBoardsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	setIsAllBoardsOpen: (arg: boolean) => void;
+	setIsAddNewBoardModalOpen: (arg: boolean) => void;
 };
 const AllBoards = ({
 	boards,
 	selectedBoard,
 	setSelectedBoard,
 	setIsAllBoardsOpen,
+	setIsAddNewBoardModalOpen,
 }: AllBoardsProps) => {
 	const setBoardId = useBoardStore((state) => state.setBoardId);
 	const btnAddTaskClass = 'fill-purple';
@@ -32,8 +34,13 @@ const AllBoards = ({
 		setIsAllBoardsOpen(false);
 	};
 
+	const handleAddNewBoardModal = () => {
+		setIsAddNewBoardModalOpen(true);
+		setIsAllBoardsOpen(false);
+	};
+
 	return (
-		<div className="bg-white dark:bg-dark-grey absolute w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-50">
+		<div className="bg-white dark:bg-dark-grey absolute w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40">
 			<span className="inline-block text-medium-grey text-12px font-semiBold tracking-2.4px mb-[1.188rem] pl-6">
 				ALL BOARDS ({boards.length})
 			</span>
@@ -60,7 +67,7 @@ const AllBoards = ({
 			})}
 			<div className="flex items-center gap-3 h-12 text-m-heading pl-6 text-purple">
 				<BoardIcon iconClass={btnAddTaskClass} />
-				<span> + Create New Board</span>
+				<span onClick={handleAddNewBoardModal}> + Create New Board</span>
 			</div>
 			<div className="bg-light-bg dark:bg-dark-bg flex items-center justify-center gap-6 h-12 rounded-md mt-4 mx-4">
 				<LightTheme />
