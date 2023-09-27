@@ -3,6 +3,7 @@ interface ButtonProps {
 	buttonText?: string;
 	svgComponent?: React.ReactNode;
 	onClick?: () => void;
+	type?: 'button' | 'submit' | 'reset';
 }
 
 const Button = ({
@@ -10,9 +11,10 @@ const Button = ({
 	buttonText,
 	svgComponent,
 	onClick,
+	type,
 }: ButtonProps) => {
 	return (
-		<button onClick={onClick} className={buttonClass}>
+		<button type={type} onClick={onClick} className={buttonClass}>
 			{svgComponent && <>{svgComponent}</>}
 			{buttonText}
 		</button>
