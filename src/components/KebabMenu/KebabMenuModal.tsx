@@ -17,7 +17,6 @@ const KebabMenuModal = ({
 }: KebabMenuProps) => {
 	const handleDeleteModal = () => {
 		setIsKebabMenuOpen(false);
-		console.log('task modal');
 
 		setIsTaskModalOpen?.(false);
 		setIsDeleteModalOpen(true);
