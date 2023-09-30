@@ -72,3 +72,12 @@ export const updateSubtaskCompletionById = async (
 		return err.response?.data;
 	}
 };
+
+export const deleteTaskById = async (taskId: number): Promise<void> => {
+	try {
+		await kanbanApi.delete(`/tasks/${taskId}`);
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+	}
+};
