@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 
 interface PatchProps {
 	patchFn: (resourceId: number, updatedData: object) => Promise<void>;
