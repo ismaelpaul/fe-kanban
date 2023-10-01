@@ -1,11 +1,15 @@
-import { useQuery } from 'react-query';
+import { useQuery, QueryKey, UseQueryResult } from '@tanstack/react-query';
 
-interface UseFetchProps {
-	queryKey: string | readonly unknown[];
-	queryFn: () => void;
+interface UseFetchProps<TData> {
+	queryKey: QueryKey;
+	queryFn: () => Promise<TData>;
 }
-const useFetch = ({ queryKey, queryFn }: UseFetchProps) => {
+
+function useFetch<TData>({
+	queryKey,
+	queryFn,
+}: UseFetchProps<TData>): UseQueryResult<TData> {
 	return useQuery(queryKey, queryFn);
-};
+}
 
 export default useFetch;
