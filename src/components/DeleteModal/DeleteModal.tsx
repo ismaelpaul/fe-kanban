@@ -4,12 +4,14 @@ interface DeleteModalPros {
 	itemName: string;
 	parentComponent: string;
 	setIsDeleteModalOpen: (arg: boolean) => void;
+	onClick: () => void;
 }
 
 const DeleteModal = ({
 	itemName,
 	parentComponent,
 	setIsDeleteModalOpen,
+	onClick,
 }: DeleteModalPros) => {
 	const deleteBtnTex = 'Delete';
 	const deleteBtnClass =
@@ -34,7 +36,11 @@ const DeleteModal = ({
 					Are you sure you want to delete the '{itemName}' {complementaryText}{' '}
 					cannot be reversed.
 				</p>
-				<Button buttonText={deleteBtnTex} buttonClass={deleteBtnClass} />
+				<Button
+					buttonText={deleteBtnTex}
+					buttonClass={deleteBtnClass}
+					onClick={onClick}
+				/>
 				<Button
 					buttonText={cancelBtnText}
 					buttonClass={cancelBtnClass}
