@@ -23,6 +23,15 @@ export const getAllBoards = async () => {
 	}
 };
 
+export const deleteBoardById = async (boardId: number) => {
+	try {
+		await kanbanApi.delete(`/boards/${boardId}`);
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+	}
+};
+
 export const getColumnsByBoardId = async (boardId: number) => {
 	try {
 		const response = await kanbanApi.get(`/boards/${boardId}/columns`);
