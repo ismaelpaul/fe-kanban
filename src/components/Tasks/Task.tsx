@@ -8,8 +8,9 @@ import { ISubtasks, SingleSubtask } from '../../interfaces/ISubtask';
 
 interface TaskPros {
 	task: SingleTask;
+	columnId: number;
 }
-const Task = ({ task }: TaskPros) => {
+const Task = ({ task, columnId }: TaskPros) => {
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [totalSubtasks, setTotalSubtasks] = useState(0);
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
@@ -17,7 +18,7 @@ const Task = ({ task }: TaskPros) => {
 	const subtaskQueryKey = `subtasks_${task.task_id}`;
 
 	const { data, isLoading, isError } = useFetch({
-		queryKey: subtaskQueryKey,
+		queryKey: [subtaskQueryKey],
 		queryFn: () => getSubtasksByTaskId(task.task_id),
 	});
 
@@ -69,6 +70,7 @@ const Task = ({ task }: TaskPros) => {
 					totalSubtasks={totalSubtasks}
 					completedSubtasks={completedSubtasks}
 					setCompletedSubtasks={setCompletedSubtasks}
+					columnId={columnId}
 				/>
 			) : (
 				<></>
