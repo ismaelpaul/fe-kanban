@@ -6,13 +6,13 @@ import { Board } from '../../interfaces/IBoard';
 import BoardIcon from '../SVGComponents/BoardIcon';
 import useBoardStore from '../../store/boardStore';
 
-type AllBoardsProps = {
+interface AllBoardsProps {
 	boards: Board[];
 	setSelectedBoard: (arg: string) => void;
 	selectedBoard: string;
 	setIsAllBoardsOpen: (arg: boolean) => void;
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
-};
+}
 const AllBoards = ({
 	boards,
 	selectedBoard,
@@ -21,13 +21,18 @@ const AllBoards = ({
 	setIsAddNewBoardModalOpen,
 }: AllBoardsProps) => {
 	const setBoardId = useBoardStore((state) => state.setBoardId);
+
 	const btnAddTaskClass = 'fill-purple';
 
 	const handleSelectBoard = (board: Board) => {
 		const urlSearchParams = new URLSearchParams();
 		urlSearchParams.set('boardName', board.name);
-		window.history.pushState(null, '', `/?boardName=${board.name}`);
-
+		urlSearchParams.set('boardID', board.board_id.toString());
+		window.history.pushState(
+			null,
+			'',
+			`/?boardName=${board.name}&boardID=${board.board_id}`
+		);
 		setBoardId(board.board_id);
 
 		setSelectedBoard(board.name);
