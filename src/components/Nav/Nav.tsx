@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import ChevronDown from '../SVGComponents/ChevronDown';
-import { getAllBoards } from '../../api/kanbanApi';
+import { deleteBoardById, getAllBoards } from '../../api/kanbanApi';
 import LogoMobile from '../SVGComponents/LogoMobile';
 import KebabMenu from '../SVGComponents/KebabMenu';
 import AddTaskMobile from '../SVGComponents/AddTaskMobile';
@@ -13,6 +13,8 @@ import AddNewTaskModal from '../Tasks/AddNewTaskModal';
 import KebabMenuModal from '../KebabMenu/KebabMenuModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import AddNewBoardModal from '../Boards/AddNewBoardModal';
+import useDelete from '../../hooks/useDelete';
+import useBoardStore from '../../store/boardStore';
 
 const Nav = () => {
 	const [selectedBoard, setSelectedBoard] = useState('');
@@ -22,12 +24,17 @@ const Nav = () => {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isAddNewBoardkModalOpen, setIsAddNewBoardModalOpen] = useState(false);
 
+	const boardId = useBoardStore((state) => state.boardId);
+	const setBoardId = useBoardStore((state) => state.setBoardId);
+
 	const kebabMenuEdit = 'Edit Board';
 	const kebabMenuDelete = 'Delete Board';
 	const kebabMenuPosition = 'top-16 right-4';
 
+	const { deleteItem } = useDelete();
+
 	const { data, isLoading, isError } = useFetch({
-		queryKey: 'boards',
+		queryKey: ['boards'],
 		queryFn: getAllBoards,
 	});
 
@@ -37,11 +44,14 @@ const Nav = () => {
 	useEffect(() => {
 		const urlSearchParams = new URLSearchParams(window.location.search);
 		const boardName = urlSearchParams.get('boardName') || firstBoard;
+		const boardId = urlSearchParams.get('boardID') || '1';
+
+		setBoardId(Number(boardId));
 
 		if (boardName) {
 			setSelectedBoard(boardName);
 		}
-	}, [firstBoard]);
+	}, [firstBoard, setBoardId, data]);
 
 	if (isLoading) {
 		return <span>Loading...</span>;
@@ -68,6 +78,28 @@ const Nav = () => {
 
 	const handleKebabMenu = () => {
 		setIsKebabModalOpen(!isKebabModalOpen);
+	};
+
+	const handleDeleteBoard = async (boardId: number) => {
+		await deleteItem(() => deleteBoardById(boardId));
+		setIsDeleteModalOpen(false);
+
+		const newBoard = boards.length > 0 ? boards[0] : null;
+
+		if (!newBoard) {
+			console.error('No remaining boards.');
+			return;
+		}
+		setSelectedBoard(newBoard.name);
+
+		const urlSearchParams = new URLSearchParams(window.location.search);
+
+		urlSearchParams.set('boardID', newBoard.board_id.toString());
+		urlSearchParams.set('boardName', newBoard.name);
+
+		window.history.pushState(null, '', `/?${urlSearchParams.toString()}`);
+
+		setBoardId(Number(boardId));
 	};
 
 	return (
@@ -108,6 +140,7 @@ const Nav = () => {
 			</div>
 			{isDeleteModalOpen ? (
 				<DeleteModal
+					onClick={() => handleDeleteBoard(boardId)}
 					itemName={selectedBoard}
 					parentComponent="Nav"
 					setIsDeleteModalOpen={setIsDeleteModalOpen}
