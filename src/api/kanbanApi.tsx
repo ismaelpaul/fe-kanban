@@ -23,6 +23,17 @@ export const getAllBoards = async () => {
 	}
 };
 
+export const addNewBoard = async (newBoard: object) => {
+	try {
+		const response = await kanbanApi.post('/boards', newBoard);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
 export const deleteBoardById = async (boardId: number) => {
 	try {
 		await kanbanApi.delete(`/boards/${boardId}`);
