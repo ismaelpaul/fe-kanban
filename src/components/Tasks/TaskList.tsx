@@ -36,7 +36,7 @@ const TaskList = ({ columnId, setTasksLength }: TaskListProps) => {
 			{tasks.map((task) => {
 				return (
 					<React.Fragment key={task.task_id}>
-						<Task task={task} />
+						<Task task={task} columnId={columnId} />
 					</React.Fragment>
 				);
 			})}
