@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { getColumnsByBoardId } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import { IColumns } from '../../interfaces/IColumn';
-import useBoardStore from '../../store/boardStore';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import Column from './Column';
 import EmptyBoard from '../Boards/EmptyBoard';
+import useBoardStore from '../../store/boardStore';
 
 const ColumnsList = () => {
 	const boardId = useBoardStore((state) => state.boardId);
@@ -20,7 +20,7 @@ const ColumnsList = () => {
 	});
 
 	useEffect(() => {
-		queryClient.invalidateQueries('columns');
+		queryClient.invalidateQueries(['columns', boardId]);
 	}, [boardId, queryClient]);
 
 	if (isLoading) {
