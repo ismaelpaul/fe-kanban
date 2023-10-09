@@ -1,3 +1,5 @@
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+
 interface ButtonProps {
 	buttonClass: string;
 	buttonText?: string;
@@ -13,10 +15,12 @@ const Button = ({
 	onClick,
 	type,
 }: ButtonProps) => {
+	const { width } = useWindowDimensions();
+
+	const isMobile = width < 768;
 	return (
 		<button type={type} onClick={onClick} className={buttonClass}>
-			{svgComponent && <>{svgComponent}</>}
-			{buttonText}
+			{isMobile && svgComponent ? <>{svgComponent}</> : buttonText}
 		</button>
 	);
 };
