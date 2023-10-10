@@ -24,6 +24,19 @@ li {
 
 @layer base {
 	html {
-		font-family: Plus Jakarta Sans, system-ui, sans-serif;
+		font-family:
+			Plus Jakarta Sans,
+			system-ui,
+			sans-serif;
+	}
+}
+
+@layer utilities {
+	.tablet\:border-lines-light {
+		@apply border-lines-light;
+	}
+
+	.tablet\:dark\:border-lines-dark {
+		@apply dark:border-lines-dark;
 	}
 }
