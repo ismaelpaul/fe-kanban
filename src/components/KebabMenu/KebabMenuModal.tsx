@@ -13,19 +13,16 @@ const KebabMenuModal = ({
 	menuPosition,
 	setIsKebabMenuOpen,
 	setIsDeleteModalOpen,
-	setIsTaskModalOpen,
 }: KebabMenuProps) => {
 	const handleDeleteModal = () => {
 		setIsKebabMenuOpen(false);
-
-		setIsTaskModalOpen?.(false);
 		setIsDeleteModalOpen(true);
 	};
 
 	return (
 		<>
 			<div
-				className={`flex flex-col gap-4 pl-4 py-[1.375rem] w-48 bg-white rounded-lg absolute drop-shadow-card ${menuPosition}`}
+				className={`flex flex-col gap-4 pl-4 py-[1.375rem] w-48 bg-white dark:bg-dark-bg rounded-lg absolute drop-shadow-card ${menuPosition}`}
 			>
 				<span className="text-l-body text-medium-grey cursor-pointer">
 					{editText}
