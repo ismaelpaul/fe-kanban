@@ -91,7 +91,7 @@ const AddNewBoardModal = ({
 		<div className="fixed inset-0 flex items-center justify-center z-40">
 			<div className="fixed inset-0 bg-black opacity-50"></div>
 			<div
-				className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen"
+				className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:mx-0 tablet:w-[30rem]"
 				ref={modalRef}
 			>
 				<form id="newBoardForm" onSubmit={onSubmit}>

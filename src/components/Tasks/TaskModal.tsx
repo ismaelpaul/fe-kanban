@@ -57,7 +57,7 @@ const TaskModal = ({
 
 	const kebabMenuEdit = 'Edit Task';
 	const kebabMenuDelete = 'Delete Task';
-	const kebabMenuPosition = 'right-8';
+	const kebabMenuPosition = 'right-8 tablet: right-40';
 
 	const { patch } = usePatch();
 	const { deleteItem } = useDelete();
@@ -121,7 +121,7 @@ const TaskModal = ({
 			<div className="fixed inset-0 flex items-center justify-center z-40">
 				<div className="fixed inset-0 bg-black opacity-50"></div>
 				<div
-					className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen"
+					className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:mx-0 tablet:w-[30rem]"
 					ref={modalRef}
 				>
 					<div className="flex items-center justify-between gap-4">
