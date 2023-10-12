@@ -93,6 +93,17 @@ export const updateSubtaskCompletionById = async (
 	}
 };
 
+export const addNewTask = async (newTask: object) => {
+	try {
+		const response = await kanbanApi.post('/tasks', newTask);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
 export const deleteTaskById = async (taskId: number): Promise<void> => {
 	try {
 		await kanbanApi.delete(`/tasks/${taskId}`);
