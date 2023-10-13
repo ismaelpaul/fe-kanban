@@ -6,6 +6,7 @@ interface ButtonProps {
 	svgComponent?: React.ReactNode;
 	onClick?: () => void;
 	type?: 'button' | 'submit' | 'reset';
+	form?: string;
 }
 
 const Button = ({
@@ -14,12 +15,13 @@ const Button = ({
 	svgComponent,
 	onClick,
 	type,
+	form,
 }: ButtonProps) => {
 	const { width } = useWindowDimensions();
 
 	const isMobile = width < 768;
 	return (
-		<button type={type} onClick={onClick} className={buttonClass}>
+		<button type={type} form={form} onClick={onClick} className={buttonClass}>
 			{isMobile && svgComponent ? <>{svgComponent}</> : buttonText}
 		</button>
 	);
