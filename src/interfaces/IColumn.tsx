@@ -7,3 +7,7 @@ export interface SingleColumn {
 export interface IColumns {
 	columns: SingleColumn[];
 }
+
+export interface ColumnName {
+	column_name: string;
+}
