@@ -8,3 +8,12 @@ export interface SingleSubtask {
 export interface ISubtasks {
 	subtasks: SingleSubtask[];
 }
+
+export interface SubtaskSubmit {
+	subtask_title: string;
+	is_completed: boolean;
+}
+
+export interface SubtaskInput {
+	subtask_title: string;
+}
