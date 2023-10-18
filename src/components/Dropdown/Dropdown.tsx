@@ -7,13 +7,11 @@ import { Options } from '../../interfaces/IOptionsDropdown';
 interface DropDownProps {
 	selectedOption: Options;
 	options: Options[];
-	isDisabled: boolean;
 	setSelectedOption: (arg: Options) => void;
 }
 const Dropdown = ({
 	selectedOption,
 	options,
-	isDisabled,
 	setSelectedOption,
 }: DropDownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +26,7 @@ const Dropdown = ({
 			<button
 				type="button"
 				className="flex items-center justify-between border border-medium-grey border-opacity-25 px-4 py-3 rounded w-full"
-				onClick={() => (!isDisabled ? setIsOpen(!isOpen) : '')}
+				onClick={() => setIsOpen(!isOpen)}
 			>
 				<span className="text-l-body dark:text-white leading-[100%]">
 					{selectedOption.label}
