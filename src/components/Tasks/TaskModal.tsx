@@ -39,7 +39,6 @@ const TaskModal = ({
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
 	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-	const [selectedOption, setSelectedOption] = useState(task.status);
 
 	const boardId = useBoardStore((state) => state.boardId);
 
@@ -52,8 +51,17 @@ const TaskModal = ({
 	};
 
 	const options = columns.map((column: SingleColumn) => {
-		return { label: column.name, value: column.name } || {};
+		return (
+			{ id: column.column_id, label: column.name, value: column.name } || {}
+		);
 	});
+	const initialSelectedOption = options.find(
+		(option) => option.label === task.status
+	);
+
+	const [selectedOption, setSelectedOption] = useState(
+		initialSelectedOption || options[0]
+	);
 
 	const kebabMenuEdit = 'Edit Task';
 	const kebabMenuDelete = 'Delete Task';
@@ -190,7 +198,6 @@ const TaskModal = ({
 							selectedOption={selectedOption}
 							setSelectedOption={setSelectedOption}
 							options={options}
-							isDisabled={true}
 						/>
 					</div>
 				</div>
