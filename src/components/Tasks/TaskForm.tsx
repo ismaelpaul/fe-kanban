@@ -176,7 +176,6 @@ const TaskForm = ({ setIsAddNewTaskModalOpen }: TaskFormProps) => {
 						<span className={errorClass}>{errors.status.message}</span>
 					)}
 					<Dropdown
-						isDisabled={false}
 						options={options}
 						selectedOption={selectedOption}
 						setSelectedOption={setSelectedOption}
