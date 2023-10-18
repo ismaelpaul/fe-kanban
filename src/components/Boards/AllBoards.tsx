@@ -5,6 +5,8 @@ import ToggleTheme from '../ToggleTheme/ToggleTheme';
 import { Board } from '../../interfaces/IBoard';
 import BoardIcon from '../SVGComponents/BoardIcon';
 import useBoardStore from '../../store/boardStore';
+import Logo from '../SVGComponents/Logo';
+import HideSidebarIcon from '../SVGComponents/HideSidebarIcon';
 
 interface AllBoardsProps {
 	boards: Board[];
@@ -45,7 +47,10 @@ const AllBoards = ({
 	};
 
 	return (
-		<div className="bg-white dark:bg-dark-grey absolute w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40">
+		<div className="bg-white dark:bg-dark-grey absolute tablet:fixed w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40 tablet:ml-0 tablet:top-0 tablet:py-0 tablet:h-screen tablet:border-r tablet:border-lines-light tablet:dark:border-lines-dark tablet:rounded-none">
+			<div className="hidden tablet:inline-block pl-[1.625rem] pt-[1.2rem] mb-[3.375rem]">
+				<Logo />
+			</div>
 			<span className="inline-block text-medium-grey text-12px font-semiBold tracking-2.4px mb-[1.188rem] pl-6">
 				ALL BOARDS ({boards.length})
 			</span>
@@ -61,11 +66,11 @@ const AllBoards = ({
 							}`}
 						>
 							<BoardIcon iconClass={iconClass} />
-							<span
+							<nav
 								className={`${isSelected ? 'text-white' : 'text-medium-grey'}`}
 							>
 								{board.name}
-							</span>
+							</nav>
 						</div>
 					</React.Fragment>
 				);
@@ -74,10 +79,21 @@ const AllBoards = ({
 				<BoardIcon iconClass={btnAddTaskClass} />
 				<span onClick={handleAddNewBoardModal}> + Create New Board</span>
 			</div>
-			<div className="bg-light-bg dark:bg-dark-bg flex items-center justify-center gap-6 h-12 rounded-md mt-4 mx-4">
-				<LightTheme />
-				<ToggleTheme />
-				<DarkTheme />
+			<div className="flex flex-col gap-4 mt-4 tablet:mt-44">
+				<div className="bg-light-bg dark:bg-dark-bg flex items-center justify-center gap-6 h-12 rounded-md mt-4 mx-4">
+					<LightTheme />
+					<ToggleTheme />
+					<DarkTheme />
+				</div>
+				<div
+					onClick={() => {
+						setIsAllBoardsOpen(false);
+					}}
+					className="hidden tablet:flex items-center gap-3 pl-6 w-60 h-12 rounded-e-full"
+				>
+					<HideSidebarIcon />
+					<span className="text-m-heading text-medium-grey">Hide Sidebar</span>
+				</div>
 			</div>
 		</div>
 	);
