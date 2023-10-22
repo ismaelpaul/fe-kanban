@@ -11,6 +11,7 @@ export interface Boards {
 
 export interface BoardSubmit {
 	user_id: number;
+	board_id?: number;
 	board_name: string;
 	columns?: ColumnName[];
 }
