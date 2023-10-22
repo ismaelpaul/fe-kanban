@@ -15,7 +15,7 @@ const DeleteModal = ({
 }: DeleteModalPros) => {
 	const deleteBtnTex = 'Delete';
 	const deleteBtnClass =
-		'bg-red text-white text-13px font-bold py-2 w-full rounded-full mb-4 tablet:mb-0 tablet:py-3';
+		'bg-red text-white text-13px font-bold py-2 w-full rounded-full tablet:mb-0 tablet:py-3';
 
 	const cancelBtnText = 'Cancel';
 	const cancelBtnClass =
@@ -36,7 +36,7 @@ const DeleteModal = ({
 					Are you sure you want to delete the '{itemName}' {complementaryText}{' '}
 					cannot be reversed.
 				</p>
-				<div className="flex tablet:flex-row gap-4">
+				<div className="flex flex-col tablet:flex-row gap-4">
 					<Button
 						buttonText={deleteBtnTex}
 						buttonClass={deleteBtnClass}
