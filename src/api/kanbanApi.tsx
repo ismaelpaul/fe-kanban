@@ -43,6 +43,22 @@ export const deleteBoardById = async (boardId: number) => {
 	}
 };
 
+export const updateBoardAndColumns = async (
+	boardId: number,
+	updatedBoardAndColumns: object
+) => {
+	try {
+		const response = await kanbanApi.patch(
+			`/boards/${boardId}`,
+			updatedBoardAndColumns
+		);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+	}
+};
+
 export const getColumnsByBoardId = async (boardId: number) => {
 	try {
 		const response = await kanbanApi.get(`/boards/${boardId}/columns`);
