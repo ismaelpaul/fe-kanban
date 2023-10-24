@@ -10,19 +10,18 @@ import HideSidebarIcon from '../SVGComponents/HideSidebarIcon';
 
 interface AllBoardsProps {
 	boards: Board[];
-	setSelectedBoard: (arg: string) => void;
-	selectedBoard: string;
 	setIsAllBoardsOpen: (arg: boolean) => void;
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
 }
 const AllBoards = ({
 	boards,
-	selectedBoard,
-	setSelectedBoard,
 	setIsAllBoardsOpen,
 	setIsAddNewBoardModalOpen,
 }: AllBoardsProps) => {
 	const setBoardId = useBoardStore((state) => state.setBoardId);
+
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
+	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
 	const btnAddTaskClass = 'fill-purple';
 
