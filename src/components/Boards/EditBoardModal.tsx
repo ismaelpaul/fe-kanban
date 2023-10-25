@@ -4,28 +4,27 @@ import Cross from '../SVGComponents/Cross';
 import Button from '../Button/Button';
 import { useQueryClient } from '@tanstack/react-query';
 import useBoardStore from '../../store/boardStore';
-import useUserStore from '../../store/userStore';
 import { IColumns } from '../../interfaces/IColumn';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BoardSubmit } from '../../interfaces/IBoard';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import usePatch from '../../hooks/usePatch';
+import { updateBoardAndColumns } from '../../api/kanbanApi';
 
 interface EditBoardModalProps {
 	setIsEditBoardModalOpen: (arg: boolean) => void;
-	selectedBoard: string;
 }
 
-const EditBoardModal = ({
-	setIsEditBoardModalOpen,
-	selectedBoard,
-}: EditBoardModalProps) => {
+const EditBoardModal = ({ setIsEditBoardModalOpen }: EditBoardModalProps) => {
 	const [columnsInput, setColumnsInput] = useState([
 		{ column_id: 0, column_name: '' },
 	]);
 
-	const userId = useUserStore((state) => state.userId);
 	const boardId = useBoardStore((state) => state.boardId);
+
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
+	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
 	const queryClient = useQueryClient();
 
@@ -42,6 +41,8 @@ const EditBoardModal = ({
 			})
 		);
 	}, [columns]);
+
+	const { patch } = usePatch();
 
 	const modalRef = useRef(null);
 	useClickOutside(modalRef, () => setIsEditBoardModalOpen(false));
@@ -78,7 +79,7 @@ const EditBoardModal = ({
 	});
 
 	const boardAndColumnsSchema = z.object({
-		user_id: z.number().optional(),
+		board_id: z.number().optional(),
 		board_name: z.string().max(50).nonempty({ message: "Can't be empty" }),
 		columns: z.array(columnSchema),
 	});
@@ -100,7 +101,7 @@ const EditBoardModal = ({
 	const submitData: SubmitHandler<BoardSubmit> = async (data: BoardSubmit) => {
 		const updatedData: Partial<BoardSubmit> = {};
 
-		updatedData.user_id = userId;
+		updatedData.board_id = boardId;
 
 		if (data.board_name !== selectedBoard) {
 			updatedData.board_name = data.board_name;
@@ -118,6 +119,27 @@ const EditBoardModal = ({
 				return { column_id: columnId, column_name: '' };
 			}
 		});
+
+		const queryKey = 'boards';
+
+		const response = await patch({
+			patchFn: updateBoardAndColumns,
+			resourceId: boardId,
+			updatedData,
+			queryKey,
+		});
+
+		const urlSearchParams = new URLSearchParams();
+		urlSearchParams.set('boardName', response.board.name);
+		window.history.pushState(
+			null,
+			'',
+			`/?boardName=${response.board.name}&boardID=${boardId}`
+		);
+
+		setSelectedBoard(response.board.name);
+
+		queryClient.invalidateQueries(['columns', boardId]);
 
 		setIsEditBoardModalOpen(false);
 
