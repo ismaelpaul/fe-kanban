@@ -20,12 +20,13 @@ const usePatch = () => {
 		queryKey,
 	}: PatchProps) => {
 		try {
-			await patchMutation.mutateAsync({
+			const response = await patchMutation.mutateAsync({
 				patchFn,
 				resourceId,
 				updatedData,
 				queryKey,
 			});
+			return response;
 		} catch (error) {
 			console.log(error, '<<<< error use patch');
 		}
