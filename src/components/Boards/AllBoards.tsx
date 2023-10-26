@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LightTheme from '../SVGComponents/LightTheme';
 import DarkTheme from '../SVGComponents/DarkTheme';
 import ToggleTheme from '../ToggleTheme/ToggleTheme';
@@ -18,6 +18,8 @@ const AllBoards = ({
 	setIsAllBoardsOpen,
 	setIsAddNewBoardModalOpen,
 }: AllBoardsProps) => {
+	const [isHovering, setIsHovering] = useState(-1);
+
 	const setBoardId = useBoardStore((state) => state.setBoardId);
 
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
@@ -45,6 +47,14 @@ const AllBoards = ({
 		setIsAllBoardsOpen(false);
 	};
 
+	const handleMouseOver = (index: number) => {
+		setIsHovering(index);
+	};
+
+	const handleMouseOut = () => {
+		setIsHovering(-1);
+	};
+
 	return (
 		<div className="bg-white dark:bg-dark-grey absolute tablet:fixed w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40 tablet:ml-0 tablet:top-0 tablet:py-0 tablet:h-screen tablet:border-r tablet:border-lines-light tablet:dark:border-lines-dark tablet:rounded-none">
 			<div className="hidden tablet:inline-block pl-[1.625rem] pt-[1.2rem] mb-[3.375rem]">
@@ -53,20 +63,30 @@ const AllBoards = ({
 			<span className="inline-block text-medium-grey text-12px font-semiBold tracking-2.4px mb-[1.188rem] pl-6">
 				ALL BOARDS ({boards.length})
 			</span>
-			{boards.map((board: Board) => {
+			{boards.map((board: Board, index) => {
 				const isSelected = selectedBoard === board.name;
 				const iconClass = isSelected ? 'fill-white' : 'fill-purple';
 				return (
 					<React.Fragment key={board.board_id}>
 						<div
+							onMouseOut={handleMouseOut}
+							onMouseOver={() => {
+								handleMouseOver(index);
+							}}
 							onClick={() => handleSelectBoard(board)}
-							className={`flex items-center gap-3 h-12 text-m-heading pl-6 mr-6 rounded-e-full ${
-								isSelected ? 'bg-purple' : ''
+							className={`flex items-center gap-3 h-12 text-m-heading pl-6 mr-6 rounded-e-full cursor-pointer transition ease-in-out duration-300 hover:bg-purple/10 ${
+								isSelected ? 'bg-purple hover:bg-purple/100' : ''
 							}`}
 						>
 							<BoardIcon iconClass={iconClass} />
 							<nav
-								className={`${isSelected ? 'text-white' : 'text-medium-grey'}`}
+								className={` ${
+									isSelected ? 'text-white' : 'text-medium-grey'
+								} ${
+									isHovering === index
+										? 'transition ease-in-out duration-300 text-purple'
+										: ''
+								}`}
 							>
 								{board.name}
 							</nav>
@@ -74,7 +94,7 @@ const AllBoards = ({
 					</React.Fragment>
 				);
 			})}
-			<div className="flex items-center gap-3 h-12 text-m-heading pl-6 text-purple">
+			<div className="flex items-center gap-3 h-12 text-m-heading pl-6 cursor-pointer text-purple">
 				<BoardIcon iconClass={btnAddTaskClass} />
 				<span onClick={handleAddNewBoardModal}> + Create New Board</span>
 			</div>
