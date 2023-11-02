@@ -6,6 +6,7 @@ export interface SingleTask {
 	description: string;
 	status: string;
 	title: string;
+	position: number;
 }
 
 export interface ITasks {
