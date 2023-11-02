@@ -5,12 +5,14 @@ import TaskModal from './TaskModal';
 import { getSubtasksByTaskId } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import { ISubtasks, SingleSubtask } from '../../interfaces/ISubtask';
+import { Draggable } from 'react-beautiful-dnd';
 
 interface TaskPros {
 	task: SingleTask;
 	columnId: number;
+	index: number;
 }
-const Task = ({ task, columnId }: TaskPros) => {
+const Task = ({ task, columnId, index }: TaskPros) => {
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [totalSubtasks, setTotalSubtasks] = useState(0);
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
@@ -52,16 +54,26 @@ const Task = ({ task, columnId }: TaskPros) => {
 
 	return (
 		<div onClick={handleTaskClick}>
-			<Card cardClass={cardClass}>
-				<>
-					<h2 className="text-m-heading text-black dark:text-white">
-						{task.title}
-					</h2>
-					<span className="text-body font-bold text-medium-grey">
-						{completedSubtasks} of {totalSubtasks} subtasks
-					</span>
-				</>
-			</Card>
+			<Draggable draggableId={task.position.toString()} index={index}>
+				{(provided) => (
+					<div
+						{...provided.dragHandleProps}
+						{...provided.draggableProps}
+						ref={provided.innerRef}
+					>
+						<Card cardClass={cardClass}>
+							<>
+								<h2 className="text-m-heading text-black dark:text-white">
+									{task.title}
+								</h2>
+								<span className="text-body font-bold text-medium-grey">
+									{completedSubtasks} of {totalSubtasks} subtasks
+								</span>
+							</>
+						</Card>
+					</div>
+				)}
+			</Draggable>
 			{isTaskModalOpen ? (
 				<TaskModal
 					task={task}
