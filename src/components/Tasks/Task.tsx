@@ -54,7 +54,7 @@ const Task = ({ task, columnId, index }: TaskPros) => {
 
 	return (
 		<div onClick={handleTaskClick}>
-			<Draggable draggableId={task.position.toString()} index={index}>
+			<Draggable draggableId={task.task_id.toString()} index={index}>
 				{(provided) => (
 					<div
 						{...provided.dragHandleProps}
