@@ -128,3 +128,17 @@ export const deleteTaskById = async (taskId: number): Promise<void> => {
 		console.log(err.response?.data);
 	}
 };
+
+export const updateTaskPosition = async (
+	taskId: number,
+	updateTask: object
+) => {
+	try {
+		const response = await kanbanApi.patch(`/tasks/${taskId}`, updateTask);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
