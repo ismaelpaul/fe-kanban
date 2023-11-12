@@ -5,8 +5,9 @@ import TaskList from '../Tasks/TaskList';
 interface ColumnProps {
 	column: SingleColumn;
 	index: number;
+	isDragging: boolean;
 }
-const Column = ({ column, index }: ColumnProps) => {
+const Column = ({ column, index, isDragging }: ColumnProps) => {
 	const [tasksLength, setTasksLength] = useState(0);
 	let circleColor;
 
@@ -19,7 +20,7 @@ const Column = ({ column, index }: ColumnProps) => {
 	}
 	return (
 		<div>
-			<div className="flex gap-3 items-center">
+			<div className="flex gap-3 items-center mb-7">
 				<div
 					className={` ${circleColor} w-[0.938rem] h-[0.938rem] rounded-full`}
 				></div>
@@ -27,7 +28,13 @@ const Column = ({ column, index }: ColumnProps) => {
 					{column.name.toUpperCase()} ({tasksLength})
 				</h1>
 			</div>
-			<div className="flex flex-col gap-5 py-8 w-[17.5rem]">
+			<div
+				className={` flex flex-col items-center py-1 gap-5 w-[18rem] mb-4 h-full ${
+					isDragging
+						? 'bg-purple/20 border-dashed border-2 border-purple-hover rounded-md'
+						: ''
+				}`}
+			>
 				<TaskList columnId={column.column_id} setTasksLength={setTasksLength} />
 			</div>
 		</div>
