@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { getColumnsByBoardId } from '../../api/kanbanApi';
+import { useEffect } from 'react';
+import { getColumnsByBoardId, updateTaskPosition } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import { IColumns } from '../../interfaces/IColumn';
 import { useQueryClient } from '@tanstack/react-query';
@@ -7,6 +7,9 @@ import Column from './Column';
 import EmptyBoard from '../Boards/EmptyBoard';
 import useBoardStore from '../../store/boardStore';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
+import usePatch from '../../hooks/usePatch';
+import useTasksStore from '../../store/tasksStore';
 
 interface ColumnsListProps {
 	isAllBoardsOpen: boolean;
@@ -26,6 +29,8 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 	const { width } = useWindowDimensions();
 	const isMobile = width < 768;
 
+	const { patch } = usePatch();
+
 	useEffect(() => {
 		queryClient.invalidateQueries(['columns', boardId]);
 	}, [boardId, queryClient]);
@@ -44,24 +49,84 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 		return <EmptyBoard />;
 	}
 
+	const handleDragAndDrop = async (result: DropResult) => {
+		const { source, destination } = result;
+
+		const taskId = Number(result.draggableId);
+
+		const columnId = Number(source.droppableId);
+		const newColumnId = Number(destination?.droppableId);
+
+		const taskPosition = source.index;
+		const newTaskPosition = destination?.index ?? -1;
+
+		if (columnId === newColumnId && taskPosition === newTaskPosition) {
+			return;
+		}
+
+		const currentState = useTasksStore.getState();
+
+		const tasksCopy = { ...currentState.tasks };
+
+		// // Find the task in the current state
+		const taskToMove = tasksCopy[columnId][taskPosition];
+
+		// Remove the task from its original position
+		tasksCopy[columnId].splice(taskPosition, 1);
+
+		// Insert the task into its new position
+		tasksCopy[newColumnId].splice(newTaskPosition, 0, taskToMove);
+
+		const updatedData = {
+			currentColumnId: columnId,
+			newColumnId: newColumnId,
+			currentTaskPosition: taskPosition + 1,
+			newTaskPosition: newTaskPosition + 1,
+		};
+
+		const queryKey = 'tasks';
+
+		await patch({
+			patchFn: updateTaskPosition,
+			resourceId: taskId,
+			updatedData,
+			queryKey,
+		});
+
+		queryClient.invalidateQueries([queryKey, newColumnId]);
+		queryClient.invalidateQueries([queryKey, columnId]);
+	};
+
 	return (
 		<div
-			className={`flex gap-6 overflow-x-scroll h-screen bg-light-bg dark:bg-dark-bg ${
+			className={`flex gap-5 overflow-x-scroll h-screen bg-light-bg dark:bg-dark-bg ${
 				isAllBoardsOpen && !isMobile ? 'ml-[16.5rem]' : 'ml-0'
 			} px-4 py-8 mt-16`}
 		>
-			{columns.map((column, index) => {
-				return (
-					<React.Fragment key={column.column_id}>
-						<Column index={index} column={column} />
-					</React.Fragment>
-				);
-			})}
-			<div className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12">
-				<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center">
-					+ New Column
-				</span>
-			</div>
+			<DragDropContext onDragEnd={handleDragAndDrop}>
+				{columns.map((column, index) => (
+					<Droppable
+						key={column.column_id}
+						droppableId={column.column_id.toString()}
+						type="group"
+					>
+						{(provided, snapshot) => (
+							<div ref={provided.innerRef} {...provided.droppableProps}>
+								<Column
+									index={index}
+									column={column}
+									isDragging={snapshot.isDraggingOver}
+								/>
+							</div>
+						)}
+					</Droppable>
+				))}
+				<div className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12">
+					<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center">
+						+ New Column
+					</span>
+				</div>
+			</DragDropContext>
 		</div>
 	);
 };
