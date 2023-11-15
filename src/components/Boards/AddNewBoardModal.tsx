@@ -12,12 +12,10 @@ import useBoardStore from '../../store/boardStore';
 
 interface AddNewBoardModalProps {
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
-	setSelectedBoard: (arg: string) => void;
 }
 
 const AddNewBoardModal = ({
 	setIsAddNewBoardModalOpen,
-	setSelectedBoard,
 }: AddNewBoardModalProps) => {
 	const [columnsInput, setColumnsInput] = useState([
 		{ id: 1, placeholder: 'e.g. Todo' },
@@ -25,6 +23,8 @@ const AddNewBoardModal = ({
 	]);
 	const userId = useUserStore((state) => state.userId);
 	const setBoardId = useBoardStore((state) => state.setBoardId);
+
+	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
 	const addInputField = () => {
 		const newInputFields = [...columnsInput];
@@ -43,7 +43,7 @@ const AddNewBoardModal = ({
 
 	const labelClass = 'text-body text-medium-grey dark:text-white font-bold';
 	const inputClass =
-		'dark:bg-dark-grey border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full focus:outline-purple';
+		'dark:bg-dark-grey dark:text-white border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full';
 
 	const btnAddColumnClass =
 		'bg-purple bg-opacity-10 dark:bg-white dark:bg-opacity-100 text-purple text-13px font-bold py-2 w-full rounded-full';
