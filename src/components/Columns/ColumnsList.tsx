@@ -6,15 +6,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import Column from './Column';
 import EmptyBoard from '../Boards/EmptyBoard';
 import useBoardStore from '../../store/boardStore';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import usePatch from '../../hooks/usePatch';
 import useTasksStore from '../../store/tasksStore';
 
-interface ColumnsListProps {
-	isAllBoardsOpen: boolean;
-}
-const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
+const ColumnsList = () => {
 	const boardId = useBoardStore((state) => state.boardId);
 
 	const queryClient = useQueryClient();
@@ -25,9 +21,6 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 		queryKey: queryKey,
 		queryFn: () => getColumnsByBoardId(boardId),
 	});
-
-	const { width } = useWindowDimensions();
-	const isMobile = width < 768;
 
 	const { patch } = usePatch();
 
@@ -98,10 +91,8 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 	};
 
 	return (
-		<div
-			className={`flex gap-5 overflow-x-scroll h-screen bg-light-bg dark:bg-dark-bg ${
-				isAllBoardsOpen && !isMobile ? 'ml-[16.5rem]' : 'ml-0'
-			} px-4 py-8 mt-16`}
+		<main
+			className={`flex gap-5 overflow-x-scroll h-screen w-screen bg-light-bg dark:bg-dark-bg pl-4 pt-8`}
 		>
 			<DragDropContext onDragEnd={handleDragAndDrop}>
 				{columns.map((column, index) => (
@@ -127,7 +118,7 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 					</span>
 				</div>
 			</DragDropContext>
-		</div>
+		</main>
 	);
 };
 
