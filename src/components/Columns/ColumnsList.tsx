@@ -10,7 +10,10 @@ import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import usePatch from '../../hooks/usePatch';
 import useTasksStore from '../../store/tasksStore';
 
-const ColumnsList = () => {
+interface ColumnsListProps {
+	isAllBoardsOpen: boolean;
+}
+const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 	const boardId = useBoardStore((state) => state.boardId);
 
 	const queryClient = useQueryClient();
@@ -92,7 +95,11 @@ const ColumnsList = () => {
 
 	return (
 		<main
-			className={`flex gap-5 overflow-x-scroll h-screen w-screen bg-light-bg dark:bg-dark-bg pl-4 pt-8`}
+			className={`flex gap-5 overflow-x-scroll h-screen w-screen bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
+				isAllBoardsOpen
+					? 'ml-[16.5rem] transition-all ease-in-out duration-300'
+					: ''
+			}`}
 		>
 			<DragDropContext onDragEnd={handleDragAndDrop}>
 				{columns.map((column, index) => (
