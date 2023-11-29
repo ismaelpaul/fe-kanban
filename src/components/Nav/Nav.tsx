@@ -1,45 +1,55 @@
 import { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import ChevronDown from '../SVGComponents/ChevronDown';
-import { deleteBoardById, getAllBoards } from '../../api/kanbanApi';
-import LogoMobile from '../SVGComponents/LogoMobile';
+import { deleteBoardById } from '../../api/kanbanApi';
 import KebabMenu from '../SVGComponents/KebabMenu';
 import AddTaskMobile from '../SVGComponents/AddTaskMobile';
 import AllBoards from '../Boards/AllBoards';
 import ChevronUp from '../SVGComponents/ChevronUp';
-import useFetch from '../../hooks/useFetch';
-import { Boards } from '../../interfaces/IBoard';
+import { Board } from '../../interfaces/IBoard';
 import AddNewTaskModal from '../Tasks/AddNewTaskModal';
 import KebabMenuModal from '../KebabMenu/KebabMenuModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
-import AddNewBoardModal from '../Boards/AddNewBoardModal';
 import useDelete from '../../hooks/useDelete';
 import useBoardStore from '../../store/boardStore';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+import Logo from '../SVGComponents/Logo';
+import LogoMobile from '../SVGComponents/LogoMobile';
 
-const Nav = () => {
-	const [selectedBoard, setSelectedBoard] = useState('');
-	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
+interface NavPros {
+	isAllBoardsOpen: boolean;
+	setIsAllBoardsOpen: (arg: boolean) => void;
+	boards: Board[];
+	setIsAddNewBoardModalOpen: (arg: boolean) => void;
+	setIsEditBoardModalOpen: (arg: boolean) => void;
+}
+const Nav = ({
+	isAllBoardsOpen,
+	setIsAllBoardsOpen,
+	boards,
+	setIsAddNewBoardModalOpen,
+	setIsEditBoardModalOpen,
+}: NavPros) => {
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-	const [isAddNewBoardkModalOpen, setIsAddNewBoardModalOpen] = useState(false);
 
 	const boardId = useBoardStore((state) => state.boardId);
 	const setBoardId = useBoardStore((state) => state.setBoardId);
+
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
+	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
 	const kebabMenuEdit = 'Edit Board';
 	const kebabMenuDelete = 'Delete Board';
 	const kebabMenuPosition = 'top-16 right-4';
 
+	const { width } = useWindowDimensions();
+	const isMobile = width < 768;
+
 	const { deleteItem } = useDelete();
 
-	const { data, isLoading, isError } = useFetch({
-		queryKey: ['boards'],
-		queryFn: getAllBoards,
-	});
-
-	const firstBoard = (data as { boards: { name: string }[] } | undefined)
-		?.boards[0]?.name;
+	const firstBoard = boards[0].name;
 
 	useEffect(() => {
 		const urlSearchParams = new URLSearchParams(window.location.search);
@@ -51,22 +61,13 @@ const Nav = () => {
 		if (boardName) {
 			setSelectedBoard(boardName);
 		}
-	}, [firstBoard, setBoardId, data]);
-
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
-	if (isError) {
-		return <span>Error: </span>;
-	}
-
-	const { boards }: Boards = data || { boards: [] };
+	}, [firstBoard, setBoardId]);
 
 	const btnBoardsText = selectedBoard;
 	const btnBoardsClass = 'text-l-heading dark:text-white';
 
-	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full`;
+	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 hover:bg-purple-hover`;
+	const btnAddTaskText = '+ Add New Task';
 
 	const toggleBoardsDropdown = () => {
 		setIsAllBoardsOpen(!isAllBoardsOpen);
@@ -90,6 +91,7 @@ const Nav = () => {
 			console.error('No remaining boards.');
 			return;
 		}
+
 		setSelectedBoard(newBoard.name);
 
 		const urlSearchParams = new URLSearchParams(window.location.search);
@@ -104,23 +106,37 @@ const Nav = () => {
 
 	return (
 		<>
-			<div className="bg-white dark:bg-dark-grey flex items-center justify-between h-16 px-4 fixed inset-0 z-40">
-				<div className="flex gap-4">
-					<LogoMobile />
-					<div className="flex items-center gap-2">
-						<Button
-							onClick={toggleBoardsDropdown}
-							buttonText={btnBoardsText}
-							buttonClass={btnBoardsClass}
-						/>
-						{isAllBoardsOpen ? <ChevronDown /> : <ChevronUp />}
-					</div>
+			<div className="bg-white dark:bg-dark-grey flex items-center justify-between h-16 px-4 sticky inset-0 z-40">
+				<div className="flex items-center gap-4 tablet:gap-6 h-full">
+					{isMobile ? <LogoMobile /> : <Logo />}
+					<div className="hidden tablet:inline-block h-full tablet:border-r border-lines-light dark:border-lines-dark"></div>
+					{isMobile ? (
+						<div className="flex items-center gap-2">
+							<Button
+								onClick={toggleBoardsDropdown}
+								buttonText={btnBoardsText}
+								buttonClass={btnBoardsClass}
+							/>
+							{isAllBoardsOpen ? <ChevronDown /> : <ChevronUp />}
+						</div>
+					) : (
+						<span
+							className={`text-l-heading dark:text-white ${
+								isAllBoardsOpen
+									? 'ml-16 transition-all ease-in-out duration-100'
+									: ''
+							}`}
+						>
+							{selectedBoard}
+						</span>
+					)}
 				</div>
 				<div className="flex items-center gap-4">
 					<Button
 						onClick={openAddNewTaskModal}
 						svgComponent={<AddTaskMobile />}
 						buttonClass={btnAddTaskClass}
+						buttonText={btnAddTaskText}
 					/>
 					<div onClick={handleKebabMenu}>
 						<KebabMenu />
@@ -132,12 +148,25 @@ const Nav = () => {
 							menuPosition={kebabMenuPosition}
 							setIsKebabMenuOpen={setIsKebabModalOpen}
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
+							setIsEditBoardModalOpen={setIsEditBoardModalOpen}
 						/>
 					) : (
 						<></>
 					)}
 				</div>
 			</div>
+			{isAllBoardsOpen ? (
+				<>
+					<div className="fixed inset-0 bg-black opacity-50 z-30 tablet:hidden"></div>
+					<AllBoards
+						boards={boards}
+						setIsAllBoardsOpen={setIsAllBoardsOpen}
+						setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
+					/>
+				</>
+			) : (
+				<></>
+			)}
 			{isDeleteModalOpen ? (
 				<DeleteModal
 					onClick={() => handleDeleteBoard(boardId)}
@@ -148,29 +177,9 @@ const Nav = () => {
 			) : (
 				<></>
 			)}
-			{isAllBoardsOpen ? (
-				<>
-					<div className="fixed inset-0 bg-black opacity-50 z-30"></div>
-					<AllBoards
-						boards={boards}
-						selectedBoard={selectedBoard}
-						setSelectedBoard={setSelectedBoard}
-						setIsAllBoardsOpen={setIsAllBoardsOpen}
-						setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
-					/>
-				</>
-			) : (
-				<></>
-			)}
+
 			{isAddNewTaskModalOpen ? (
 				<AddNewTaskModal setIsAddNewTaskModalOpen={setIsAddNewTaskModalOpen} />
-			) : (
-				<></>
-			)}
-			{isAddNewBoardkModalOpen ? (
-				<AddNewBoardModal
-					setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
-				/>
 			) : (
 				<></>
 			)}
