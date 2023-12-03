@@ -10,11 +10,13 @@ import HideSidebarIcon from '../SVGComponents/HideSidebarIcon';
 
 interface AllBoardsProps {
 	boards: Board[];
+	isAllBoardsOpen: boolean;
 	setIsAllBoardsOpen: (arg: boolean) => void;
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
 }
 const AllBoards = ({
 	boards,
+	isAllBoardsOpen,
 	setIsAllBoardsOpen,
 	setIsAddNewBoardModalOpen,
 }: AllBoardsProps) => {
@@ -39,7 +41,6 @@ const AllBoards = ({
 		setBoardId(board.board_id);
 
 		setSelectedBoard(board.name);
-		setIsAllBoardsOpen(false);
 	};
 
 	const handleAddNewBoardModal = () => {
@@ -56,7 +57,13 @@ const AllBoards = ({
 	};
 
 	return (
-		<div className="bg-white dark:bg-dark-grey absolute tablet:fixed w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40 tablet:ml-0 tablet:top-0 tablet:py-0 tablet:h-screen tablet:border-r tablet:border-lines-light tablet:dark:border-lines-dark tablet:rounded-none">
+		<div
+			className={`tablet:transform transition-all ease-in-out duration-1000 ${
+				isAllBoardsOpen ? 'tablet:translate-x-0' : 'tablet:-translate-x-64'
+			}
+			
+			bg-white dark:bg-dark-grey absolute tablet:fixed w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40 tablet:ml-0 tablet:top-0 tablet:py-0 tablet:h-screen tablet:border-r tablet:border-lines-light tablet:dark:border-lines-dark tablet:rounded-none`}
+		>
 			<div className="hidden tablet:inline-block pl-[1.625rem] pt-[1.2rem] mb-[3.375rem]">
 				<Logo />
 			</div>
@@ -65,7 +72,9 @@ const AllBoards = ({
 			</span>
 			{boards.map((board: Board, index) => {
 				const isSelected = selectedBoard === board.name;
-				const iconClass = isSelected ? 'fill-white' : 'fill-purple';
+				const boardIconClass = isSelected
+					? 'transition ease-in-out duration-300 fill-white'
+					: '';
 				return (
 					<React.Fragment key={board.board_id}>
 						<div
@@ -74,11 +83,17 @@ const AllBoards = ({
 								handleMouseOver(index);
 							}}
 							onClick={() => handleSelectBoard(board)}
-							className={`flex items-center gap-3 h-12 text-m-heading pl-6 mr-6 rounded-e-full cursor-pointer transition ease-in-out duration-300 hover:bg-purple/10 ${
-								isSelected ? 'bg-purple hover:bg-purple/100' : ''
+							className={`flex items-center gap-3 h-12 text-m-heading pl-6 mr-6 rounded-e-full cursor-pointer transition ease-in-out duration-300 hover:bg-purple/10 dark:hover:bg-white ${
+								isSelected ? 'bg-purple pointer-events-none' : ''
 							}`}
 						>
-							<BoardIcon iconClass={iconClass} />
+							<BoardIcon
+								iconClass={`${boardIconClass} ${
+									isHovering === index
+										? 'transition ease-in-out duration-300 fill-purple'
+										: 'fill-medium-white'
+								}`}
+							/>
 							<nav
 								className={` ${
 									isSelected ? 'text-white' : 'text-medium-grey'
@@ -108,10 +123,26 @@ const AllBoards = ({
 					onClick={() => {
 						setIsAllBoardsOpen(false);
 					}}
-					className="hidden tablet:flex items-center gap-3 pl-6 w-60 h-12 rounded-e-full"
+					onMouseEnter={() => setIsHovering(boards.length + 1)}
+					onMouseLeave={() => setIsHovering(-1)}
+					className="cursor-pointer hidden tablet:flex items-center gap-3 pl-6 w-60 h-12 rounded-e-full transition ease-in-out duration-300 hover:bg-purple/10 hover:text-purple"
 				>
-					<HideSidebarIcon />
-					<span className="text-m-heading text-medium-grey">Hide Sidebar</span>
+					<HideSidebarIcon
+						iconClass={`${
+							isHovering === boards.length + 1
+								? 'transition ease-in-out duration-300 fill-purple'
+								: 'fill-medium-grey'
+						}`}
+					/>
+					<span
+						className={`text-m-heading ${
+							isHovering === boards.length + 1
+								? 'transition ease-in-out duration-300 text-purple'
+								: 'text-medium-grey'
+						}`}
+					>
+						Hide Sidebar
+					</span>
 				</div>
 			</div>
 		</div>
