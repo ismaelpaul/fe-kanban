@@ -7,12 +7,12 @@ import useFetch from '../../hooks/useFetch';
 import { ISubtasks, SingleSubtask } from '../../interfaces/ISubtask';
 import { Draggable } from 'react-beautiful-dnd';
 
-interface TaskPros {
+interface TaskProps {
 	task: SingleTask;
 	columnId: number;
 	index: number;
 }
-const Task = ({ task, columnId, index }: TaskPros) => {
+const Task = ({ task, columnId, index }: TaskProps) => {
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [totalSubtasks, setTotalSubtasks] = useState(0);
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
