@@ -160,6 +160,7 @@ const Nav = ({
 					<div className="fixed inset-0 bg-black opacity-50 z-30 tablet:hidden"></div>
 					<AllBoards
 						boards={boards}
+						isAllBoardsOpen={isAllBoardsOpen}
 						setIsAllBoardsOpen={setIsAllBoardsOpen}
 						setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
 					/>
