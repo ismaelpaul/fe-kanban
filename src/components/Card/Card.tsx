@@ -4,7 +4,7 @@ interface CardProps {
 }
 
 const Card = ({ children, cardClass }: CardProps) => {
-	return <article className={`card ${cardClass}`}>{children}</article>;
+	return <article className={`${cardClass}`}>{children}</article>;
 };
 
 export default Card;
