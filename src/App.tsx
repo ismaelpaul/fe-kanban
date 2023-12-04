@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import ColumnsList from './components/Columns/ColumnsList';
 import Nav from './components/Nav/Nav';
-import ShowSidebarIcon from './components/SVGComponents/ShowSidebarIcon';
 import useFetch from './hooks/useFetch';
 import { getAllBoards } from './api/kanbanApi';
 import { Boards } from './interfaces/IBoard';
 import AddNewBoardModal from './components/Boards/AddNewBoardModal';
 import EditBoardModal from './components/Boards/EditBoardModal';
+import ToggleSidebar from './components/Toggle/ToggleSidebar';
 
 function App() {
 	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
@@ -38,15 +38,10 @@ function App() {
 				setIsEditBoardModalOpen={setIsEditBoardModalOpen}
 			/>
 			<ColumnsList isAllBoardsOpen={isAllBoardsOpen} />
-			<aside
-				onClick={() => {
-					setIsAllBoardsOpen(true);
-				}}
-				className="hidden tablet:flex items-center justify-center absolute bottom-4 bg-purple w-14 h-12 rounded-r-full"
-			>
-				<ShowSidebarIcon />
-			</aside>
-
+			<ToggleSidebar
+				setIsAllBoardsOpen={setIsAllBoardsOpen}
+				isAllBoardsOpen={isAllBoardsOpen}
+			/>
 			{isAddNewBoardModalOpen ? (
 				<AddNewBoardModal
 					setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
