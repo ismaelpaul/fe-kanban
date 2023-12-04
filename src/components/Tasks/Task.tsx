@@ -13,6 +13,7 @@ interface TaskProps {
 	index: number;
 }
 const Task = ({ task, columnId, index }: TaskProps) => {
+	const [isHovering, setIsHovering] = useState(-1);
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [totalSubtasks, setTotalSubtasks] = useState(0);
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
@@ -46,11 +47,21 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	const { subtasks }: ISubtasks = data || { subtasks: [] };
 
 	const cardClass =
-		'bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg';
+		'bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg cursor-pointer';
 
 	const handleTaskClick = () => {
 		setIsTaskModalOpen(true);
 	};
+
+	const handleMouseOver = (index: number) => {
+		setIsHovering(index);
+	};
+
+	const handleMouseOut = () => {
+		setIsHovering(-1);
+	};
+
+	const isCardOnHover = isHovering === index;
 
 	return (
 		<div onClick={handleTaskClick}>
@@ -60,10 +71,20 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 						{...provided.dragHandleProps}
 						{...provided.draggableProps}
 						ref={provided.innerRef}
+						onMouseOut={handleMouseOut}
+						onMouseOver={() => {
+							handleMouseOver(index);
+						}}
 					>
 						<Card cardClass={cardClass}>
 							<>
-								<h2 className="text-m-heading text-black dark:text-white">
+								<h2
+									className={`text-m-heading transition ease-in-out duration-300  ${
+										isCardOnHover
+											? ' text-purple'
+											: 'text-black dark:text-white'
+									}`}
+								>
 									{task.title}
 								</h2>
 								<span className="text-body font-bold text-medium-grey">
