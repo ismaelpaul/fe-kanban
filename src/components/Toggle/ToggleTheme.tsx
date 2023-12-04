@@ -17,7 +17,7 @@ const ToggleTheme = () => {
 			<Switch
 				checked={enabled}
 				onChange={handleToggle}
-				className="bg-purple relative inline-flex h-6 w-11 items-center rounded-full"
+				className="bg-purple transition ease-in-out duration-300 hover:bg-purple-hover relative inline-flex h-6 w-11 items-center rounded-full cursor-pointer"
 			>
 				<span
 					className={`${
