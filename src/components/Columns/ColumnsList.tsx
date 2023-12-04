@@ -120,7 +120,7 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 					</Droppable>
 				))}
 				<div className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12">
-					<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center">
+					<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center cursor-pointer transition ease-in-out duration-300 hover:text-purple">
 						+ New Column
 					</span>
 				</div>
