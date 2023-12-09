@@ -8,24 +8,28 @@ interface DropDownProps {
 	selectedOption: Options;
 	options: Options[];
 	setSelectedOption: (arg: Options) => void;
+	isParentTaskModal: boolean;
 }
 const Dropdown = ({
 	selectedOption,
 	options,
 	setSelectedOption,
+	isParentTaskModal,
 }: DropDownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOptionClick = (option: Options) => {
-		setSelectedOption(option);
-		setIsOpen(false);
+		if (!isParentTaskModal) {
+			setSelectedOption(option);
+			setIsOpen(false);
+		}
 	};
 
 	return (
 		<div className="flex items-center gap-2 relative cursor-pointer mt-2">
 			<button
 				type="button"
-				className="flex items-center justify-between border border-medium-grey border-opacity-25 px-4 py-3 rounded w-full"
+				className="flex items-center justify-between border border-medium-grey border-opacity-25 px-4 py-3 rounded w-full focus:border-purple"
 				onClick={() => setIsOpen(!isOpen)}
 			>
 				<span className="text-l-body dark:text-white leading-[100%]">
@@ -39,7 +43,7 @@ const Dropdown = ({
 						return (
 							<React.Fragment key={index}>
 								<li
-									className="text-l-body text-medium-grey"
+									className="text-l-body text-medium-grey cursor-not-allowed"
 									onClick={() => handleOptionClick(option)}
 								>
 									{option.label}
