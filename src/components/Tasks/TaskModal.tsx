@@ -16,6 +16,7 @@ import useDelete from '../../hooks/useDelete';
 import { useQueryClient } from '@tanstack/react-query';
 import useBoardStore from '../../store/boardStore';
 import { IColumns, SingleColumn } from '../../interfaces/IColumn';
+import { motion } from 'framer-motion';
 
 interface TaskModalProps {
 	task: SingleTask;
@@ -39,6 +40,8 @@ const TaskModal = ({
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
 	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+	const isParentTaskModal = true;
 
 	const boardId = useBoardStore((state) => state.boardId);
 
@@ -65,7 +68,7 @@ const TaskModal = ({
 
 	const kebabMenuEdit = 'Edit Task';
 	const kebabMenuDelete = 'Delete Task';
-	const kebabMenuPosition = 'right-8 tablet: right-40';
+	const kebabMenuPosition = 'right-8 tablet:right-40 laptop:right-[30rem]';
 
 	const { patch } = usePatch();
 	const { deleteItem } = useDelete();
@@ -128,13 +131,16 @@ const TaskModal = ({
 		<>
 			<div className="fixed inset-0 flex items-center justify-center z-40">
 				<div className="fixed inset-0 bg-black opacity-50"></div>
-				<div
+				<motion.div
+					initial={{ scale: 0.7 }}
+					animate={{ scale: 1 }}
+					transition={{ duration: 0.2 }}
 					className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:mx-0 tablet:w-[30rem]"
 					ref={modalRef}
 				>
 					<div className="flex items-center justify-between gap-4">
 						<h1 className="text-l-heading dark:text-white">{task.title}</h1>
-						<div onClick={handleKebabMenu}>
+						<div onClick={handleKebabMenu} className="cursor-pointer">
 							<KebabMenu />
 						</div>
 					</div>
@@ -162,7 +168,7 @@ const TaskModal = ({
 						return (
 							<div
 								key={subtask.subtask_id}
-								className="flex items-center bg-lines-light dark:bg-dark-bg p-3 mt-2 rounded gap-4"
+								className="flex items-center bg-lines-light dark:bg-dark-bg p-3 mt-2 rounded gap-4 transition ease-in-out duration-200 hover:dark:bg-purple/25"
 							>
 								<input
 									type="checkbox"
@@ -174,11 +180,11 @@ const TaskModal = ({
 											subtask.is_completed
 										);
 									}}
-									className="relative peer appearance-none w-4 h-4 bg-white border border-medium-grey border-opacity-25 rounded-sm checked:bg-purple checked:border-0"
+									className="relative peer appearance-none w-4 h-4 bg-white border border-medium-grey border-opacity-25 rounded-sm checked:bg-purple checked:border-0 cursor-pointer"
 								/>
 								<label
 									htmlFor={subtask.subtask_id.toString()}
-									className="text-12px dark:text-white font-bold peer-checked:opacity-50 peer-checked:line-through"
+									className="text-12px dark:text-white font-bold peer-checked:opacity-50 peer-checked:line-through cursor-pointer"
 								>
 									{subtask.title}
 								</label>
@@ -198,9 +204,10 @@ const TaskModal = ({
 							selectedOption={selectedOption}
 							setSelectedOption={setSelectedOption}
 							options={options}
+							isParentTaskModal={isParentTaskModal}
 						/>
 					</div>
-				</div>
+				</motion.div>
 			</div>
 			{isDeleteModalOpen ? (
 				<DeleteModal
