@@ -1,4 +1,5 @@
 import Button from '../Button/Button';
+import { motion } from 'framer-motion';
 
 interface DeleteModalPros {
 	itemName: string;
@@ -30,7 +31,12 @@ const DeleteModal = ({
 	return (
 		<div className="fixed inset-0 flex items-center justify-center z-40">
 			<div className="fixed inset-0 bg-black opacity-50"></div>
-			<div className="bg-white dark:bg-dark-bg p-6 rounded-md z-50 mx-4 w-screen tablet:w-[30rem]">
+			<motion.div
+				initial={{ scale: 0.7 }}
+				animate={{ scale: 1 }}
+				transition={{ duration: 0.2 }}
+				className="bg-white dark:bg-dark-bg p-6 rounded-md z-50 mx-4 w-screen tablet:w-[30rem]"
+			>
 				<h1 className="text-l-heading text-red mb-6">Delete this {item}?</h1>
 				<p className="text-l-body text-medium-grey mb-6">
 					Are you sure you want to delete the '{itemName}' {complementaryText}{' '}
@@ -48,7 +54,7 @@ const DeleteModal = ({
 						onClick={() => setIsDeleteModalOpen(false)}
 					/>
 				</div>
-			</div>
+			</motion.div>
 		</div>
 	);
 };

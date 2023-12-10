@@ -9,6 +9,7 @@ import { BoardSubmit } from '../../interfaces/IBoard';
 import useUserStore from '../../store/userStore';
 import { addNewBoard } from '../../api/kanbanApi';
 import useBoardStore from '../../store/boardStore';
+import { motion } from 'framer-motion';
 
 interface AddNewBoardModalProps {
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
@@ -90,7 +91,10 @@ const AddNewBoardModal = ({
 	return (
 		<div className="fixed inset-0 flex items-center justify-center z-40">
 			<div className="fixed inset-0 bg-black opacity-50"></div>
-			<div
+			<motion.div
+				initial={{ scale: 0.7 }}
+				animate={{ scale: 1 }}
+				transition={{ duration: 0.2 }}
 				className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:mx-0 tablet:w-[30rem]"
 				ref={modalRef}
 			>
@@ -145,7 +149,7 @@ const AddNewBoardModal = ({
 						type="submit"
 					/>
 				</form>
-			</div>
+			</motion.div>
 		</div>
 	);
 };
