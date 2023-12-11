@@ -6,6 +6,7 @@ import { getSubtasksByTaskId } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import { ISubtasks, SingleSubtask } from '../../interfaces/ISubtask';
 import { Draggable } from 'react-beautiful-dnd';
+import EditTaskModal from './EditTaskModal';
 
 interface TaskProps {
 	task: SingleTask;
@@ -17,6 +18,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [totalSubtasks, setTotalSubtasks] = useState(0);
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
+	const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
 
 	const subtaskQueryKey = `subtasks_${task.task_id}`;
 
@@ -98,12 +100,22 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 			{isTaskModalOpen ? (
 				<TaskModal
 					task={task}
-					setIsTaskModalOpen={setIsTaskModalOpen}
 					subtasks={subtasks}
 					totalSubtasks={totalSubtasks}
 					completedSubtasks={completedSubtasks}
-					setCompletedSubtasks={setCompletedSubtasks}
 					columnId={columnId}
+					setCompletedSubtasks={setCompletedSubtasks}
+					setIsTaskModalOpen={setIsTaskModalOpen}
+					setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+				/>
+			) : (
+				<></>
+			)}
+			{isEditTaskModalOpen ? (
+				<EditTaskModal
+					setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+					task={task}
+					subtasks={subtasks}
 				/>
 			) : (
 				<></>
