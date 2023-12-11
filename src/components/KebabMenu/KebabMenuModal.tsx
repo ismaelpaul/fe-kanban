@@ -5,7 +5,10 @@ interface KebabMenuProps {
 	setIsKebabMenuOpen: (arg: boolean) => void;
 	setIsDeleteModalOpen: (arg: boolean) => void;
 	setIsTaskModalOpen?: (arg: boolean) => void;
-	setIsEditBoardModalOpen: (arg: boolean) => void;
+	setIsEditBoardModalOpen?: (arg: boolean) => void;
+	setIsEditTaskModalOpen?: (arg: boolean) => void;
+
+	isParentTaskModal?: boolean;
 }
 
 const KebabMenuModal = ({
@@ -15,15 +18,25 @@ const KebabMenuModal = ({
 	setIsKebabMenuOpen,
 	setIsDeleteModalOpen,
 	setIsEditBoardModalOpen,
+	setIsEditTaskModalOpen,
+	isParentTaskModal,
+	setIsTaskModalOpen,
 }: KebabMenuProps) => {
 	const handleDeleteModal = () => {
 		setIsKebabMenuOpen(false);
 		setIsDeleteModalOpen(true);
 	};
 
-	const handleEditBoardModal = () => {
+	const handleEditModal = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		if (isParentTaskModal) {
+			setIsTaskModalOpen!(false);
+			setIsEditTaskModalOpen!(true);
+		} else {
+			setIsTaskModalOpen!(false);
+			setIsEditBoardModalOpen!(true);
+		}
 		setIsKebabMenuOpen(false);
-		setIsEditBoardModalOpen(true);
 	};
 
 	return (
@@ -32,7 +45,9 @@ const KebabMenuModal = ({
 				className={`flex flex-col gap-4 pl-4 py-[1.375rem] w-48 bg-white dark:bg-dark-bg rounded-lg absolute drop-shadow-card ${menuPosition}`}
 			>
 				<span
-					onClick={handleEditBoardModal}
+					onClick={(e) => {
+						handleEditModal(e);
+					}}
 					className="text-l-body text-medium-grey cursor-pointer"
 				>
 					{editText}
