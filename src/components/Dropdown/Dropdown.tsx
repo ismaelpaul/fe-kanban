@@ -43,7 +43,9 @@ const Dropdown = ({
 						return (
 							<React.Fragment key={index}>
 								<li
-									className="text-l-body text-medium-grey cursor-not-allowed"
+									className={`text-l-body text-medium-grey ${
+										isParentTaskModal ? 'cursor-not-allowed' : 'cursor-pointer'
+									}`}
 									onClick={() => handleOptionClick(option)}
 								>
 									{option.label}
