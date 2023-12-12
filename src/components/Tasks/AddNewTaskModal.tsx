@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import useClickOutside from '../../hooks/useClickOutside';
 import Button from '../Button/Button';
 import { motion } from 'framer-motion';
-
 import TaskForm from './TaskForm';
 
 interface AddNewTaskModalProps {
