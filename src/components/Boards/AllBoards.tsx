@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import LightTheme from '../SVGComponents/LightTheme';
 import DarkTheme from '../SVGComponents/DarkTheme';
-import ToggleTheme from '../ToggleTheme/ToggleTheme';
+import ToggleTheme from '../Toggle/ToggleTheme';
 import { Board } from '../../interfaces/IBoard';
 import BoardIcon from '../SVGComponents/BoardIcon';
 import useBoardStore from '../../store/boardStore';
 import Logo from '../SVGComponents/Logo';
 import HideSidebarIcon from '../SVGComponents/HideSidebarIcon';
+import { motion } from 'framer-motion';
 
 interface AllBoardsProps {
 	boards: Board[];
@@ -16,7 +17,6 @@ interface AllBoardsProps {
 }
 const AllBoards = ({
 	boards,
-	isAllBoardsOpen,
 	setIsAllBoardsOpen,
 	setIsAddNewBoardModalOpen,
 }: AllBoardsProps) => {
@@ -57,10 +57,11 @@ const AllBoards = ({
 	};
 
 	return (
-		<div
-			className={`tablet:transform transition-all ease-in-out duration-1000 ${
-				isAllBoardsOpen ? 'tablet:translate-x-0' : 'tablet:-translate-x-64'
-			}
+		<motion.div
+			initial={{ transform: 'translateX(-10rem)' }}
+			animate={{ transform: 'translateX(0)' }}
+			transition={{ duration: 0.25 }}
+			className={`
 			
 			bg-white dark:bg-dark-grey absolute tablet:fixed w-[16.5rem] top-20 ml-[3.375rem] rounded-lg py-[1.188rem] z-40 tablet:ml-0 tablet:top-0 tablet:py-0 tablet:h-screen tablet:border-r tablet:border-lines-light tablet:dark:border-lines-dark tablet:rounded-none`}
 		>
@@ -125,7 +126,7 @@ const AllBoards = ({
 					}}
 					onMouseEnter={() => setIsHovering(boards.length + 1)}
 					onMouseLeave={() => setIsHovering(-1)}
-					className="cursor-pointer hidden tablet:flex items-center gap-3 pl-6 w-60 h-12 rounded-e-full transition ease-in-out duration-300 hover:bg-purple/10 hover:text-purple"
+					className="cursor-pointer hidden tablet:flex items-center gap-3 pl-6 w-60 h-12 rounded-e-full transition ease-in-out duration-300 hover:bg-purple/10 dark:hover:bg-white hover:text-purple"
 				>
 					<HideSidebarIcon
 						iconClass={`${
@@ -145,7 +146,7 @@ const AllBoards = ({
 					</span>
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 
