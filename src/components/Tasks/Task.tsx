@@ -66,7 +66,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	const isCardOnHover = isHovering === index;
 
 	return (
-		<div onClick={handleTaskClick}>
+		<>
 			<Draggable draggableId={task.task_id.toString()} index={index}>
 				{(provided) => (
 					<div
@@ -78,7 +78,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 							handleMouseOver(index);
 						}}
 					>
-						<Card cardClass={cardClass}>
+						<Card onClick={handleTaskClick} cardClass={cardClass}>
 							<>
 								<h2
 									className={`text-m-heading transition ease-in-out duration-300  ${
@@ -120,7 +120,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 			) : (
 				<></>
 			)}
-		</div>
+		</>
 	);
 };
 
