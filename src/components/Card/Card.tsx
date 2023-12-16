@@ -5,8 +5,6 @@ interface CardProps {
 }
 
 const Card = ({ children, cardClass, onClick }: CardProps) => {
-	console.log(onClick);
-
 	return (
 		<article onClick={onClick} className={`${cardClass}`}>
 			{children}
