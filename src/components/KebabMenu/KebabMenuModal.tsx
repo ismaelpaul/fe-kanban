@@ -7,8 +7,7 @@ interface KebabMenuProps {
 	setIsTaskModalOpen?: (arg: boolean) => void;
 	setIsEditBoardModalOpen?: (arg: boolean) => void;
 	setIsEditTaskModalOpen?: (arg: boolean) => void;
-
-	isParentTaskModal?: boolean;
+	isParentTaskModal: boolean;
 }
 
 const KebabMenuModal = ({
@@ -33,7 +32,6 @@ const KebabMenuModal = ({
 			setIsTaskModalOpen!(false);
 			setIsEditTaskModalOpen!(true);
 		} else {
-			setIsTaskModalOpen!(false);
 			setIsEditBoardModalOpen!(true);
 		}
 		setIsKebabMenuOpen(false);
