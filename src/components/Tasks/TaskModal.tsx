@@ -20,12 +20,13 @@ import { motion } from 'framer-motion';
 
 interface TaskModalProps {
 	task: SingleTask;
-	setIsTaskModalOpen: (arg: boolean) => void;
 	subtasks: SingleSubtask[];
 	totalSubtasks: number;
 	completedSubtasks: number;
-	setCompletedSubtasks: (arg: number) => void;
 	columnId: number;
+	setCompletedSubtasks: (arg: number) => void;
+	setIsTaskModalOpen: (arg: boolean) => void;
+	setIsEditTaskModalOpen: (arg: boolean) => void;
 }
 
 const TaskModal = ({
@@ -36,12 +37,11 @@ const TaskModal = ({
 	completedSubtasks,
 	setCompletedSubtasks,
 	columnId,
+	setIsEditTaskModalOpen,
 }: TaskModalProps) => {
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
 	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-	const isParentTaskModal = true;
 
 	const boardId = useBoardStore((state) => state.boardId);
 
@@ -152,6 +152,8 @@ const TaskModal = ({
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsKebabMenuOpen={setIsKebabModalOpen}
 							setIsTaskModalOpen={setIsTaskModalOpen}
+							isParentTaskModal={true}
+							setIsEditTaskModalOpen={setIsEditTaskModalOpen}
 						/>
 					) : (
 						<></>
@@ -164,7 +166,6 @@ const TaskModal = ({
 					</span>
 					{subtasks.map((subtask: SingleSubtask) => {
 						const isCompleted = subtask.is_completed === true;
-
 						return (
 							<div
 								key={subtask.subtask_id}
@@ -204,7 +205,7 @@ const TaskModal = ({
 							selectedOption={selectedOption}
 							setSelectedOption={setSelectedOption}
 							options={options}
-							isParentTaskModal={isParentTaskModal}
+							isParentTaskModal={true}
 						/>
 					</div>
 				</motion.div>
