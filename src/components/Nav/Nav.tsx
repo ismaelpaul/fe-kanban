@@ -123,7 +123,7 @@ const Nav = ({
 						<span
 							className={`text-l-heading dark:text-white ${
 								isAllBoardsOpen
-									? 'ml-16 transition-all ease-in-out duration-100'
+									? 'transition-all ease-in-out duration-300 ml-16'
 									: ''
 							}`}
 						>
@@ -138,7 +138,7 @@ const Nav = ({
 						buttonClass={btnAddTaskClass}
 						buttonText={btnAddTaskText}
 					/>
-					<div onClick={handleKebabMenu}>
+					<div onClick={handleKebabMenu} className="cursor-pointer">
 						<KebabMenu />
 					</div>
 					{isKebabModalOpen ? (
@@ -149,6 +149,7 @@ const Nav = ({
 							setIsKebabMenuOpen={setIsKebabModalOpen}
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsEditBoardModalOpen={setIsEditBoardModalOpen}
+							isParentTaskModal={false}
 						/>
 					) : (
 						<></>
