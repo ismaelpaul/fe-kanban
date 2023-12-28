@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { SubtaskSubmit } from '../interfaces/ISubtask';
 
 interface AxiosConfig extends AxiosRequestConfig {
 	credentials?: string;
@@ -135,6 +136,23 @@ export const updateTaskPosition = async (
 ) => {
 	try {
 		const response = await kanbanApi.patch(`/tasks/${taskId}`, updateTask);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const addNewSubtaskByTaskId = async (
+	taskId: number,
+	newSubtask: SubtaskSubmit[]
+) => {
+	try {
+		const response = await kanbanApi.post(
+			`/tasks/${taskId}/subtasks`,
+			newSubtask
+		);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
