@@ -28,7 +28,10 @@ const AddNewTaskModal = ({
 				ref={modalRef}
 			>
 				<h1 className="text-l-heading mb-6 dark:text-white">Add New Task</h1>
-				<TaskForm setIsAddNewTaskModalOpen={setIsAddNewTaskModalOpen} />
+				<TaskForm
+					setIsAddNewTaskModalOpen={setIsAddNewTaskModalOpen}
+					isNewTask={true}
+				/>
 				<Button
 					form={'task-form'}
 					type="submit"
