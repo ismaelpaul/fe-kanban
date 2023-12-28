@@ -6,5 +6,8 @@ export const TaskSchema = z.object({
 	title: z.string().nonempty({ message: "Can't be empty" }),
 	description: z.string(),
 	status: z.string(),
+});
+
+export const TaskSubmitSchema = TaskSchema.extend({
 	subtasks: z.array(SubtaskSchema),
 });
