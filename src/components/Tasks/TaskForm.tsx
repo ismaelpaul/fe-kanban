@@ -1,25 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import Dropdown from '../Dropdown/Dropdown';
 import Cross from '../SVGComponents/Cross';
 import { IColumns, SingleColumn } from '../../interfaces/IColumn';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TaskSubmit } from '../../interfaces/ITask';
-import { addNewTask, getColumnsByBoardId } from '../../api/kanbanApi';
+import { getColumnsByBoardId } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import useBoardStore from '../../store/boardStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { SubtaskInput } from '../../interfaces/ISubtask';
+import { TaskSubmitSchema } from '../../models/Task';
+import TextInput from '../Input/TextInput';
+import TextAreaInput from '../Input/TextAreaInput';
+import {
+	addNewTaskSubmission,
+	editTaskSubmission,
+} from '../../utils/Task/TaskSubmission';
 
 interface TaskFormProps {
-	setIsAddNewTaskModalOpen: (arg: boolean) => void;
+	setIsAddNewTaskModalOpen?: (arg: boolean) => void;
+	initialValue?: TaskSubmit;
+	isNewTask: boolean;
 }
-const TaskForm = ({ setIsAddNewTaskModalOpen }: TaskFormProps) => {
-	const [subtasksInput, setSubtasksInput] = useState([
-		{ id: 1, placeholder: 'e.g. Make coffee' },
-		{ id: 2, placeholder: 'e.g. Drink coffee' },
-	]);
+const TaskForm = ({
+	setIsAddNewTaskModalOpen,
+	initialValue,
+	isNewTask,
+}: TaskFormProps) => {
+	const [subtasksInput, setSubtasksInput] = useState<SubtaskInput[]>([]);
 
 	const queryClient = useQueryClient();
 
@@ -42,114 +52,161 @@ const TaskForm = ({ setIsAddNewTaskModalOpen }: TaskFormProps) => {
 
 	const [selectedOption, setSelectedOption] = useState(options[0]);
 
-	const subtaskSchema = z.object({
-		subtask_title: z.string(),
-		is_completed: z.boolean().default(false),
-	});
-
-	const taskAndSubtaskSchema = z.object({
-		column_id: z.number().optional(),
-		title: z.string().nonempty({ message: "Can't be empty" }),
-		description: z.string(),
-		status: z.string(),
-		subtasks: z.array(subtaskSchema),
-	});
-
 	const {
 		register,
 		handleSubmit,
 		reset,
+		setValue,
 		formState: { errors },
-	} = useForm<TaskSubmit>({
-		resolver: zodResolver(taskAndSubtaskSchema),
+	} = useForm({
+		resolver: zodResolver(TaskSubmitSchema),
+		defaultValues: initialValue,
 	});
 
 	const submitData: SubmitHandler<TaskSubmit> = async (data) => {
-		data.column_id = selectedOption.id;
-		data.status = selectedOption.value;
-
-		const columnId = selectedOption.id;
-
-		await addNewTask(data);
+		if (isNewTask) {
+			addNewTaskSubmission(data, selectedOption, queryClient);
+			setIsAddNewTaskModalOpen!(false);
+		} else {
+			data.task_id = initialValue?.task_id;
+			editTaskSubmission(data, selectedOption, initialValue);
+		}
 
 		reset();
-
-		setIsAddNewTaskModalOpen(false);
-
-		queryClient.invalidateQueries(['tasks', columnId]);
 	};
 
 	const onSubmit = handleSubmit(submitData);
 
 	const labelClass = 'text-body text-medium-grey dark:text-white font-bold';
 	const inputClass =
-		'dark:bg-dark-grey dark:text-white border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full';
+		'dark:bg-dark-grey dark:text-white border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full cursor-pointer hover:border-purple focus:outline-none';
 
 	const btnAddSubtaskClass =
 		'bg-purple bg-opacity-10 dark:bg-white dark:bg-opacity-100 text-purple text-13px font-bold py-2 w-full rounded-full';
 	const btnAddSubtaskText = '+ Add New Subtask';
 
-	const errorClass =
-		'text-red text-l-body absolute right-[12.7rem] mt-[2.2rem]';
+	const errorClass = 'text-red text-l-body absolute ';
 
 	const addInputField = () => {
-		const newInputFields = [...subtasksInput];
-		const newId = newInputFields.length + 1;
-		newInputFields.push({ id: newId, placeholder: 'e.g. New Subtask' });
-		setSubtasksInput(newInputFields);
+		const newId = subtasksInput.length + 1;
+		const newSubtask = {
+			subtask_id: newId,
+			title: '',
+			placeholder: 'e.g. New Subtask',
+			is_completed: false,
+			is_new: true,
+		};
+
+		setSubtasksInput((prevSubtasksInput) => {
+			const updatedSubtasks = [...prevSubtasksInput, newSubtask];
+
+			// Update form values and trigger revalidation
+			setValue(`subtasks.${updatedSubtasks.length - 1}`, newSubtask);
+
+			return updatedSubtasks;
+		});
 	};
 
 	const removeInputField = (idxToRemove: number) => {
-		const updatedInputs = subtasksInput.filter((_, idx) => idx !== idxToRemove);
-		setSubtasksInput(updatedInputs);
+		setSubtasksInput((prevState) =>
+			prevState.filter((_, idx) => idx !== idxToRemove)
+		);
+
+		// Update form values and trigger revalidation
+		setValue(
+			`subtasks`,
+			subtasksInput.filter((_, idx) => idx !== idxToRemove)
+		);
 	};
+
+	useEffect(() => {
+		if (initialValue) {
+			setSelectedOption({
+				id: initialValue.column_id,
+				label: initialValue.status,
+				value: initialValue.status,
+			});
+			setSubtasksInput(initialValue.subtasks);
+		} else {
+			setSubtasksInput([
+				{
+					subtask_id: 1,
+					title: '',
+					placeholder: 'e.g. Make coffee',
+					is_completed: false,
+					is_new: true,
+				},
+				{
+					subtask_id: 2,
+					title: '',
+					placeholder: 'e.g. Drink coffee',
+					is_completed: false,
+					is_new: true,
+				},
+			]);
+		}
+	}, [initialValue]);
 
 	return (
 		<>
 			<form id="task-form" onSubmit={onSubmit}>
-				<div className="flex flex-col gap-2 mb-6">
+				<div className="flex flex-col gap-2 mb-6 relative">
 					<label htmlFor="title" className={labelClass}>
 						Title
 					</label>
-					<input
-						id="title"
-						{...register('title')}
+					<TextInput
+						register={register}
 						name="title"
-						type="text"
+						className={`${inputClass} ${
+							errors.title ? 'border border-red border-opacity-100' : ''
+						}`}
 						placeholder="e.g. Take coffee break"
-						className={inputClass}
+						defaultValue={initialValue?.title || ''}
 					/>
 					{errors.title && (
-						<span className={errorClass}>{errors.title.message}</span>
+						<span className={`${errorClass} right-6 mt-[2.1rem]`}>
+							{errors.title.message}
+						</span>
 					)}
 				</div>
 				<div className="flex flex-col gap-2 mb-6">
 					<label htmlFor="description" className={labelClass}>
 						Description
 					</label>
-					<textarea
-						id="description"
-						{...register('description')}
-						name="description"
-						placeholder="e.g. It's always good to take a break. This 15 minute break will  recharge the batteries a little."
+					<TextAreaInput
+						register={register}
+						name={'description'}
 						className={`${inputClass} h-28`}
+						defaultValue={initialValue?.description || ''}
+						placeholder="e.g. It's always good to take a break. This 15 minute break will  recharge the batteries a little."
 					/>
 				</div>
 				<div>
 					<label className={`${labelClass} inline-block mb-2`}>Subtasks</label>
-					{subtasksInput.map((input, idx) => {
-						const subtaskTitleKey =
-							`subtasks[${idx}].subtask_title` as keyof TaskSubmit;
+					{subtasksInput.map((subtask, idx) => {
 						return (
-							<div key={idx} className="flex items-center gap-4 mb-3">
-								<input
-									{...register(subtaskTitleKey)}
-									name={`subtasks[${idx}].subtask_title`}
-									className={inputClass}
-									placeholder={input.placeholder}
+							<div key={idx} className="flex items-center gap-4 mb-3 relative">
+								<TextInput
+									register={register}
+									name={`subtasks.${idx}.title`}
+									className={`${inputClass} ${
+										errors.subtasks?.[idx]
+											? 'border border-red border-opacity-100'
+											: ''
+									}`}
+									placeholder={subtask.placeholder}
+									defaultValue={subtask.title}
 								/>
-								<div onClick={() => removeInputField(idx)}>
-									<Cross />
+								{errors.subtasks && (
+									<span className={`${errorClass} right-14`}>
+										{errors.subtasks[idx]?.title?.message}
+									</span>
+								)}
+								<div
+									className="cursor-pointer"
+									onClick={() => removeInputField(idx)}
+								>
+									<Cross isError={errors.subtasks?.[idx] != null} />
 								</div>
 							</div>
 						);
@@ -167,10 +224,7 @@ const TaskForm = ({ setIsAddNewTaskModalOpen }: TaskFormProps) => {
 						id="status"
 						type="hidden"
 						{...register('status')}
-						value={selectedOption.value}
-						onChange={(e) => {
-							console.log('Selected Status Value:', e.target.value);
-						}}
+						defaultValue={selectedOption.value}
 					/>
 					{errors.status && (
 						<span className={errorClass}>{errors.status.message}</span>
@@ -179,6 +233,7 @@ const TaskForm = ({ setIsAddNewTaskModalOpen }: TaskFormProps) => {
 						options={options}
 						selectedOption={selectedOption}
 						setSelectedOption={setSelectedOption}
+						isParentTaskModal={false}
 					/>
 				</div>
 			</form>
