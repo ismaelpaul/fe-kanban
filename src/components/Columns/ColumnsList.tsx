@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
-import { getColumnsByBoardId, updateTaskPosition } from '../../api/kanbanApi';
+import {
+	getColumnsByBoardId,
+	updateTaskPositionAndStatus,
+} from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import { IColumns } from '../../interfaces/IColumn';
 import { useQueryClient } from '@tanstack/react-query';
@@ -78,12 +81,13 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 			newColumnId: newColumnId,
 			currentTaskPosition: taskPosition + 1,
 			newTaskPosition: newTaskPosition + 1,
+			newStatus: columns[newColumnId - 1].name,
 		};
 
 		const queryKey = 'tasks';
 
 		await patch({
-			patchFn: updateTaskPosition,
+			patchFn: updateTaskPositionAndStatus,
 			resourceId: taskId,
 			updatedData,
 			queryKey,
