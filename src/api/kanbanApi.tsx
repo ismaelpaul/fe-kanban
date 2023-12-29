@@ -121,7 +121,7 @@ export const addNewTask = async (newTask: object) => {
 	}
 };
 
-export const deleteTaskById = async (taskId: number): Promise<void> => {
+export const deleteTaskById = async (taskId: number) => {
 	try {
 		await kanbanApi.delete(`/tasks/${taskId}`);
 	} catch (error) {
@@ -130,7 +130,7 @@ export const deleteTaskById = async (taskId: number): Promise<void> => {
 	}
 };
 
-export const updateTaskPosition = async (
+export const updateTaskPositionAndStatus = async (
 	taskId: number,
 	updateTask: object
 ) => {
@@ -154,6 +154,16 @@ export const addNewSubtaskByTaskId = async (
 			newSubtask
 		);
 		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const deleteSubtask = async (subtasksToBeDeleted: number[]) => {
+	try {
+		await kanbanApi.delete('/subtasks', { data: subtasksToBeDeleted });
 	} catch (error) {
 		const err = error as AxiosError;
 		console.log(err.response?.data);
