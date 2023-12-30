@@ -16,11 +16,11 @@ const DeleteModal = ({
 }: DeleteModalPros) => {
 	const deleteBtnTex = 'Delete';
 	const deleteBtnClass =
-		'bg-red text-white text-13px font-bold py-2 w-full rounded-full tablet:mb-0 tablet:py-3';
+		'bg-red text-white text-13px font-bold py-2 w-full rounded-full tablet:mb-0 tablet:py-3 hover:bg-red-hover';
 
 	const cancelBtnText = 'Cancel';
 	const cancelBtnClass =
-		'bg-purple bg-opacity-10 dark:bg-white text-purple text-13px font-bold py-2 w-full rounded-full tablet:py-3';
+		'bg-purple bg-opacity-10 dark:bg-white text-purple text-13px font-bold py-2 w-full rounded-full tablet:py-3 hover:bg-purple/25';
 
 	const item = parentComponent === 'Nav' ? 'board' : 'task';
 	const complementaryText =
