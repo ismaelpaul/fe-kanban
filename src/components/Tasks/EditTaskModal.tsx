@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import TaskForm from './TaskForm';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useClickOutside from '../../hooks/useClickOutside';
-import { SingleTask } from '../../interfaces/ITask';
+import { SingleTask, TaskSubmit } from '../../interfaces/ITask';
 import { SingleSubtask } from '../../interfaces/ISubtask';
 import Button from '../Button/Button';
 
@@ -16,17 +16,20 @@ const EditTaskModal = ({
 	task,
 	subtasks,
 }: EditTaskModalProps) => {
+	const [taskData, setTaskData] = useState<Partial<TaskSubmit>>({});
 	const modalRef = useRef(null);
 	useClickOutside(modalRef, () => {
 		setIsEditTaskModalOpen(false);
 	});
 
-	const initialValue = {
-		...task,
-		subtasks: subtasks.map((subtask) => {
-			return subtask;
-		}),
-	};
+	useEffect(() => {
+		if (task || subtasks) {
+			setTaskData({
+				...task,
+				subtasks,
+			});
+		}
+	}, [task, subtasks]);
 
 	const btnSaveChangesClass =
 		'bg-purple text-white text-13px font-bold py-2 w-full rounded-full';
@@ -43,7 +46,11 @@ const EditTaskModal = ({
 				ref={modalRef}
 			>
 				<h1 className="text-l-heading mb-6 dark:text-white">Edit Task</h1>
-				<TaskForm initialValue={initialValue} />
+				<TaskForm
+					taskData={taskData}
+					isNewTask={false}
+					setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+				/>
 				<Button
 					form={'task-form'}
 					type="submit"
