@@ -21,12 +21,14 @@ import {
 
 interface TaskFormProps {
 	setIsAddNewTaskModalOpen?: (arg: boolean) => void;
-	initialValue?: TaskSubmit;
+	setIsEditTaskModalOpen?: (arg: boolean) => void;
+	taskData: Partial<TaskSubmit>;
 	isNewTask: boolean;
 }
 const TaskForm = ({
 	setIsAddNewTaskModalOpen,
-	initialValue,
+	setIsEditTaskModalOpen,
+	taskData,
 	isNewTask,
 }: TaskFormProps) => {
 	const [subtasksInput, setSubtasksInput] = useState<SubtaskInput[]>([]);
@@ -60,16 +62,18 @@ const TaskForm = ({
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(TaskSubmitSchema),
-		defaultValues: initialValue,
+		defaultValues: taskData,
 	});
 
-	const submitData: SubmitHandler<TaskSubmit> = async (data) => {
+	const submitData: SubmitHandler<Partial<TaskSubmit>> = async (
+		newTaskData
+	) => {
 		if (isNewTask) {
-			addNewTaskSubmission(data, selectedOption, queryClient);
+			addNewTaskSubmission(newTaskData, selectedOption, queryClient);
 			setIsAddNewTaskModalOpen!(false);
 		} else {
-			data.task_id = initialValue?.task_id;
-			editTaskSubmission(data, selectedOption, initialValue);
+			editTaskSubmission(newTaskData, selectedOption, taskData, queryClient);
+			setIsEditTaskModalOpen!(false);
 		}
 
 		reset();
@@ -120,13 +124,15 @@ const TaskForm = ({
 	};
 
 	useEffect(() => {
-		if (initialValue) {
+		if (taskData) {
 			setSelectedOption({
-				id: initialValue.column_id,
-				label: initialValue.status,
-				value: initialValue.status,
+				id: taskData.column_id ?? 0,
+				label: taskData.status ?? 'Select Status',
+				value: taskData.status ?? 'Status',
 			});
-			setSubtasksInput(initialValue.subtasks);
+			if (taskData.subtasks) {
+				setSubtasksInput(taskData.subtasks);
+			}
 		} else {
 			setSubtasksInput([
 				{
@@ -145,7 +151,7 @@ const TaskForm = ({
 				},
 			]);
 		}
-	}, [initialValue]);
+	}, [taskData]);
 
 	return (
 		<>
@@ -161,7 +167,7 @@ const TaskForm = ({
 							errors.title ? 'border border-red border-opacity-100' : ''
 						}`}
 						placeholder="e.g. Take coffee break"
-						defaultValue={initialValue?.title || ''}
+						defaultValue={taskData.title || ''}
 					/>
 					{errors.title && (
 						<span className={`${errorClass} right-6 mt-[2.1rem]`}>
@@ -177,7 +183,7 @@ const TaskForm = ({
 						register={register}
 						name={'description'}
 						className={`${inputClass} h-28`}
-						defaultValue={initialValue?.description || ''}
+						defaultValue={taskData.description || ''}
 						placeholder="e.g. It's always good to take a break. This 15 minute break will  recharge the batteries a little."
 					/>
 				</div>
