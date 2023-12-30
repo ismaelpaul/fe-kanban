@@ -135,6 +135,23 @@ export const updateTaskPositionAndStatus = async (
 	updateTask: object
 ) => {
 	try {
+		const response = await kanbanApi.patch(
+			`/tasks/${taskId}/position-status`,
+			updateTask
+		);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const updateTaskTitleAndDescription = async (
+	taskId: number,
+	updateTask: object
+) => {
+	try {
 		const response = await kanbanApi.patch(`/tasks/${taskId}`, updateTask);
 		return response.data;
 	} catch (error) {
