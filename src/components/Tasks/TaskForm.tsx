@@ -22,7 +22,7 @@ import {
 interface TaskFormProps {
 	setIsAddNewTaskModalOpen?: (arg: boolean) => void;
 	setIsEditTaskModalOpen?: (arg: boolean) => void;
-	taskData: Partial<TaskSubmit>;
+	taskData?: Partial<TaskSubmit>;
 	isNewTask: boolean;
 }
 const TaskForm = ({
@@ -164,10 +164,10 @@ const TaskForm = ({
 						register={register}
 						name="title"
 						className={`${inputClass} ${
-							errors.title ? 'border border-red border-opacity-100' : ''
+							errors.title ? 'border border-red/100' : ''
 						}`}
 						placeholder="e.g. Take coffee break"
-						defaultValue={taskData.title || ''}
+						defaultValue={taskData?.title || ''}
 					/>
 					{errors.title && (
 						<span className={`${errorClass} right-6 mt-[2.1rem]`}>
@@ -183,7 +183,7 @@ const TaskForm = ({
 						register={register}
 						name={'description'}
 						className={`${inputClass} h-28`}
-						defaultValue={taskData.description || ''}
+						defaultValue={taskData?.description || ''}
 						placeholder="e.g. It's always good to take a break. This 15 minute break will  recharge the batteries a little."
 					/>
 				</div>
@@ -196,9 +196,7 @@ const TaskForm = ({
 									register={register}
 									name={`subtasks.${idx}.title`}
 									className={`${inputClass} ${
-										errors.subtasks?.[idx]
-											? 'border border-red border-opacity-100'
-											: ''
+										errors.subtasks?.[idx] ? 'border border-red/100' : ''
 									}`}
 									placeholder={subtask.placeholder}
 									defaultValue={subtask.title}
