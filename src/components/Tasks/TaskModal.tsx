@@ -169,7 +169,7 @@ const TaskModal = ({
 						return (
 							<div
 								key={subtask.subtask_id}
-								className="flex items-center bg-lines-light dark:bg-dark-bg p-3 mt-2 rounded gap-4 transition ease-in-out duration-200 hover:dark:bg-purple/25"
+								className="flex items-center bg-lines-light dark:bg-dark-bg p-3 mt-2 rounded gap-4 transition ease-in-out duration-200 hover:bg-purple/25"
 							>
 								<input
 									type="checkbox"
