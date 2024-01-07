@@ -99,8 +99,25 @@ export const updateSubtaskCompletionById = async (
 ) => {
 	try {
 		const response = await kanbanApi.patch(
-			`/subtasks/${subtaskId}`,
+			`/subtasks/${subtaskId}/completion`,
 			completionStatus
+		);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const updateSubtaskTitleByid = async (
+	subtaskId: number,
+	subtaskTitle: object
+) => {
+	try {
+		const response = await kanbanApi.patch(
+			`/subtasks/${subtaskId}`,
+			subtaskTitle
 		);
 		return response.data;
 	} catch (error) {
