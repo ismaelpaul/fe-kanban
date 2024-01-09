@@ -10,10 +10,15 @@ export interface ISubtasks {
 }
 
 export interface SubtaskSubmit {
-	subtask_title: string;
+	title: string;
 	is_completed: boolean;
 }
 
 export interface SubtaskInput {
-	subtask_title: string;
+	placeholder?: string;
+	task_id?: number;
+	subtask_id?: number;
+	title: string;
+	is_completed: boolean;
+	is_new?: boolean;
 }
