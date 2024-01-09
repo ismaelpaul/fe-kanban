@@ -32,6 +32,7 @@ const TaskForm = ({
 	isNewTask,
 }: TaskFormProps) => {
 	const [subtasksInput, setSubtasksInput] = useState<SubtaskInput[]>([]);
+	const [subtasksToDelete, setSubtasksToDelete] = useState<number[]>([]);
 
 	const queryClient = useQueryClient();
 
@@ -72,7 +73,14 @@ const TaskForm = ({
 			addNewTaskSubmission(newTaskData, selectedOption, queryClient);
 			setIsAddNewTaskModalOpen!(false);
 		} else {
-			editTaskSubmission(newTaskData, selectedOption, taskData, queryClient);
+			editTaskSubmission(
+				newTaskData,
+				selectedOption,
+				taskData,
+				queryClient,
+				subtasksToDelete,
+				setSubtasksToDelete
+			);
 			setIsEditTaskModalOpen!(false);
 		}
 
@@ -111,7 +119,9 @@ const TaskForm = ({
 		});
 	};
 
-	const removeInputField = (idxToRemove: number) => {
+	const removeInputField = (idxToRemove: number, subtaskId: number) => {
+		setSubtasksToDelete([...subtasksToDelete, subtaskId]);
+
 		setSubtasksInput((prevState) =>
 			prevState.filter((_, idx) => idx !== idxToRemove)
 		);
@@ -133,6 +143,7 @@ const TaskForm = ({
 			if (taskData.subtasks) {
 				setSubtasksInput(taskData.subtasks);
 			}
+			setValue('title', taskData.title);
 		} else {
 			setSubtasksInput([
 				{
@@ -151,7 +162,7 @@ const TaskForm = ({
 				},
 			]);
 		}
-	}, [taskData]);
+	}, [taskData, setValue]);
 
 	return (
 		<>
@@ -167,7 +178,7 @@ const TaskForm = ({
 							errors.title ? 'border border-red/100' : ''
 						}`}
 						placeholder="e.g. Take coffee break"
-						defaultValue={taskData?.title || ''}
+						defaultValue={taskData?.title}
 					/>
 					{errors.title && (
 						<span className={`${errorClass} right-6 mt-[2.1rem]`}>
@@ -183,7 +194,7 @@ const TaskForm = ({
 						register={register}
 						name={'description'}
 						className={`${inputClass} h-28`}
-						defaultValue={taskData?.description || ''}
+						defaultValue={taskData?.description}
 						placeholder="e.g. It's always good to take a break. This 15 minute break will  recharge the batteries a little."
 					/>
 				</div>
@@ -192,6 +203,13 @@ const TaskForm = ({
 					{subtasksInput.map((subtask, idx) => {
 						return (
 							<div key={idx} className="flex items-center gap-4 mb-3 relative">
+								<input
+									{...register(`subtasks.${idx}.subtask_id`, {
+										valueAsNumber: true,
+									})}
+									defaultValue={Number(subtask.subtask_id)}
+									type="hidden"
+								/>
 								<TextInput
 									register={register}
 									name={`subtasks.${idx}.title`}
@@ -208,7 +226,7 @@ const TaskForm = ({
 								)}
 								<div
 									className="cursor-pointer"
-									onClick={() => removeInputField(idx)}
+									onClick={() => removeInputField(idx, subtask.subtask_id)}
 								>
 									<Cross isError={errors.subtasks?.[idx] != null} />
 								</div>
