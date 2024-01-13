@@ -24,9 +24,22 @@ export const getAllBoards = async () => {
 	}
 };
 
-export const addNewBoard = async (newBoard: object) => {
+export const getBoardByBoardId = async (boardId: number) => {
 	try {
-		const response = await kanbanApi.post('/boards', newBoard);
+		const response = await kanbanApi.get(`/boards/${boardId}`);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const addNewBoard = async (newBoardData: object) => {
+	console.log(newBoardData);
+
+	try {
+		const response = await kanbanApi.post('/boards', newBoardData);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
