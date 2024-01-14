@@ -2,7 +2,7 @@ import Button from '../Button/Button';
 import { motion } from 'framer-motion';
 
 interface DeleteModalPros {
-	itemName: string;
+	itemName: string | null;
 	parentComponent: string;
 	setIsDeleteModalOpen: (arg: boolean) => void;
 	onClick: () => void;
