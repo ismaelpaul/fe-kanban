@@ -12,6 +12,7 @@ import useBoardStore from '../../store/boardStore';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import usePatch from '../../hooks/usePatch';
 import useTasksStore from '../../store/tasksStore';
+import useColumnsStore from '../../store/columnsStore';
 
 interface ColumnsListProps {
 	isAllBoardsOpen: boolean;
@@ -30,9 +31,14 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 
 	const { patch } = usePatch();
 
+	const setColumns = useColumnsStore((state) => state.setColumns);
+
 	useEffect(() => {
+		if (data) {
+			setColumns(data.columns);
+		}
 		queryClient.invalidateQueries(['columns', boardId]);
-	}, [boardId, queryClient]);
+	}, [boardId, queryClient, setColumns, data]);
 
 	if (isLoading) {
 		return <span>Loading...</span>;
