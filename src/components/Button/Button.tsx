@@ -2,7 +2,7 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 interface ButtonProps {
 	buttonClass: string;
-	buttonText?: string;
+	buttonText?: string | null;
 	svgComponent?: React.ReactNode;
 	onClick?: () => void;
 	type?: 'button' | 'submit' | 'reset';
