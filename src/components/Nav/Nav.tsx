@@ -15,6 +15,7 @@ import useBoardStore from '../../store/boardStore';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import Logo from '../SVGComponents/Logo';
 import LogoMobile from '../SVGComponents/LogoMobile';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;
@@ -40,6 +41,8 @@ const Nav = ({
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
+	const queryClient = useQueryClient();
+
 	const kebabMenuEdit = 'Edit Board';
 	const kebabMenuDelete = 'Delete Board';
 	const kebabMenuPosition = 'top-16 right-4';
@@ -59,11 +62,15 @@ const Nav = ({
 		setBoardId(Number(boardId));
 
 		if (boardName) {
-			setSelectedBoard(boardName);
+			setSelectedBoard({
+				name: boardName,
+				board_id: Number(boardId),
+				user_id: 1,
+			});
 		}
-	}, [firstBoard, setBoardId]);
+	}, [firstBoard, setBoardId, setSelectedBoard]);
 
-	const btnBoardsText = selectedBoard;
+	const btnBoardsText = selectedBoard.name;
 	const btnBoardsClass = 'text-l-heading dark:text-white';
 
 	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 hover:bg-purple-hover`;
@@ -92,7 +99,7 @@ const Nav = ({
 			return;
 		}
 
-		setSelectedBoard(newBoard.name);
+		setSelectedBoard(newBoard);
 
 		const urlSearchParams = new URLSearchParams(window.location.search);
 
@@ -101,7 +108,9 @@ const Nav = ({
 
 		window.history.pushState(null, '', `/?${urlSearchParams.toString()}`);
 
-		setBoardId(Number(boardId));
+		setBoardId(Number(newBoard.board_id));
+
+		queryClient.invalidateQueries(['boards']);
 	};
 
 	return (
@@ -127,7 +136,7 @@ const Nav = ({
 									: ''
 							}`}
 						>
-							{selectedBoard}
+							{selectedBoard.name}
 						</span>
 					)}
 				</div>
@@ -172,7 +181,7 @@ const Nav = ({
 			{isDeleteModalOpen ? (
 				<DeleteModal
 					onClick={() => handleDeleteBoard(boardId)}
-					itemName={selectedBoard}
+					itemName={selectedBoard.name}
 					parentComponent="Nav"
 					setIsDeleteModalOpen={setIsDeleteModalOpen}
 				/>
