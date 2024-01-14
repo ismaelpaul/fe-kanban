@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { SubtaskSubmit } from '../interfaces/ISubtask';
+import { SingleColumn } from '../interfaces/IColumn';
 
 interface AxiosConfig extends AxiosRequestConfig {
 	credentials?: string;
@@ -76,6 +77,23 @@ export const updateBoardAndColumns = async (
 export const getColumnsByBoardId = async (boardId: number) => {
 	try {
 		const response = await kanbanApi.get(`/boards/${boardId}/columns`);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const updatedColumnsByBoardId = async (
+	boardId: number,
+	newColumns: SingleColumn[]
+) => {
+	try {
+		const response = await kanbanApi.patch(
+			`/boards/${boardId}/columns`,
+			newColumns
+		);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
