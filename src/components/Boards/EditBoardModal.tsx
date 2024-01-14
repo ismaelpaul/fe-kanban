@@ -1,30 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import useClickOutside from '../../hooks/useClickOutside';
-import { useQueryClient } from '@tanstack/react-query';
 import useBoardStore from '../../store/boardStore';
-import { IColumns } from '../../interfaces/IColumn';
 import { motion } from 'framer-motion';
 import Button from '../Button/Button';
 import BoardForm from './BoardForm';
-import { BoardSubmit } from '../../interfaces/IBoard';
+import useColumnsStore from '../../store/columnsStore';
 
 interface EditBoardModalProps {
 	setIsEditBoardModalOpen: (arg: boolean) => void;
 }
 
 const EditBoardModal = ({ setIsEditBoardModalOpen }: EditBoardModalProps) => {
-	const [boardData, setBoardData] = useState<Partial<BoardSubmit>>({});
-
-	const boardId = useBoardStore((state) => state.boardId);
-
-	const queryClient = useQueryClient();
-
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
+	const columns = useColumnsStore((state) => state.columns);
 
-	const queryColumnsKey = ['columns', boardId];
-
-	const { columns }: IColumns = queryClient.getQueryData(queryColumnsKey) || {
-		columns: [],
+	const boardData = {
+		...selectedBoard,
+		columns,
 	};
 
 	const btnSaveChangesClass =
@@ -33,12 +25,6 @@ const EditBoardModal = ({ setIsEditBoardModalOpen }: EditBoardModalProps) => {
 
 	const modalRef = useRef(null);
 	useClickOutside(modalRef, () => setIsEditBoardModalOpen(false));
-
-	useEffect(() => {
-		if (selectedBoard || columns) {
-			setBoardData({ ...selectedBoard, columns });
-		}
-	}, [selectedBoard, columns]);
 
 	return (
 		<div className="fixed inset-0 flex items-center justify-center z-40">
