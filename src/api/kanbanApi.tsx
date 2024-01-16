@@ -235,3 +235,13 @@ export const deleteSubtask = async (subtasksToBeDeleted: number[]) => {
 		return err.response?.data;
 	}
 };
+
+export const deleteColumnsById = async (columnsToDelete: number[]) => {
+	try {
+		await kanbanApi.delete(`/columns`, { data: columnsToDelete });
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
