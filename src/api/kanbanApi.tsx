@@ -37,8 +37,6 @@ export const getBoardByBoardId = async (boardId: number) => {
 };
 
 export const addNewBoard = async (newBoardData: object) => {
-	console.log(newBoardData);
-
 	try {
 		const response = await kanbanApi.post('/boards', newBoardData);
 		return response.data;
@@ -58,15 +56,12 @@ export const deleteBoardById = async (boardId: number) => {
 	}
 };
 
-export const updateBoardAndColumns = async (
+export const updateBoardNameById = async (
 	boardId: number,
-	updatedBoardAndColumns: object
+	updatedBoard: object
 ) => {
 	try {
-		const response = await kanbanApi.patch(
-			`/boards/${boardId}`,
-			updatedBoardAndColumns
-		);
+		const response = await kanbanApi.patch(`/boards/${boardId}`, updatedBoard);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -239,6 +234,17 @@ export const deleteSubtask = async (subtasksToBeDeleted: number[]) => {
 export const deleteColumnsById = async (columnsToDelete: number[]) => {
 	try {
 		await kanbanApi.delete(`/columns`, { data: columnsToDelete });
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const addNewColumnsByBoardId = async (boardId: number, newColumns) => {
+	try {
+		const response = await kanbanApi.post(`/boards/${boardId}`, newColumns);
+		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
 		console.log(err.response?.data);
