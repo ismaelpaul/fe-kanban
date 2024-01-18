@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	getColumnsByBoardId,
 	updateTaskPositionAndStatus,
@@ -13,11 +13,13 @@ import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import usePatch from '../../hooks/usePatch';
 import useTasksStore from '../../store/tasksStore';
 import useColumnsStore from '../../store/columnsStore';
+import AddNewColumnModal from './AddNewColumnModal';
 
 interface ColumnsListProps {
 	isAllBoardsOpen: boolean;
 }
 const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
+	const [isAddNewColumnModalOpen, setIsAddNewColumnModalOpen] = useState(false);
 	const boardId = useBoardStore((state) => state.boardId);
 
 	const queryClient = useQueryClient();
@@ -129,12 +131,22 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 						)}
 					</Droppable>
 				))}
-				<div className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12">
+				<div
+					onClick={() => setIsAddNewColumnModalOpen(true)}
+					className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12"
+				>
 					<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center cursor-pointer transition ease-in-out duration-300 hover:text-purple">
 						+ New Column
 					</span>
 				</div>
 			</DragDropContext>
+			{isAddNewColumnModalOpen ? (
+				<AddNewColumnModal
+					setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
+				/>
+			) : (
+				<></>
+			)}
 		</main>
 	);
 };
