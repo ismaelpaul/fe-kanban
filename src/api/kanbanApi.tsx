@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { SubtaskSubmit } from '../interfaces/ISubtask';
-import { SingleColumn } from '../interfaces/IColumn';
+import { ColumnsInput, SingleColumn } from '../interfaces/IColumn';
 
 interface AxiosConfig extends AxiosRequestConfig {
 	credentials?: string;
@@ -241,7 +241,10 @@ export const deleteColumnsById = async (columnsToDelete: number[]) => {
 	}
 };
 
-export const addNewColumnsByBoardId = async (boardId: number, newColumns) => {
+export const addNewColumnsByBoardId = async (
+	boardId: number,
+	newColumns: ColumnsInput[]
+) => {
 	try {
 		const response = await kanbanApi.post(`/boards/${boardId}`, newColumns);
 		return response.data;
