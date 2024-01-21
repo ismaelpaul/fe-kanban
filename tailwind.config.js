@@ -50,6 +50,9 @@ export default {
 			'purple-dot': '#8471F2',
 			'green-dot': '#67E2AE',
 			linear: '#E9EFFA',
+			success: '#53D768',
+			warning: '#FFD600',
+			error: '#EA5555',
 		},
 		extend: {
 			dropShadow: {
