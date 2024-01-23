@@ -5,7 +5,7 @@ type TextInputProps<T extends FieldValues> = {
 	name: Path<T>;
 	className: string;
 	placeholder?: string | undefined;
-	defaultValue: string | undefined;
+	defaultValue?: string | undefined;
 };
 
 const TextInput = <T extends FieldValues>({
