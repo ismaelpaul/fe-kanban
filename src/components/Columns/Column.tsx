@@ -19,7 +19,7 @@ const Column = ({ column, index, isDragging }: ColumnProps) => {
 		circleColor = 'bg-green-dot';
 	}
 	return (
-		<div>
+		<>
 			<div className="flex gap-3 items-center mb-7">
 				<div
 					className={` ${circleColor} w-[0.938rem] h-[0.938rem] rounded-full`}
@@ -29,15 +29,15 @@ const Column = ({ column, index, isDragging }: ColumnProps) => {
 				</h1>
 			</div>
 			<div
-				className={` flex flex-col items-center py-1 gap-5 w-[18rem] mb-4 h-full ${
+				className={` flex flex-col items-center py-1 gap-5 w-[18rem] mb-4 max-h-[80vh] overflow-y-scroll no-scrollbar ${
 					isDragging
-						? 'bg-purple/20 border-dashed border-2 border-purple-hover rounded-md'
+						? 'bg-purple/20 border-dashed border-2 border-purple-hover rounded-md h-full'
 						: ''
 				}`}
 			>
 				<TaskList columnId={column.column_id} setTasksLength={setTasksLength} />
 			</div>
-		</div>
+		</>
 	);
 };
 
