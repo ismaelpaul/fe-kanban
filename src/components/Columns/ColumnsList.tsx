@@ -53,7 +53,9 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 	const { columns }: IColumns = data || { columns: [] };
 
 	if (columns.length === 0) {
-		return <EmptyBoard />;
+		return (
+			<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
+		);
 	}
 
 	const handleDragAndDrop = async (result: DropResult) => {
@@ -107,9 +109,9 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 
 	return (
 		<main
-			className={`flex gap-5 overflow-x-scroll h-screen bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
+			className={`flex gap-5 overflow-x-scroll h-screen w-screen fixed bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
 				isAllBoardsOpen
-					? 'ml-[16.5rem] transition-all ease-in-out duration-300'
+					? 'tablet:ml-[16.5rem] transition-all ease-in-out duration-300'
 					: ''
 			}`}
 		>
