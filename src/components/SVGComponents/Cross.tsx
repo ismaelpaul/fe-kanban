@@ -1,5 +1,5 @@
 interface CrossProps {
-	isError: boolean;
+	isError?: boolean;
 }
 
 const Cross = ({ isError }: CrossProps) => {
