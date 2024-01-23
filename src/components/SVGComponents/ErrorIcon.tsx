@@ -1,7 +1,7 @@
 const ErrorIcon = () => {
 	return (
 		<svg
-			fill="#000000"
+			fill="#EA5555"
 			width="25px"
 			height="25px"
 			viewBox="-1.7 0 20.4 20.4"
