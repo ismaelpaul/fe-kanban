@@ -9,5 +9,12 @@ export interface IColumns {
 }
 
 export interface ColumnName {
-	column_name: string;
+	name: string;
+}
+
+export interface ColumnsInput {
+	placeholder?: string;
+	column_id?: number;
+	name: string;
+	is_new?: boolean;
 }
