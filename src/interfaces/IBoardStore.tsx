@@ -1,9 +1,11 @@
+import { Board } from './IBoard';
+
 export interface BoardStoreState {
 	boardId: number;
-	selectedBoard: string;
+	selectedBoard: Board;
 }
 
 export interface BoardStoreActions {
 	setBoardId: (newBoardId: number) => void;
-	setSelectedBoard: (newSelectedBoard: string) => void;
+	setSelectedBoard: (newSelectedBoard: Board) => void;
 }
