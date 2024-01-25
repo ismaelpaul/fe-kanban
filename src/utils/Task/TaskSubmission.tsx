@@ -9,6 +9,7 @@ import {
 } from '../../api/kanbanApi';
 import { TaskStatusDropdown, TaskSubmit } from '../../interfaces/ITask';
 import { SingleSubtask, SubtaskInput } from '../../interfaces/ISubtask';
+import { getNewItemsToAdd } from '../utils';
 
 type UpdatedTaskTitleAndDescription = {
 	title?: string;
@@ -94,7 +95,7 @@ export const editTaskSubmission = async (
 		}
 
 		// Add new subtasks
-		const newSubtasksToAdd = getNewSubtasksToAdd(newSubtasks);
+		const newSubtasksToAdd = getNewItemsToAdd<SubtaskInput>(newSubtasks || []);
 
 		if (newSubtasksToAdd.length > 0) {
 			newSubtasksToAdd.forEach((subtask: SubtaskInput) => {
@@ -147,14 +148,6 @@ const getEditedSubtask = (
 		}
 	}
 	return subtasksToEdit;
-};
-
-const getNewSubtasksToAdd = (newSubtasks: SubtaskInput[]) => {
-	const newSubtasksToAdd = newSubtasks.filter(
-		(subtask: SubtaskInput) => subtask.is_new
-	);
-
-	return newSubtasksToAdd;
 };
 
 function compareSubtasks(
