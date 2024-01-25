@@ -1,4 +1,4 @@
-import { ColumnName } from './IColumn';
+import { ColumnsInput } from './IColumn';
 
 export interface Board {
 	board_id: number;
@@ -11,7 +11,7 @@ export interface Boards {
 
 export interface BoardSubmit {
 	user_id: number;
-	board_id?: number;
-	board_name: string;
-	columns?: ColumnName[];
+	board_id: number;
+	name: string;
+	columns: ColumnsInput[];
 }
