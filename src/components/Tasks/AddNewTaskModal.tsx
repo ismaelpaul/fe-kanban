@@ -24,7 +24,8 @@ const AddNewTaskModal = ({
 				initial={{ scale: 0.7 }}
 				animate={{ scale: 1 }}
 				transition={{ duration: 0.2 }}
-				className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:w-[30rem]"
+				className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:w-[30rem] max-h-[80vh] overflow-y-scroll no-scrollbar"
+				role="dialog"
 				ref={modalRef}
 			>
 				<h1 className="text-l-heading mb-6 dark:text-white">Add New Task</h1>
