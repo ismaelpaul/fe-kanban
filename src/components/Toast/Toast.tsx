@@ -5,7 +5,7 @@ import ErrorIcon from '../SVGComponents/ErrorIcon';
 import WarningIcon from '../SVGComponents/WarningIcon';
 import { useToast } from '../../hooks/useToast';
 import { motion } from 'framer-motion';
-import { IToast } from '../../interfaces/IToast';
+import { IToast, IToastTypes } from '../../interfaces/IToast';
 
 const toastTypes: Record<
 	string,
@@ -39,7 +39,7 @@ const toastTypes: Record<
 const Toast = ({ message, type, id }: IToast) => {
 	const { title, icon, progressBarClass, titleClass } = toastTypes[type];
 
-	const toast = useToast() as IToast;
+	const toast = useToast() as IToastTypes;
 
 	const timerID = useRef<number | null>(null);
 
