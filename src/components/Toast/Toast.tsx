@@ -12,28 +12,32 @@ const toastTypes: Record<
 	{
 		icon: JSX.Element;
 		progressBarClass: string;
+		titleClass: string;
 		title: string;
 	}
 > = {
 	success: {
 		icon: <SuccessIcon />,
 		progressBarClass: 'bg-success',
+		titleClass: 'text-success',
 		title: 'Success!',
 	},
 	warning: {
 		icon: <WarningIcon />,
 		progressBarClass: 'bg-warning',
+		titleClass: 'text-warning',
 		title: 'Warning!',
 	},
 	error: {
 		icon: <ErrorIcon />,
 		progressBarClass: 'bg-error',
+		titleClass: 'text-error',
 		title: 'Error!',
 	},
 };
 
 const Toast = ({ message, type, id }: IToast) => {
-	const { title, icon, progressBarClass } = toastTypes[type];
+	const { title, icon, progressBarClass, titleClass } = toastTypes[type];
 
 	const toast = useToast() as IToast;
 
@@ -58,7 +62,7 @@ const Toast = ({ message, type, id }: IToast) => {
 			<div className="flex flex-col p-4 gap-2">
 				<div className="flex flex-row items-center gap-2">
 					<span>{icon}</span>
-					<span className={`text-${type} text-m-heading`}>{title}</span>
+					<span className={`${titleClass} text-m-heading`}>{title}</span>
 					<button className="ml-auto" onClick={handleClose}>
 						<Cross />
 					</button>
