@@ -40,7 +40,7 @@ const AllBoards = ({
 		);
 		setBoardId(board.board_id);
 
-		setSelectedBoard(board.name);
+		setSelectedBoard(board);
 	};
 
 	const handleAddNewBoardModal = () => {
@@ -72,7 +72,7 @@ const AllBoards = ({
 				ALL BOARDS ({boards.length})
 			</span>
 			{boards.map((board: Board, index) => {
-				const isSelected = selectedBoard === board.name;
+				const isSelected = selectedBoard.name === board.name;
 				const boardIconClass = isSelected
 					? 'transition ease-in-out duration-300 fill-white'
 					: '';
