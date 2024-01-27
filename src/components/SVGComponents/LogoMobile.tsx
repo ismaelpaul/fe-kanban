@@ -1,5 +1,3 @@
-import React from 'react';
-
 const LogoMobile = () => {
 	return (
 		<svg width="24" height="25" xmlns="http://www.w3.org/2000/svg">
