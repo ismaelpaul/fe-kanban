@@ -42,23 +42,28 @@ const AddNewColumnModal = ({
 		await addNewColumnsByBoardId(boardId, newColumn);
 		reset();
 		setIsAddNewColumnModalOpen(false);
+		// to do: invalidate queries to refetch columns
 	};
 
 	const onSubmit = handleSubmit(submitData);
 
-	console.log(errors, '<<<< errors');
-
 	return (
-		<div className="fixed inset-0 flex items-center justify-center z-40">
+		<aside className="fixed inset-0 flex items-center justify-center z-40">
 			<div className="fixed inset-0 bg-black opacity-50"></div>
-			<motion.div
+			<motion.dialog
+				aria-modal="true"
+				open
 				initial={{ scale: 0.7 }}
 				animate={{ scale: 1 }}
 				transition={{ duration: 0.2 }}
 				className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-4 w-screen tablet:mx-0 tablet:w-[30rem] relative"
 				ref={modalRef}
+				role="dialog"
+				aria-labelledby="modal-heading"
 			>
-				<h1 className="text-l-heading mb-6 dark:text-white">Add New Column</h1>
+				<h1 id="modal-heading" className="text-l-heading mb-6 dark:text-white">
+					Add New Column
+				</h1>
 				<form id="column-form" onSubmit={onSubmit}>
 					<label htmlFor="name" className={labelClass}>
 						Column Name
@@ -83,8 +88,8 @@ const AddNewColumnModal = ({
 					buttonText={btnAddNewColumnText}
 					type="submit"
 				/>
-			</motion.div>
-		</div>
+			</motion.dialog>
+		</aside>
 	);
 };
 
