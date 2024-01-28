@@ -17,7 +17,7 @@ export interface SubtaskSubmit {
 export interface SubtaskInput {
 	placeholder?: string;
 	task_id?: number;
-	subtask_id?: number;
+	subtask_id: number;
 	title: string;
 	is_completed: boolean;
 	is_new?: boolean;

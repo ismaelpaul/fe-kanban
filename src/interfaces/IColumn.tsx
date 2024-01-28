@@ -14,7 +14,7 @@ export interface ColumnName {
 
 export interface ColumnsInput {
 	placeholder?: string;
-	column_id?: number;
+	column_id: number;
 	name: string;
 	is_new?: boolean;
 }
