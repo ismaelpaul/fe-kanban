@@ -14,7 +14,7 @@ import useBoardStore from '../../store/boardStore';
 import { ColumnsInput } from '../../interfaces/IColumn';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../hooks/useToast';
-import { IToast } from '../../interfaces/IToast';
+import { IToastTypes } from '../../interfaces/IToast';
 
 interface BoardFormProps {
 	setIsAddNewBoardModalOpen?: (arg: boolean) => void;
@@ -53,13 +53,13 @@ const BoardForm = ({
 		const newId = columnsInput.length + 1;
 		const newColumn = {
 			column_id: newId,
-			column_name: '',
+			name: '',
 			placeholder: 'e.g. New Column',
 			is_new: true,
 		};
 
 		setColumnsInput((prevColumnsInput) => {
-			const updatedColumns = [...prevColumnsInput, newColumn];
+			const updatedColumns: ColumnsInput[] = [...prevColumnsInput, newColumn];
 
 			// Update form values and trigger revalidation
 			setValue(`columns.${updatedColumns.length - 1}`, newColumn);
@@ -71,7 +71,7 @@ const BoardForm = ({
 	const removeInputField = (
 		idxToRemove: number,
 		columnId: number,
-		toast: IToast
+		toast: IToastTypes
 	) => {
 		if (!isNewBoard) {
 			toast.warning(
@@ -111,9 +111,6 @@ const BoardForm = ({
 				toast
 			);
 			setIsAddNewBoardModalOpen!(false);
-			// toast.success(
-			// 	'New board has been added daskhdalfdsalghdlsahgdslahgldksahgdlsag'
-			// );
 		} else {
 			editBoardSubmission(
 				newBoardData,
@@ -122,7 +119,8 @@ const BoardForm = ({
 				setColumnsToDelete,
 				setSelectedBoard,
 				queryClient,
-				boardId
+				boardId,
+				toast
 			);
 			setIsEditBoardModalOpen!(false);
 		}
@@ -135,7 +133,7 @@ const BoardForm = ({
 	useEffect(() => {
 		if (boardData?.columns) {
 			setColumnsInput(boardData.columns);
-			setValue('name', boardData.name);
+			setValue('name', boardData.name || '');
 		} else {
 			setColumnsInput([
 				{ column_id: 1, name: '', placeholder: 'eg. Todo' },

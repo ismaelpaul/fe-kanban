@@ -8,7 +8,7 @@ import {
 	updateTaskTitleAndDescription,
 } from '../../api/kanbanApi';
 import { TaskStatusDropdown, TaskSubmit } from '../../interfaces/ITask';
-import { SingleSubtask, SubtaskInput } from '../../interfaces/ISubtask';
+import { SubtaskInput } from '../../interfaces/ISubtask';
 import { getNewItemsToAdd } from '../utils';
 
 type UpdatedTaskTitleAndDescription = {
@@ -27,7 +27,6 @@ export const addNewTaskSubmission = async (
 	const subtasks = newTaskData.subtasks;
 	subtasks?.forEach((subtask) => {
 		delete subtask.placeholder;
-		delete subtask.subtask_id;
 		delete subtask.is_new;
 	});
 
@@ -40,7 +39,7 @@ export const addNewTaskSubmission = async (
 export const editTaskSubmission = async (
 	newTaskData: Partial<TaskSubmit>,
 	selectedOption: TaskStatusDropdown,
-	taskData: Partial<TaskSubmit>,
+	taskData: Partial<TaskSubmit> | undefined,
 	queryClient: QueryClient,
 	subtasksToDelete: number[],
 	setSubtasksToDelete: (arg: number[]) => void
@@ -73,7 +72,7 @@ export const editTaskSubmission = async (
 		await updateTaskPositionAndStatus(taskId, positionAndStatusData);
 	}
 
-	const subtasks = taskData.subtasks;
+	const subtasks = taskData?.subtasks;
 	const newSubtasks = newTaskData.subtasks;
 
 	const subtasksHaveChanged = compareSubtasks(subtasks, newSubtasks);
@@ -89,7 +88,7 @@ export const editTaskSubmission = async (
 
 		if (editedSubtasks.length > 0) {
 			editedSubtasks.forEach((subtask) => {
-				const subtaskId = subtask.subtask_id;
+				const subtaskId = subtask.subtask_id || 0;
 				updateSubtaskTitleByid(subtaskId, subtask);
 			});
 		}
@@ -100,7 +99,6 @@ export const editTaskSubmission = async (
 		if (newSubtasksToAdd.length > 0) {
 			newSubtasksToAdd.forEach((subtask: SubtaskInput) => {
 				delete subtask.placeholder;
-				delete subtask.subtask_id;
 				delete subtask.is_new;
 			});
 			await addNewSubtaskByTaskId(taskId, newSubtasksToAdd);
@@ -120,28 +118,32 @@ export const editTaskSubmission = async (
 };
 
 const getEditedSubtask = (
-	subtasks: SingleSubtask[],
-	newSubtasks: SubtaskInput[]
+	subtasks: SubtaskInput[] | undefined,
+	newSubtasks: SubtaskInput[] | undefined
 ) => {
 	const subtasksToEdit = [];
-	if (subtasks.length === newSubtasks.length) {
-		for (let i = 0; i < subtasks.length; i++) {
+
+	const subtasksArray = subtasks ?? [];
+	const newSubtasksArray = newSubtasks ?? [];
+
+	if (subtasksArray.length === newSubtasksArray.length) {
+		for (let i = 0; i < subtasksArray.length; i++) {
 			if (
-				subtasks[i].title !== newSubtasks[i].title &&
-				!newSubtasks[i].is_new
+				subtasksArray[i].title !== newSubtasksArray[i].title &&
+				!newSubtasksArray[i].is_new
 			) {
-				subtasksToEdit.push(newSubtasks[i]);
+				subtasksToEdit.push(newSubtasksArray[i]);
 			}
 		}
 	} else {
-		for (let i = 0; i < subtasks.length; i++) {
-			for (let j = 0; j < newSubtasks.length; j++) {
-				if (subtasks[i].subtask_id === newSubtasks[j].subtask_id) {
+		for (let i = 0; i < subtasksArray.length; i++) {
+			for (let j = 0; j < newSubtasksArray.length; j++) {
+				if (subtasksArray[i].subtask_id === newSubtasksArray[j].subtask_id) {
 					if (
-						subtasks[i].title !== newSubtasks[j].title &&
-						!newSubtasks[i].is_new
+						subtasksArray[i].title !== newSubtasksArray[j].title &&
+						!newSubtasksArray[i].is_new
 					) {
-						subtasksToEdit.push(newSubtasks[j]);
+						subtasksToEdit.push(newSubtasksArray[j]);
 					}
 				}
 			}
@@ -151,17 +153,20 @@ const getEditedSubtask = (
 };
 
 function compareSubtasks(
-	subtasks: SingleSubtask[],
-	newSubtasks: SubtaskInput[]
+	subtasks: SubtaskInput[] | undefined,
+	newSubtasks: SubtaskInput[] | undefined
 ) {
-	if (subtasks.length !== newSubtasks.length) {
+	const subtasksArray = subtasks ?? [];
+	const newSubtasksArray = newSubtasks ?? [];
+
+	if (subtasksArray.length !== newSubtasksArray.length) {
 		return true;
 	}
 
-	for (let i = 0; i < subtasks.length; i++) {
+	for (let i = 0; i < subtasksArray.length; i++) {
 		if (
-			subtasks[i].subtask_id !== newSubtasks[i].subtask_id ||
-			subtasks[i].title !== newSubtasks[i].title
+			subtasksArray[i].subtask_id !== newSubtasksArray[i].subtask_id ||
+			subtasksArray[i].title !== newSubtasksArray[i].title
 		) {
 			return true;
 		}

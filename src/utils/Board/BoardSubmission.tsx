@@ -4,11 +4,11 @@ import {
 	addNewColumnsByBoardId,
 	deleteColumnsById,
 	updateBoardNameById,
-	updatedColumnsByBoardId,
+	updateColumnsByBoardId,
 } from '../../api/kanbanApi';
 import { Board, BoardSubmit } from '../../interfaces/IBoard';
-import { ColumnsInput, SingleColumn } from '../../interfaces/IColumn';
-import { IToast } from '../../interfaces/IToast';
+import { ColumnsInput } from '../../interfaces/IColumn';
+import { IToastTypes } from '../../interfaces/IToast';
 import { getNewItemsToAdd } from '../utils';
 
 export const addNewBoardSubmission = async (
@@ -16,10 +16,8 @@ export const addNewBoardSubmission = async (
 	setBoardId: (id: number) => void,
 	setSelectedBoard: (board: Board) => void,
 	queryClient: QueryClient,
-	toast: IToast
+	toast: IToastTypes
 ) => {
-	console.log(newBoardData);
-
 	const response = await addNewBoard(newBoardData);
 
 	const newBoard = response.board;
@@ -44,13 +42,19 @@ export const addNewBoardSubmission = async (
 
 export const editBoardSubmission = async (
 	newBoardData: Partial<BoardSubmit>,
-	boardData: Partial<BoardSubmit>,
+	boardData: Partial<BoardSubmit> | undefined,
 	columnsToDelete: number[],
 	setColumnsToDelete: (arg: number[]) => void,
 	setSelectedBoard: (board: Board) => void,
 	queryClient: QueryClient,
-	boardId: number
+	boardId: number,
+	toast: IToastTypes
 ) => {
+	if (!boardData) {
+		toast.error('Something went wrong, please try again.');
+		return;
+	}
+
 	if (newBoardData.name !== boardData?.name) {
 		const updatedBoard = { name: newBoardData.name };
 
@@ -72,7 +76,7 @@ export const editBoardSubmission = async (
 	const columns = boardData?.columns;
 	const newColumns = newBoardData.columns;
 
-	const columnsHaveChanges = compareArrays(columns, newColumns);
+	const columnsHaveChanges = compareColumns(columns, newColumns);
 
 	if (columnsHaveChanges) {
 		// Delete columns
@@ -85,7 +89,7 @@ export const editBoardSubmission = async (
 		const columnsToEdit = getEditedColumns(columns, newColumns);
 
 		if (columnsToEdit.length > 0) {
-			await updatedColumnsByBoardId(boardId, columnsToEdit);
+			await updateColumnsByBoardId(boardId, columnsToEdit);
 		}
 
 		// Add new columns
@@ -94,7 +98,6 @@ export const editBoardSubmission = async (
 		if (newColumnsToAdd.length > 0) {
 			newColumnsToAdd.forEach((column: ColumnsInput) => {
 				delete column.placeholder;
-				delete column.column_id;
 				delete column.is_new;
 			});
 			await addNewColumnsByBoardId(boardId, newColumnsToAdd);
@@ -104,26 +107,57 @@ export const editBoardSubmission = async (
 };
 
 const getEditedColumns = (
-	columns: SingleColumn[],
-	newColumns: ColumnsInput[]
+	columns: ColumnsInput[] | undefined,
+	newColumns: ColumnsInput[] | undefined
 ) => {
-	const columnsToEdit = [];
-	if (columns.length === newColumns.length) {
-		for (let i = 0; i < columns.length; i++) {
-			if (columns[i].name !== newColumns[i].name && !newColumns[i].is_new) {
-				columnsToEdit.push(newColumns[i]);
+	const columnsToEdit: ColumnsInput[] = [];
+
+	const columnsArray = columns ?? [];
+	const newColumnsArray = newColumns ?? [];
+
+	if (columnsArray.length === newColumnsArray.length) {
+		for (let i = 0; i < columnsArray.length; i++) {
+			if (
+				columnsArray[i].name !== newColumnsArray[i].name &&
+				!newColumnsArray[i].is_new
+			) {
+				columnsToEdit.push(newColumnsArray[i]);
 			}
 		}
 	} else {
-		for (let i = 0; i < columns.length; i++) {
-			for (let j = 0; j < newColumns.length; j++) {
-				if (columns[i].column_id === newColumns[j].column_id) {
-					if (columns[i].name !== newColumns[j].name && !newColumns[i].is_new) {
-						columnsToEdit.push(newColumns[j]);
+		for (let i = 0; i < columnsArray.length; i++) {
+			for (let j = 0; j < newColumnsArray.length; j++) {
+				if (columnsArray[i].column_id === newColumnsArray[j].column_id) {
+					if (
+						columnsArray[i].name !== newColumnsArray[j].name &&
+						!newColumnsArray[i].is_new
+					) {
+						columnsToEdit.push(newColumnsArray[j]);
 					}
 				}
 			}
 		}
 	}
+
 	return columnsToEdit;
 };
+
+function compareColumns(
+	columns: ColumnsInput[] | undefined,
+	newColumns: ColumnsInput[] | undefined
+) {
+	const columnsArray = columns ?? [];
+	const newColumnsArray = newColumns ?? [];
+
+	if (columnsArray.length !== newColumnsArray.length) {
+		return true;
+	}
+
+	for (let i = 0; i < columnsArray.length; i++) {
+		if (columnsArray[i].name !== newColumnsArray[i].name) {
+			return true;
+		}
+	}
+
+	return false;
+}

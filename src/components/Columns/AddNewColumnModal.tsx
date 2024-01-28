@@ -6,7 +6,7 @@ import TextInput from '../Input/TextInput';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ColumnSubmit } from '../../models/Column';
-import { ColumnName, ColumnsInput } from '../../interfaces/IColumn';
+import { ColumnsInput } from '../../interfaces/IColumn';
 import { addNewColumnsByBoardId } from '../../api/kanbanApi';
 import useBoardStore from '../../store/boardStore';
 interface AddNewColumnModalPros {
@@ -37,8 +37,9 @@ const AddNewColumnModal = ({
 		resolver: zodResolver(ColumnSubmit),
 	});
 
-	const submitData: SubmitHandler<ColumnsInput> = async (data) => {
-		const newColumn = [data];
+	const submitData: SubmitHandler<Partial<ColumnsInput>> = async (data) => {
+		const newColumn = data;
+
 		await addNewColumnsByBoardId(boardId, newColumn);
 		reset();
 		setIsAddNewColumnModalOpen(false);
@@ -78,7 +79,7 @@ const AddNewColumnModal = ({
 					/>
 					{errors.name && (
 						<span className={`${errorClass} right-10 bottom-[5.8rem]`}>
-							{errors?.name.message}
+							<span>{errors.name.message?.toString()}</span>
 						</span>
 					)}
 				</form>

@@ -17,7 +17,9 @@ import TextAreaInput from '../Input/TextAreaInput';
 import {
 	addNewTaskSubmission,
 	editTaskSubmission,
-} from '../../utils/Task/TaskSubmission';
+} from '../../utils/Task/taskSubmission';
+import { IToastTypes } from '../../interfaces/IToast';
+import { useToast } from '../../hooks/useToast';
 
 interface TaskFormProps {
 	setIsAddNewTaskModalOpen?: (arg: boolean) => void;
@@ -35,6 +37,8 @@ const TaskForm = ({
 	const [subtasksToDelete, setSubtasksToDelete] = useState<number[]>([]);
 
 	const queryClient = useQueryClient();
+
+	const toast = useToast();
 
 	const boardId = useBoardStore((state) => state.boardId);
 
@@ -119,7 +123,16 @@ const TaskForm = ({
 		});
 	};
 
-	const removeInputField = (idxToRemove: number, subtaskId: number) => {
+	const removeInputField = (
+		idxToRemove: number,
+		subtaskId: number,
+		toast: IToastTypes
+	) => {
+		if (!isNewTask) {
+			toast.warning(
+				'Removing columns will also remove its related info such as tasks and subtasks'
+			);
+		}
 		setSubtasksToDelete([...subtasksToDelete, subtaskId]);
 
 		setSubtasksInput((prevState) =>
@@ -226,7 +239,9 @@ const TaskForm = ({
 								)}
 								<div
 									className="cursor-pointer"
-									onClick={() => removeInputField(idx, subtask.subtask_id)}
+									onClick={() =>
+										removeInputField(idx, subtask?.subtask_id, toast)
+									}
 								>
 									<Cross isError={errors.subtasks?.[idx] != null} />
 								</div>

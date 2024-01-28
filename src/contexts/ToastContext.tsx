@@ -1,8 +1,13 @@
 import React, { createContext, useReducer } from 'react';
 import ToastsList from '../components/Toast/ToastList';
 import { toastReducer } from '../reducer/toastReducer';
+import { IToast, IToastTypes } from '../interfaces/IToast';
 
-export const ToastContext = createContext({});
+export interface ToastContextValue extends IToastTypes {}
+
+export const ToastContext = createContext<ToastContextValue | undefined>(
+	undefined
+);
 
 interface ToastContextProviderProps {
 	children: React.ReactNode;
@@ -19,7 +24,8 @@ export const ToastContextProvider = ({
 
 	const addToast = (type: string, message: string) => {
 		const id = Math.floor(Math.random() * 10000000);
-		dispatch({ type: 'ADD_TOAST', payload: { id, message, type } });
+		const toast: IToast = { id, message, type };
+		dispatch({ type: 'ADD_TOAST', payload: toast });
 	};
 
 	const success = (message: string) => {
@@ -38,7 +44,7 @@ export const ToastContextProvider = ({
 		dispatch({ type: 'DELETE_TOAST', payload: id });
 	};
 
-	const value = { success, warning, error, remove };
+	const value: IToastTypes = { success, warning, error, remove };
 
 	return (
 		<ToastContext.Provider value={value}>

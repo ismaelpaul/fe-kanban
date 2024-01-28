@@ -37,6 +37,6 @@ export const toastReducer: Reducer<ToastState, ToastAction> = (
 				toasts: updatedToasts,
 			};
 		default:
-			throw new Error(`Unhandled action type: ${action.type}`);
+			throw new Error('Unhandled action type');
 	}
 };
