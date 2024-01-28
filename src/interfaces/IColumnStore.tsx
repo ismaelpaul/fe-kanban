@@ -1,9 +1,9 @@
-import { IColumns } from './IColumn';
+import { SingleColumn } from './IColumn';
 
 export interface ColumnsStoreState {
-	columns: IColumns;
+	columns: SingleColumn[];
 }
 
 export interface ColumnsStoreActions {
-	setColumns: (columns: IColumns) => void;
+	setColumns: (columns: SingleColumn[]) => void;
 }
