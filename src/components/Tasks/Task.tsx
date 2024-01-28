@@ -29,7 +29,8 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 
 	useEffect(() => {
 		if (!isLoading && !isError) {
-			const { subtasks } = data || { subtasks: [] };
+			const { subtasks }: ISubtasks = data || { subtasks: [] };
+
 			const completedSubtasks = subtasks.filter(
 				(subtask: SingleSubtask) => subtask.is_completed === true
 			);
