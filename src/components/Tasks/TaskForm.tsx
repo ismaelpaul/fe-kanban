@@ -17,7 +17,7 @@ import TextAreaInput from '../Input/TextAreaInput';
 import {
 	addNewTaskSubmission,
 	editTaskSubmission,
-} from '../../utils/Task/taskSubmission';
+} from '../../utils/Task/taskSubmission.ts';
 import { IToastTypes } from '../../interfaces/IToast';
 import { useToast } from '../../hooks/useToast';
 

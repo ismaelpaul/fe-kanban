@@ -9,7 +9,7 @@ import Cross from '../SVGComponents/Cross';
 import {
 	addNewBoardSubmission,
 	editBoardSubmission,
-} from '../../utils/Board/boardSubmission';
+} from '../../utils/Board/boardSubmission.ts';
 import useBoardStore from '../../store/boardStore';
 import { ColumnsInput } from '../../interfaces/IColumn';
 import { useQueryClient } from '@tanstack/react-query';
