@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { SubtaskSubmit } from '../interfaces/ISubtask';
+import { SingleSubtask, SubtaskSubmit } from '../interfaces/ISubtask';
 import { ColumnsInput } from '../interfaces/IColumn';
 
 interface AxiosConfig extends AxiosRequestConfig {
@@ -111,7 +111,7 @@ export const getTasksByColumnId = async (columnId: number) => {
 export const getSubtasksByTaskId = async (taskId: number) => {
 	try {
 		const response = await kanbanApi.get(`/tasks/${taskId}/subtasks`);
-		return response.data;
+		return response.data as SingleSubtask[];
 	} catch (error) {
 		const err = error as AxiosError;
 		console.log(err.response?.data);
