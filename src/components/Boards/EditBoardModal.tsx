@@ -1,10 +1,10 @@
 import { useRef } from 'react';
-import useClickOutside from '../../hooks/useClickOutside';
 import useBoardStore from '../../store/boardStore';
 import { motion } from 'framer-motion';
 import Button from '../Button/Button';
 import BoardForm from './BoardForm';
 import useColumnsStore from '../../store/columnsStore';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface EditBoardModalProps {
 	setIsEditBoardModalOpen: (arg: boolean) => void;

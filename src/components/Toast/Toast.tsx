@@ -3,9 +3,9 @@ import Cross from '../SVGComponents/Cross';
 import SuccessIcon from '../SVGComponents/SuccessIcon';
 import ErrorIcon from '../SVGComponents/ErrorIcon';
 import WarningIcon from '../SVGComponents/WarningIcon';
-import { useToast } from '../../hooks/useToast';
 import { motion } from 'framer-motion';
 import { IToast, IToastTypes } from '../../interfaces/IToast';
+import { useToast } from '../../hooks/useToast';
 
 const toastTypes: Record<
 	string,

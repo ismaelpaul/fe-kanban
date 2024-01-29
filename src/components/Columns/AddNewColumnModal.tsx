@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import useClickOutside from '../../hooks/useClickOutside';
 import { motion } from 'framer-motion';
 import Button from '../Button/Button';
 import TextInput from '../Input/TextInput';
@@ -9,6 +8,7 @@ import { ColumnSubmit } from '../../models/Column';
 import { ColumnsInput } from '../../interfaces/IColumn';
 import { addNewColumnsByBoardId } from '../../api/kanbanApi';
 import useBoardStore from '../../store/boardStore';
+import useClickOutside from '../../hooks/useClickOutside';
 interface AddNewColumnModalPros {
 	setIsAddNewColumnModalOpen: (arg: boolean) => void;
 }
