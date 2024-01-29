@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import Button from '../Button/Button';
-import useClickOutside from '../../hooks/useClickOutside';
 import { motion } from 'framer-motion';
 import BoardForm from './BoardForm';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface AddNewBoardModalProps {
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;

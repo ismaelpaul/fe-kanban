@@ -12,10 +12,10 @@ import KebabMenuModal from '../KebabMenu/KebabMenuModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import useDelete from '../../hooks/useDelete';
 import useBoardStore from '../../store/boardStore';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
 import Logo from '../SVGComponents/Logo';
 import LogoMobile from '../SVGComponents/LogoMobile';
 import { useQueryClient } from '@tanstack/react-query';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;

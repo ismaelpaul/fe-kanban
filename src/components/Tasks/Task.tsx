@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SingleTask } from '../../interfaces/ITask';
 import Card from '../Card/Card';
 import TaskModal from './TaskModal';
-import { getSubtasksByTaskId } from '../../api/kanbanApi';
-import useFetch from '../../hooks/useFetch';
-import { ISubtasks, SingleSubtask } from '../../interfaces/ISubtask';
 import { Draggable } from 'react-beautiful-dnd';
 import EditTaskModal from './EditTaskModal';
+import useFetchSubtasks from '../../hooks/useFetchSubtasks';
+import SubtasksCount from '../Subtasks/SubtasksCount';
 
 interface TaskProps {
 	task: SingleTask;
@@ -20,34 +19,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
 	const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
 
-	const subtaskQueryKey = `subtasks_${task.task_id}`;
-
-	const { data, isLoading, isError } = useFetch({
-		queryKey: [subtaskQueryKey],
-		queryFn: () => getSubtasksByTaskId(task.task_id),
-	});
-
-	useEffect(() => {
-		if (!isLoading && !isError) {
-			const { subtasks }: ISubtasks = data || { subtasks: [] };
-
-			const completedSubtasks = subtasks.filter(
-				(subtask: SingleSubtask) => subtask.is_completed === true
-			);
-			setTotalSubtasks(subtasks.length);
-			setCompletedSubtasks(completedSubtasks.length);
-		}
-	}, [isLoading, isError, data]);
-
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
-	if (isError) {
-		return <span>Error: </span>;
-	}
-
-	const { subtasks }: ISubtasks = data || { subtasks: [] };
+	const { subtasks, isLoading, isError } = useFetchSubtasks(task.task_id);
 
 	const cardClass =
 		'bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg cursor-pointer';
@@ -65,6 +37,14 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	};
 
 	const isCardOnHover = isHovering === index;
+
+	if (isLoading) {
+		return <span>Loading...</span>;
+	}
+
+	if (isError) {
+		return <span>Error: </span>;
+	}
 
 	return (
 		<>
@@ -90,9 +70,13 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 								>
 									{task.title}
 								</h2>
-								<span className="text-body font-bold text-medium-grey">
-									{completedSubtasks} of {totalSubtasks} subtasks
-								</span>
+								<SubtasksCount
+									taskId={task.task_id}
+									totalSubtasks={totalSubtasks}
+									setTotalSubtasks={setTotalSubtasks}
+									setCompletedSubtasks={setCompletedSubtasks}
+									completedSubtasks={completedSubtasks}
+								/>
 							</>
 						</Card>
 					</div>
