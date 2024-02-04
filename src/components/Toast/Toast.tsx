@@ -41,7 +41,7 @@ const Toast = ({ message, type, id }: IToast) => {
 
 	const toast = useToast() as IToastTypes;
 
-	const timerID = useRef<number | null>(null);
+	const timerID = useRef<NodeJS.Timeout | null>(null);
 
 	const handleClose = () => {
 		toast.remove(id);
