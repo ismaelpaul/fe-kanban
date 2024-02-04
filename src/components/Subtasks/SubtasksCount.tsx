@@ -1,32 +1,29 @@
 import { useEffect } from 'react';
 import { SingleSubtask } from '../../interfaces/ISubtask';
-import useFetchSubtasks from '../../hooks/useFetchSubtasks';
 
 type SubtasksCountProps = {
-	taskId: number;
 	totalSubtasks: number;
 	setTotalSubtasks: (arg: number) => void;
 	setCompletedSubtasks: (arg: number) => void;
 	completedSubtasks: number;
+	subtasks: SingleSubtask[];
 };
 const SubtasksCount = ({
-	taskId,
 	totalSubtasks,
 	setTotalSubtasks,
 	setCompletedSubtasks,
 	completedSubtasks,
+	subtasks,
 }: SubtasksCountProps) => {
-	const { subtasks, isLoading, isError } = useFetchSubtasks(taskId);
-
 	useEffect(() => {
-		if (!isLoading && !isError) {
+		if (subtasks) {
 			const completedSubtasks = subtasks.filter(
-				(subtask: SingleSubtask) => subtask.is_completed === true
+				(subtask: SingleSubtask) => subtask.is_completed
 			);
 			setTotalSubtasks(subtasks.length);
 			setCompletedSubtasks(completedSubtasks.length);
 		}
-	}, [isLoading, isError, subtasks]);
+	}, [subtasks, setCompletedSubtasks, setTotalSubtasks]);
 
 	return (
 		<span className="text-body font-bold text-medium-grey">
