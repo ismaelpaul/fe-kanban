@@ -71,11 +71,11 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 									{task.title}
 								</h2>
 								<SubtasksCount
-									taskId={task.task_id}
 									totalSubtasks={totalSubtasks}
 									setTotalSubtasks={setTotalSubtasks}
 									setCompletedSubtasks={setCompletedSubtasks}
 									completedSubtasks={completedSubtasks}
+									subtasks={subtasks}
 								/>
 							</>
 						</Card>
