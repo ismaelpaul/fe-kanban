@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	getColumnsByBoardId,
-	updateTaskPositionAndStatus,
-} from '../../api/kanbanApi';
-import useFetch from '../../hooks/useFetch';
-import { IColumns } from '../../interfaces/IColumn';
+import { updateTaskPositionAndStatus } from '../../api/kanbanApi';
 import { useQueryClient } from '@tanstack/react-query';
 import Column from './Column';
 import EmptyBoard from '../Boards/EmptyBoard';
@@ -14,6 +9,7 @@ import usePatch from '../../hooks/usePatch';
 import useTasksStore from '../../store/tasksStore';
 import useColumnsStore from '../../store/columnsStore';
 import AddNewColumnModal from './AddNewColumnModal';
+import useFetchColumns from '../../hooks/useFetchColumns';
 
 interface ColumnsListProps {
 	isAllBoardsOpen: boolean;
@@ -24,23 +20,18 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 
 	const queryClient = useQueryClient();
 
-	const queryKey = ['columns', boardId];
-
-	const { data, isLoading, isError } = useFetch({
-		queryKey: queryKey,
-		queryFn: () => getColumnsByBoardId(boardId),
-	});
+	const { columns, isLoading, isError } = useFetchColumns(boardId);
 
 	const { patch } = usePatch();
 
 	const setColumns = useColumnsStore((state) => state.setColumns);
 
 	useEffect(() => {
-		if (data) {
-			setColumns(data.columns);
+		if (columns) {
+			setColumns(columns);
 		}
 		queryClient.invalidateQueries(['columns', boardId]);
-	}, [boardId, queryClient, setColumns, data]);
+	}, [columns, boardId, queryClient, setColumns]);
 
 	if (isLoading) {
 		return <span>Loading...</span>;
@@ -50,9 +41,7 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 		return <span>Error: </span>;
 	}
 
-	const { columns }: IColumns = data || { columns: [] };
-
-	if (columns.length === 0) {
+	if (!columns.length) {
 		return (
 			<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
 		);
