@@ -27,16 +27,6 @@ export const addNewBoardSubmission = async (
 
 	toast.success(`${newBoard.name} has been added.`);
 
-	const urlSearchParams = new URLSearchParams(window.location.search);
-
-	urlSearchParams.set('boardID', response.board.board_id.toString());
-	urlSearchParams.set('boardName', response.board.name);
-	window.history.pushState(
-		null,
-		'',
-		`/?boardName=${newBoard.name}&boardID=${newBoard.board_id}`
-	);
-
 	queryClient.invalidateQueries(['boards']);
 };
 

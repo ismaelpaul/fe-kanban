@@ -30,16 +30,7 @@ const AllBoards = ({
 	const btnAddTaskClass = 'fill-purple';
 
 	const handleSelectBoard = (board: Board) => {
-		const urlSearchParams = new URLSearchParams();
-		urlSearchParams.set('boardName', board.name);
-		urlSearchParams.set('boardID', board.board_id.toString());
-		window.history.pushState(
-			null,
-			'',
-			`/?boardName=${board.name}&boardID=${board.board_id}`
-		);
 		setBoardId(board.board_id);
-
 		setSelectedBoard(board);
 	};
 
