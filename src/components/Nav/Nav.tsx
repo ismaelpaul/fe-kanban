@@ -52,23 +52,13 @@ const Nav = ({
 
 	const { deleteItem } = useDelete();
 
-	const firstBoard = boards[0].name;
+	const firstBoard = boards[0];
 
 	useEffect(() => {
-		const urlSearchParams = new URLSearchParams(window.location.search);
-		const boardName = urlSearchParams.get('boardName') || firstBoard;
-		const boardId = urlSearchParams.get('boardID') || '1';
-
 		setBoardId(Number(boardId));
 
-		if (boardName) {
-			setSelectedBoard({
-				name: boardName,
-				board_id: Number(boardId),
-				user_id: 1,
-			});
-		}
-	}, [firstBoard, setBoardId, setSelectedBoard]);
+		setSelectedBoard(firstBoard);
+	}, [firstBoard, setBoardId, setSelectedBoard, boardId]);
 
 	const btnBoardsText = selectedBoard.name;
 	const btnBoardsClass = 'text-l-heading dark:text-white';
