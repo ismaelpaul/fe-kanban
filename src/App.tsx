@@ -30,7 +30,15 @@ function App() {
 				setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
 				setIsEditBoardModalOpen={setIsEditBoardModalOpen}
 			/>
-			<ColumnsList isAllBoardsOpen={isAllBoardsOpen} />
+			<main
+				className={`flex gap-5 overflow-x-scroll h-screen w-screen fixed bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
+					isAllBoardsOpen
+						? 'tablet:ml-[16.5rem] transition-all ease-in-out duration-300'
+						: ''
+				}`}
+			>
+				<ColumnsList />
+			</main>
 			<ToggleSidebar
 				setIsAllBoardsOpen={setIsAllBoardsOpen}
 				isAllBoardsOpen={isAllBoardsOpen}
