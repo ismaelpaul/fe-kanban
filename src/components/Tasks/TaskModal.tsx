@@ -68,7 +68,7 @@ const TaskModal = ({
 
 	const kebabMenuEdit = 'Edit Task';
 	const kebabMenuDelete = 'Delete Task';
-	const kebabMenuPosition = 'right-8 tablet:right-40 laptop:right-[30rem]';
+	const kebabMenuPosition = 'right-8 tablet:right-40 laptop:-right-[4rem]';
 
 	const { patch } = usePatch();
 	const { deleteItem } = useDelete();

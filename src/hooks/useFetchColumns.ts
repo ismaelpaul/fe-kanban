@@ -14,11 +14,11 @@ const useFetchColumns = (boardId: number) => {
 		}
 	);
 
-	const { columns } = (data as IColumns) || { subtasks: [] };
+	const { columns } = (data as IColumns) || { columns: [] };
 
 	useEffect(() => {
 		refetch();
-	}, []);
+	}, [boardId, refetch]);
 
 	return { columns, isLoading, isError };
 };

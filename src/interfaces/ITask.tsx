@@ -1,4 +1,4 @@
-import { SubtaskInput } from './ISubtask';
+import { SingleSubtask, SubtaskInput } from './ISubtask';
 
 export interface SingleTask {
 	column_id: number;
@@ -7,6 +7,7 @@ export interface SingleTask {
 	status: string;
 	title: string;
 	position: number;
+	subtasks: SingleSubtask[];
 }
 
 export interface ITasks {

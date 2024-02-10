@@ -11,10 +11,7 @@ import useColumnsStore from '../../store/columnsStore';
 import AddNewColumnModal from './AddNewColumnModal';
 import useFetchColumns from '../../hooks/useFetchColumns';
 
-interface ColumnsListProps {
-	isAllBoardsOpen: boolean;
-}
-const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
+const ColumnsList = () => {
 	const [isAddNewColumnModalOpen, setIsAddNewColumnModalOpen] = useState(false);
 	const boardId = useBoardStore((state) => state.boardId);
 
@@ -97,13 +94,7 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 	};
 
 	return (
-		<main
-			className={`flex gap-5 overflow-x-scroll h-screen w-screen fixed bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
-				isAllBoardsOpen
-					? 'tablet:ml-[16.5rem] transition-all ease-in-out duration-300'
-					: ''
-			}`}
-		>
+		<>
 			<DragDropContext onDragEnd={handleDragAndDrop}>
 				{columns.map((column, index) => (
 					<Droppable
@@ -138,7 +129,7 @@ const ColumnsList = ({ isAllBoardsOpen }: ColumnsListProps) => {
 			) : (
 				<></>
 			)}
-		</main>
+		</>
 	);
 };
 
