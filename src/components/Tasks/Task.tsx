@@ -4,7 +4,6 @@ import Card from '../Card/Card';
 import TaskModal from './TaskModal';
 import { Draggable } from 'react-beautiful-dnd';
 import EditTaskModal from './EditTaskModal';
-import useFetchSubtasks from '../../hooks/useFetchSubtasks';
 import SubtasksCount from '../Subtasks/SubtasksCount';
 
 interface TaskProps {
@@ -12,6 +11,7 @@ interface TaskProps {
 	columnId: number;
 	index: number;
 }
+
 const Task = ({ task, columnId, index }: TaskProps) => {
 	const [isHovering, setIsHovering] = useState(-1);
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -19,7 +19,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	const [completedSubtasks, setCompletedSubtasks] = useState(0);
 	const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
 
-	const { subtasks, isLoading, isError } = useFetchSubtasks(task.task_id);
+	const subtasks = task.subtasks;
 
 	const cardClass =
 		'bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg cursor-pointer';
@@ -37,14 +37,6 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 	};
 
 	const isCardOnHover = isHovering === index;
-
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
-	if (isError) {
-		return <span>Error: </span>;
-	}
 
 	return (
 		<>
