@@ -6,9 +6,10 @@ interface PatchProps {
 	updatedData: object;
 	queryKey: string;
 }
+
 const usePatch = () => {
-	const patchMutation = useMutation(
-		async ({ patchFn, resourceId, updatedData }: PatchProps) => {
+	const patchMutation = useMutation<void, Error, PatchProps>(
+		async ({ patchFn, resourceId, updatedData }) => {
 			return patchFn(resourceId, updatedData);
 		}
 	);
@@ -18,7 +19,7 @@ const usePatch = () => {
 		resourceId,
 		updatedData,
 		queryKey,
-	}: PatchProps) => {
+	}: PatchProps): Promise<void> => {
 		try {
 			const response = await patchMutation.mutateAsync({
 				patchFn,
@@ -29,6 +30,7 @@ const usePatch = () => {
 			return response;
 		} catch (error) {
 			console.log(error, '<<<< error use patch');
+			throw error;
 		}
 	};
 
