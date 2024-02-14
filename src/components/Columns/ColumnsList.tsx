@@ -52,6 +52,10 @@ const ColumnsList = () => {
 		const columnId = Number(source.droppableId);
 		const newColumnId = Number(destination?.droppableId);
 
+		const newColumnIndex = columns.findIndex(
+			(column) => column.column_id === newColumnId
+		);
+
 		const taskPosition = source.index;
 		const newTaskPosition = destination?.index ?? -1;
 
@@ -77,7 +81,7 @@ const ColumnsList = () => {
 			newColumnId: newColumnId,
 			currentTaskPosition: taskPosition + 1,
 			newTaskPosition: newTaskPosition + 1,
-			newStatus: columns[newColumnId - 1].name,
+			newStatus: columns[newColumnIndex].name,
 		};
 
 		const queryKey = 'tasks';
