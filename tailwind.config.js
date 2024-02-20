@@ -49,6 +49,8 @@ export default {
 			'blue-dot': '#49C4E5',
 			'purple-dot': '#8471F2',
 			'green-dot': '#67E2AE',
+			'github-bg': '#24292e',
+			'google-bg': '#dd4b39',
 			linear: '#E9EFFA',
 			success: '#53D768',
 			warning: '#FFD600',
