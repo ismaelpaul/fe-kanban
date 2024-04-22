@@ -1,60 +1,18 @@
-import { useState } from 'react';
-import ColumnsList from './components/Columns/ColumnsList';
-import Nav from './components/Nav/Nav';
-import AddNewBoardModal from './components/Boards/AddNewBoardModal';
-import EditBoardModal from './components/Boards/EditBoardModal';
-import ToggleSidebar from './components/Toggle/ToggleSidebar';
-import useFetchBoards from './hooks/useFetchBoards';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './pages/Auth/Login';
+import Boards from './pages/Boards/Boards';
+import Register from './pages/Auth/Register';
 
 function App() {
-	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
-	const [isAddNewBoardModalOpen, setIsAddNewBoardModalOpen] = useState(false);
-	const [isEditBoardModalOpen, setIsEditBoardModalOpen] = useState(false);
-
-	const { boards, isLoading, isError } = useFetchBoards();
-
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
-	if (isError) {
-		return <span>Error: </span>;
-	}
-
 	return (
 		<>
-			<Nav
-				boards={boards}
-				isAllBoardsOpen={isAllBoardsOpen}
-				setIsAllBoardsOpen={setIsAllBoardsOpen}
-				setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
-				setIsEditBoardModalOpen={setIsEditBoardModalOpen}
-			/>
-			<main
-				className={`flex gap-5 overflow-x-scroll h-screen w-screen fixed bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
-					isAllBoardsOpen
-						? 'tablet:ml-[16.5rem] transition-all ease-in-out duration-300'
-						: ''
-				}`}
-			>
-				<ColumnsList />
-			</main>
-			<ToggleSidebar
-				setIsAllBoardsOpen={setIsAllBoardsOpen}
-				isAllBoardsOpen={isAllBoardsOpen}
-			/>
-			{isAddNewBoardModalOpen ? (
-				<AddNewBoardModal
-					setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
-				/>
-			) : (
-				<></>
-			)}
-			{isEditBoardModalOpen ? (
-				<EditBoardModal setIsEditBoardModalOpen={setIsEditBoardModalOpen} />
-			) : (
-				<></>
-			)}
+			<BrowserRouter>
+				<Routes>
+					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Register />} />
+					<Route path="/boards" element={<Boards />} />
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }

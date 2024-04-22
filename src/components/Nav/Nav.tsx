@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import ChevronDown from '../SVGComponents/ChevronDown';
 import { deleteBoardById } from '../../api/kanbanApi';
-import KebabMenu from '../SVGComponents/KebabMenu';
 import AddTaskMobile from '../SVGComponents/AddTaskMobile';
 import AllBoards from '../Boards/AllBoards';
 import ChevronUp from '../SVGComponents/ChevronUp';
@@ -16,6 +15,7 @@ import Logo from '../SVGComponents/Logo';
 import LogoMobile from '../SVGComponents/LogoMobile';
 import { useQueryClient } from '@tanstack/react-query';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
+import KebabMenuIcon from '../SVGComponents/KebabMenuIcon';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;
@@ -138,14 +138,13 @@ const Nav = ({
 						buttonText={btnAddTaskText}
 					/>
 					<div onClick={handleKebabMenu} className="cursor-pointer">
-						<KebabMenu />
+						<KebabMenuIcon />
 					</div>
 					{isKebabModalOpen ? (
 						<KebabMenuModal
 							editText={kebabMenuEdit}
 							deleteText={kebabMenuDelete}
 							menuPosition={kebabMenuPosition}
-							setIsKebabMenuOpen={setIsKebabModalOpen}
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsEditBoardModalOpen={setIsEditBoardModalOpen}
 							isParentTaskModal={false}

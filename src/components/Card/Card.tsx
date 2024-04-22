@@ -1,7 +1,7 @@
 interface CardProps {
 	children: JSX.Element;
 	cardClass: string;
-	onClick: () => void;
+	onClick?: () => void;
 }
 
 const Card = ({ children, cardClass, onClick }: CardProps) => {
