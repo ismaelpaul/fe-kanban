@@ -19,7 +19,6 @@ const Boards = () => {
 	if (isError) {
 		return <span>Error: </span>;
 	}
-	console.log('rerendered');
 
 	return (
 		<>
