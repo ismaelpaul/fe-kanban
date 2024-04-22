@@ -3,7 +3,6 @@ import { deleteTaskById } from '../../api/kanbanApi';
 import { SingleSubtask } from '../../interfaces/ISubtask';
 import { SingleTask } from '../../interfaces/ITask';
 import Dropdown from '../Dropdown/Dropdown';
-import KebabMenu from '../SVGComponents/KebabMenu';
 import useClickOutside from '../../hooks/useClickOutside';
 import usePatch from '../../hooks/usePatch';
 import KebabMenuModal from '../KebabMenu/KebabMenuModal';
@@ -16,6 +15,7 @@ import { motion } from 'framer-motion';
 import useKebabMenu from '../../hooks/useKebabMenu';
 import SubtasksList from '../Subtasks/SubtaskList';
 import { handleSubtaskCompletion } from '../../utils/Subtask/SubtaskUtils';
+import ModalHeader from '../ModalHeader/ModalHeader';
 
 interface TaskModalProps {
 	task: SingleTask;
@@ -41,7 +41,7 @@ const TaskModal = ({
 	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-	const { isKebabMenuOpen, handleKebabMenu } = useKebabMenu();
+	const { isKebabMenuOpen } = useKebabMenu();
 
 	const boardId = useBoardStore((state) => state.boardId);
 
@@ -117,14 +117,7 @@ const TaskModal = ({
 					role="dialog"
 					aria-labelledby="modal-heading"
 				>
-					<div className="flex items-center justify-between gap-4">
-						<h1 id="modal-heading" className="text-l-heading dark:text-white">
-							{task.title}
-						</h1>
-						<div onClick={handleKebabMenu} className="cursor-pointer">
-							<KebabMenu />
-						</div>
-					</div>
+					<ModalHeader title={task.title} />
 					{isKebabMenuOpen ? (
 						<KebabMenuModal
 							editText={kebabMenuEdit}
