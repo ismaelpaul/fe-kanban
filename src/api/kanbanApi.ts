@@ -20,8 +20,11 @@ export const getAllBoards = async () => {
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
-		console.log(err.response?.data);
-		return err.response?.data;
+		if (err.response?.status === 401) {
+			throw error;
+		} else {
+			return err.response?.data;
+		}
 	}
 };
 
