@@ -6,6 +6,7 @@ type TextInputProps<T extends FieldValues> = {
 	className: string;
 	placeholder?: string | undefined;
 	defaultValue?: string | undefined;
+	autoComplete?: string;
 };
 
 const TextInput = <T extends FieldValues>({

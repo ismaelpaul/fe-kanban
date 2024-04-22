@@ -4,6 +4,7 @@ import useFetch from '../../hooks/useFetch';
 import Task from './Task';
 import { ITasks } from '../../interfaces/ITask';
 import useTasksStore from '../../store/tasksStore';
+import CardSkeleton from '../SkeletonLoader/CardSkeleton';
 
 interface TaskListProps {
 	columnId: number;
@@ -25,16 +26,13 @@ const TaskList = ({ columnId, setTasksLength }: TaskListProps) => {
 		}
 	}, [data, isLoading, isError, setTasksLength, setTasks, columnId]);
 
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
 	if (isError) {
 		return <span>Error: </span>;
 	}
 
 	return (
 		<>
+			{isLoading && <CardSkeleton />}
 			{tasks[columnId]?.map((task, index) => {
 				return (
 					<React.Fragment key={task.task_id}>
