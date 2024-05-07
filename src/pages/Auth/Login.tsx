@@ -11,11 +11,13 @@ const Login = () => {
 	const btnClass =
 		'text-white text-13px py-2 w-full rounded-full transition ease-in duration-200';
 
+	const baseUrl = import.meta.env.VITE_BASE_URL;
+
 	const googleAuth = () => {
-		window.open('http://localhost:9090/auth/google', '_self');
+		window.open(`${baseUrl}/auth/google`, '_self');
 	};
 	const githubAuth = () => {
-		window.open('http://localhost:9090/auth/github', '_self');
+		window.open(`${baseUrl}/auth/github`, '_self');
 	};
 	return (
 		<div className="min-h-screen bg-dark-grey flex flex-col items-center justify-center">

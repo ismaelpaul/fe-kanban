@@ -57,8 +57,12 @@ const Nav = ({
 	useEffect(() => {
 		setBoardId(Number(boardId));
 
-		setSelectedBoard(firstBoard);
-	}, [firstBoard, setBoardId, setSelectedBoard, boardId]);
+		if (selectedBoard.name === '') {
+			setSelectedBoard(firstBoard);
+		} else {
+			setSelectedBoard(selectedBoard);
+		}
+	}, [firstBoard, setBoardId, setSelectedBoard, boardId, selectedBoard]);
 
 	const btnBoardsText = selectedBoard.name;
 	const btnBoardsClass = 'text-l-heading dark:text-white';
@@ -91,14 +95,9 @@ const Nav = ({
 
 		setSelectedBoard(newBoard);
 
-		const urlSearchParams = new URLSearchParams(window.location.search);
-
-		urlSearchParams.set('boardID', newBoard.board_id.toString());
-		urlSearchParams.set('boardName', newBoard.name);
-
-		window.history.pushState(null, '', `/?${urlSearchParams.toString()}`);
-
 		setBoardId(Number(newBoard.board_id));
+
+		setIsKebabModalOpen(false);
 
 		queryClient.invalidateQueries(['boards']);
 	};
