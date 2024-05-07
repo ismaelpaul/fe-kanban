@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { SingleColumn } from '../../interfaces/IColumn';
 import TaskList from '../Tasks/TaskList';
+import ColumnHeader from './ColumnHeader';
 
 interface ColumnProps {
 	column: SingleColumn;
@@ -9,25 +10,22 @@ interface ColumnProps {
 }
 const Column = ({ column, index, isDragging }: ColumnProps) => {
 	const [tasksLength, setTasksLength] = useState(0);
-	let circleColor;
+	let dotColor;
 
 	if (index === 0) {
-		circleColor = 'bg-blue-dot';
+		dotColor = 'bg-blue-dot';
 	} else if (index === 1) {
-		circleColor = 'bg-purple-dot';
+		dotColor = 'bg-purple-dot';
 	} else {
-		circleColor = 'bg-green-dot';
+		dotColor = 'bg-green-dot';
 	}
 	return (
 		<>
-			<div className="flex gap-3 items-center mb-7">
-				<div
-					className={` ${circleColor} w-[0.938rem] h-[0.938rem] rounded-full`}
-				></div>
-				<h1 className="text-s-heading text-medium-grey tracking-2.4px">
-					{column.name.toUpperCase()} ({tasksLength})
-				</h1>
-			</div>
+			<ColumnHeader
+				dotColor={dotColor}
+				tasksLength={tasksLength}
+				column={column}
+			/>
 			<div
 				className={` flex flex-col items-center py-1 gap-5 w-[18rem] mb-4 max-h-[80vh] overflow-y-scroll no-scrollbar ${
 					isDragging
