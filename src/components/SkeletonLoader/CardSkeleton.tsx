@@ -5,7 +5,7 @@ const CardSkeleton = () => {
 	const cardClass =
 		'bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg';
 	return (
-		<div>
+		<div className="py-2">
 			<Card cardClass={cardClass}>
 				<>
 					<Skeleton
