@@ -5,6 +5,7 @@ import useFetchBoards from '../../hooks/useFetchBoards';
 import { useState } from 'react';
 import AddNewBoardModal from '../../components/Boards/AddNewBoardModal';
 import EditBoardModal from '../../components/Boards/EditBoardModal';
+import MainSkeleton from '../../components/SkeletonLoader/MainSkeleton';
 
 const Boards = () => {
 	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
@@ -13,7 +14,7 @@ const Boards = () => {
 
 	const { boards, isLoading, isError } = useFetchBoards();
 	if (isLoading) {
-		return <span>Loading...</span>;
+		return <MainSkeleton />;
 	}
 
 	if (isError) {
