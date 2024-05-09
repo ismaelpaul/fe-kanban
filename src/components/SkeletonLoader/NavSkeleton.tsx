@@ -35,7 +35,7 @@ const NavSkeleton = () => {
 					<Button
 						svgComponent={<AddTaskMobile />}
 						buttonClass={
-							'bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-headings'
+							'bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading'
 						}
 						buttonText={'+ Add New Task'}
 					/>
