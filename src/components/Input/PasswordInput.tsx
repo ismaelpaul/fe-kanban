@@ -8,6 +8,7 @@ type PasswordInputProps<T extends FieldValues> = {
 	name: Path<T>;
 	className: string;
 	placeholder?: string | undefined;
+	autoComplete?: string;
 };
 
 const PasswordInput = <T extends FieldValues>({
