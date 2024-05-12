@@ -103,7 +103,7 @@ const BoardForm = ({
 
 	const submitData: SubmitHandler<BoardSubmit> = async (newBoardData) => {
 		if (isNewBoard) {
-			addNewBoardSubmission(
+			await addNewBoardSubmission(
 				newBoardData,
 				setBoardId,
 				setSelectedBoard,
@@ -112,7 +112,7 @@ const BoardForm = ({
 			);
 			setIsAddNewBoardModalOpen!(false);
 		} else {
-			editBoardSubmission(
+			await editBoardSubmission(
 				newBoardData,
 				boardData,
 				columnsToDelete,
