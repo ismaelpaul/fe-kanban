@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RegisterSchema } from '../../models/Auth';
 import { Register } from '../../interfaces/IAuth';
+import { registerUser } from '../../api/kanbanApi';
 
 const RegisterForm = () => {
 	const inputClass =
@@ -23,7 +24,7 @@ const RegisterForm = () => {
 	});
 
 	const submitData: SubmitHandler<Register> = async (data) => {
-		console.log(data, '<<<');
+		await registerUser(data);
 		reset();
 	};
 
@@ -58,7 +59,6 @@ const RegisterForm = () => {
 				register={register}
 				className={inputClass}
 				placeholder={'Email'}
-				autoComplete="off"
 			/>
 			<label htmlFor="password" className={labelClass}>
 				Password
@@ -68,6 +68,7 @@ const RegisterForm = () => {
 				name="password"
 				className={inputClass}
 				placeholder={'Passowrd'}
+				autoComplete="off"
 			/>
 			<Button
 				form="register-form"
