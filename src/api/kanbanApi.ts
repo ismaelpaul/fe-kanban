@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { SingleSubtask, SubtaskSubmit } from '../interfaces/ISubtask';
 import { ColumnsInput } from '../interfaces/IColumn';
-import { RegisterUser } from '../interfaces/IUser';
+import { RegisterUser } from '../interfaces/IAuth';
 
 interface AxiosConfig extends AxiosRequestConfig {
 	credentials?: string;
@@ -262,6 +262,17 @@ export const addNewColumnsByBoardId = async (
 export const registerUser = async (userData: RegisterUser) => {
 	try {
 		const response = await kanbanApi.post('/user/register', userData);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const emailExists = async (email: string) => {
+	try {
+		const response = await kanbanApi.get(`/user/check-email?email=${email}`);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
