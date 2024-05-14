@@ -4,13 +4,14 @@ import Button from '../Button/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { RegisterSchema } from '../../models/Auth';
-import { Register } from '../../interfaces/IAuth';
+import { RegisterUser } from '../../interfaces/IAuth';
 import { registerUser } from '../../api/kanbanApi';
 
 const RegisterForm = () => {
 	const inputClass =
 		' border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full cursor-pointer hover:border-purple focus:outline-none';
 	const labelClass = 'text-body text-medium-grey font-bold';
+	const errorClass = 'text-red text-l-body absolute';
 	const btnClass =
 		'text-white text-13px py-2 w-full rounded-full transition ease-in duration-200';
 
@@ -19,17 +20,16 @@ const RegisterForm = () => {
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm<Register>({
+	} = useForm<RegisterUser>({
 		resolver: zodResolver(RegisterSchema),
 	});
 
-	const submitData: SubmitHandler<Register> = async (data) => {
+	const submitData: SubmitHandler<RegisterUser> = async (data) => {
 		await registerUser(data);
 		reset();
 	};
 
 	const onSubmit = handleSubmit(submitData);
-	console.log(errors, '<<<<<<<< errors');
 
 	return (
 		<form id="register-form" onSubmit={onSubmit}>
@@ -43,6 +43,11 @@ const RegisterForm = () => {
 				placeholder={'First name'}
 				autoComplete="given-name"
 			/>
+			{errors.firstName && (
+				<span className={`${errorClass} right-6 mt-[2.2rem]`}>
+					{errors.firstName.message}
+				</span>
+			)}
 			<label htmlFor="lastName" className={labelClass}>
 				Last Name
 			</label>
@@ -53,6 +58,11 @@ const RegisterForm = () => {
 				placeholder={'Last name'}
 				autoComplete="family-name"
 			/>
+			{errors.lastName && (
+				<span className={`${errorClass} right-6 mt-[2.2rem]`}>
+					{errors.lastName.message}
+				</span>
+			)}
 			<label className={labelClass}>Email</label>
 			<TextInput
 				name="email"
@@ -60,6 +70,11 @@ const RegisterForm = () => {
 				className={inputClass}
 				placeholder={'Email'}
 			/>
+			{errors.email && (
+				<span className={`${errorClass} right-6 mt-[2.2rem]`}>
+					{errors.email.message}
+				</span>
+			)}
 			<label htmlFor="password" className={labelClass}>
 				Password
 			</label>
@@ -67,9 +82,29 @@ const RegisterForm = () => {
 				register={register}
 				name="password"
 				className={inputClass}
-				placeholder={'Passowrd'}
+				placeholder={'Password'}
 				autoComplete="off"
 			/>
+			{errors.password && (
+				<span className={`${errorClass} right-6 mt-[2.2rem]`}>
+					{errors.password.message}
+				</span>
+			)}
+			<label htmlFor="confirmPassword" className={labelClass}>
+				Confirm Password
+			</label>
+			<PasswordInput
+				register={register}
+				name="confirmPassword"
+				className={inputClass}
+				placeholder={'Confirm Password'}
+				autoComplete="off"
+			/>
+			{errors.confirmPassword && (
+				<span className={`${errorClass} right-6 mt-[2.2rem]`}>
+					{errors.confirmPassword.message}
+				</span>
+			)}
 			<Button
 				form="register-form"
 				type={'submit'}
