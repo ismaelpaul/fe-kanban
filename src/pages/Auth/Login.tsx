@@ -5,8 +5,7 @@ import GithubIcon from '../../components/SVGComponents/GithubIcon';
 import LoginForm from '../../components/Form/LoginForm';
 
 const Login = () => {
-	const cardClass =
-		'bg-white drop-shadow-card px-4 py-6 rounded-lg max-w-[25%]';
+	const cardClass = 'bg-white drop-shadow-card px-4 py-6 rounded-lg w-[25rem]';
 
 	const btnClass =
 		'text-white text-13px py-2 w-full rounded-full transition ease-in duration-200';
@@ -23,7 +22,9 @@ const Login = () => {
 		<div className="min-h-screen bg-dark-grey flex flex-col items-center justify-center">
 			<Card cardClass={cardClass}>
 				<>
-					<h1>Choose a Login Method</h1>
+					<h1 className="text-m-heading text-center mb-4">
+						Choose a Login Method
+					</h1>
 					<div>
 						<LoginForm />
 						<div className="flex items-center gap-2 my-4">
@@ -53,7 +54,7 @@ const Login = () => {
 					</div>
 				</>
 			</Card>
-			<span className="text-13px text-white">
+			<span className="text-13px text-white mt-3">
 				Don't have an account yet?
 				<Link to="/register">
 					<strong> Register</strong>
