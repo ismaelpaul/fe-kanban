@@ -5,7 +5,7 @@ import Card from '../../components/Card/Card';
 import RegisterForm from '../../components/Form/RegisterForm';
 
 const Register = () => {
-	const cardClass = 'bg-white drop-shadow-card px-4 py-6 rounded-lg w-[25rem]';
+	const cardClass = 'bg-white drop-shadow-card px-4 py-6 rounded-lg w-[50rem]';
 
 	const btnClass =
 		'text-white text-13px py-2 w-full rounded-full transition ease-in duration-200';
@@ -21,30 +21,36 @@ const Register = () => {
 			<Card cardClass={cardClass}>
 				<>
 					<h1 className="text-m-heading text-center mb-4">Sign up</h1>
-					<RegisterForm />
-					<div className="flex items-center gap-2 my-4">
-						<hr className="h-px w-full bg-lines-light border-0" />
-						<span className="px-2 text-13px text-medium-grey">or</span>
-						<hr className="h-px w-full bg-lines-light border-0" />
-					</div>
-					<div className="flex flex-col gap-4">
-						<button
-							onClick={googleAuth}
-							type="button"
-							className={`${btnClass} flex justify-center	 bg-google-bg hover:bg-google-bg/80`}
-						>
-							<GoogleIcon />
-							Sign up with Google
-						</button>
+					<div className="flex items-center">
+						<div className="w-[50%]">
+							<RegisterForm />
+						</div>
 
-						<button
-							onClick={githubAuth}
-							type="button"
-							className={`${btnClass} flex justify-center	 bg-github-bg hover:bg-github-bg/80`}
-						>
-							<GithubIcon />
-							Sign up with GitHub
-						</button>
+						<div className="flex flex-col items-center gap-2 mx-4 py-6">
+							<div className="border-l-2 h-36 border-medium-grey/10" />
+							<span className="p-2 text-13px text-medium-grey">OR</span>
+							<div className="border-l-2 h-36 border-medium-grey/10" />
+						</div>
+
+						<div className="flex flex-col gap-4 flex-grow">
+							<button
+								onClick={googleAuth}
+								type="button"
+								className={`${btnClass} flex justify-center	 bg-google-bg hover:bg-google-bg/80`}
+							>
+								<GoogleIcon />
+								Sign up with Google
+							</button>
+
+							<button
+								onClick={githubAuth}
+								type="button"
+								className={`${btnClass} flex justify-center	 bg-github-bg hover:bg-github-bg/80`}
+							>
+								<GithubIcon />
+								Sign up with GitHub
+							</button>
+						</div>
 					</div>
 				</>
 			</Card>
