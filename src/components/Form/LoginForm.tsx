@@ -5,6 +5,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginUser } from '../../interfaces/IAuth';
 import { LoginSchema } from '../../models/Auth';
+import { loginUser } from '../../api/kanbanApi';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../../hooks/useToast';
 
 const LoginForm = () => {
 	const inputClass =
@@ -14,6 +17,8 @@ const LoginForm = () => {
 	const btnClass =
 		'text-white text-13px py-2 w-full rounded-full transition ease-in duration-200';
 
+	const navigate = useNavigate();
+	const toast = useToast();
 	const {
 		register,
 		handleSubmit,
@@ -24,8 +29,15 @@ const LoginForm = () => {
 	});
 
 	const submitData: SubmitHandler<LoginUser> = async (data) => {
-		console.log(data, '<<<');
-		reset();
+		try {
+			await loginUser(data);
+			navigate('/boards');
+			reset();
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		}
 	};
 
 	const onSubmit = handleSubmit(submitData);
