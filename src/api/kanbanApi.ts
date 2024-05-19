@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { SingleSubtask, SubtaskSubmit } from '../interfaces/ISubtask';
 import { ColumnsInput } from '../interfaces/IColumn';
-import { RegisterUser } from '../interfaces/IAuth';
+import { LoginUser, RegisterUser } from '../interfaces/IAuth';
 
 interface AxiosConfig extends AxiosRequestConfig {
 	credentials?: string;
@@ -22,7 +22,7 @@ export const getAllBoards = async () => {
 	} catch (error) {
 		const err = error as AxiosError;
 		if (err.response?.status === 401) {
-			throw error;
+			throw new Error('Not authorized, please log in.');
 		} else {
 			return err.response?.data;
 		}
@@ -256,6 +256,20 @@ export const addNewColumnsByBoardId = async (
 		const err = error as AxiosError;
 		console.log(err.response?.data);
 		return err.response?.data;
+	}
+};
+
+export const loginUser = async (userData: LoginUser) => {
+	try {
+		const response = await kanbanApi.post('user/login', userData);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		if (err.response?.status === 400) {
+			throw new Error('Invalid email or password.');
+		} else {
+			return err.response?.data;
+		}
 	}
 };
 
