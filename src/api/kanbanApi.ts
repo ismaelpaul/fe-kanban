@@ -294,3 +294,14 @@ export const emailExists = async (email: string) => {
 		return err.response?.data;
 	}
 };
+
+export const getUser = async () => {
+	try {
+		const response = await kanbanApi.get('/user');
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
