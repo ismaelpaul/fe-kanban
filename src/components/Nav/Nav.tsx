@@ -16,6 +16,7 @@ import LogoMobile from '../SVGComponents/LogoMobile';
 import { useQueryClient } from '@tanstack/react-query';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import KebabMenuIcon from '../SVGComponents/KebabMenuIcon';
+import UserProfile from '../UserProfile/UserProfile';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;
@@ -129,6 +130,7 @@ const Nav = ({
 						</span>
 					)}
 				</div>
+				<UserProfile />
 				<div className="flex items-center gap-4">
 					<Button
 						onClick={openAddNewTaskModal}

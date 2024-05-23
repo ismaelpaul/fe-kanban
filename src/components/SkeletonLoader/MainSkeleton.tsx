@@ -1,11 +1,11 @@
-import ColumnsSkeleton from './ColumnsSkeleton';
+import ColumnsListSkeleton from './ColumnsListSkeleton';
 import NavSkeleton from './NavSkeleton';
 
 const MainSkeleton = () => {
 	return (
 		<>
 			<NavSkeleton />
-			<ColumnsSkeleton />
+			<ColumnsListSkeleton />
 		</>
 	);
 };

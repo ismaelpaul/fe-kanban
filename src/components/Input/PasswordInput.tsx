@@ -8,6 +8,7 @@ type PasswordInputProps<T extends FieldValues> = {
 	name: Path<T>;
 	className: string;
 	placeholder?: string | undefined;
+	autoComplete?: string;
 };
 
 const PasswordInput = <T extends FieldValues>({
@@ -22,7 +23,7 @@ const PasswordInput = <T extends FieldValues>({
 	};
 
 	return (
-		<div className="mb-4 flex relative">
+		<div className="flex relative">
 			<input
 				type={isVisible ? 'text' : 'password'}
 				autoComplete="current-password"
@@ -31,7 +32,7 @@ const PasswordInput = <T extends FieldValues>({
 			/>
 			<button
 				type="button"
-				className="flex justify-around items-center absolute top-[0.7rem] right-4"
+				className="flex justify-around items-center absolute top-[0.9rem] right-4"
 				onClick={handleToggle}
 			>
 				{isVisible ? <EyeIconShow /> : <EyeIconHide />}
