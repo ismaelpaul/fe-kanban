@@ -1,7 +1,9 @@
+import { UserInfo } from './IUser';
+
 export interface UserStoreState {
-	userId: number;
+	user: UserInfo;
 }
 
 export interface UserStoreActions {
-	setUserId: (newUserId: number) => void;
+	setUser: (newUser: UserInfo) => void;
 }
