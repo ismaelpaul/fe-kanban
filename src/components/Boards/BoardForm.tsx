@@ -11,7 +11,7 @@ import {
 	editBoardSubmission,
 } from '../../utils/Board/boardSubmission.ts';
 import useBoardStore from '../../store/boardStore';
-import { ColumnsInput } from '../../interfaces/IColumn';
+import { ColumnsInput } from '../../interfaces/IColumn.ts';
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../../hooks/useToast';
 import { IToastTypes } from '../../interfaces/IToast';
