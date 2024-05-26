@@ -12,7 +12,7 @@ const ColumnsListSkeleton = () => {
 		<div className="flex h-screen w-screen bg-light-grey dark:bg-dark-bg gap-6 p-6">
 			{columnsData.map(({ color, numCards }, index) => (
 				<ColumnSkeleton key={index} color={color}>
-					{[...Array(numCards)].map((cardIndex) => (
+					{[...Array(numCards)].map((_, cardIndex) => (
 						<CardSkeleton key={cardIndex} />
 					))}
 				</ColumnSkeleton>
