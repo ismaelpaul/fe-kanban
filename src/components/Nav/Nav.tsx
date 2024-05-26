@@ -17,6 +17,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import KebabMenuIcon from '../SVGComponents/KebabMenuIcon';
 import UserProfile from '../UserProfile/UserProfile';
+import useColumnsStore from '../../store/columnsStore';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;
@@ -36,11 +37,13 @@ const Nav = ({
 	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-	const boardId = useBoardStore((state) => state.boardId);
-	const setBoardId = useBoardStore((state) => state.setBoardId);
-
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
+
+	const boardId = selectedBoard.board_id;
+
+	const columns = useColumnsStore((state) => state.columns);
+	const hasNoColumns = columns.length == 0;
 
 	const queryClient = useQueryClient();
 
@@ -53,22 +56,22 @@ const Nav = ({
 
 	const { deleteItem } = useDelete();
 
-	const firstBoard = boards[0];
+	const firstBoard = boards[0] || '';
 
 	useEffect(() => {
-		setBoardId(Number(boardId));
-
 		if (selectedBoard.name === '') {
 			setSelectedBoard(firstBoard);
 		} else {
 			setSelectedBoard(selectedBoard);
 		}
-	}, [firstBoard, setBoardId, setSelectedBoard, boardId, selectedBoard]);
+	}, [firstBoard, setSelectedBoard, selectedBoard]);
 
 	const btnBoardsText = selectedBoard.name;
 	const btnBoardsClass = 'text-l-heading dark:text-white';
 
-	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 hover:bg-purple-hover`;
+	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 enabled:hover:bg-purple-hover ${
+		hasNoColumns ? 'cursor-not-allowed opacity-75' : ''
+	}`;
 	const btnAddTaskText = '+ Add New Task';
 
 	const toggleBoardsDropdown = () => {
@@ -95,8 +98,6 @@ const Nav = ({
 		}
 
 		setSelectedBoard(newBoard);
-
-		setBoardId(Number(newBoard.board_id));
 
 		setIsKebabModalOpen(false);
 
