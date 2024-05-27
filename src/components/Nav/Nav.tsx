@@ -54,22 +54,24 @@ const Nav = ({
 
 	const { deleteItem } = useDelete();
 
-	const firstBoard = boards[0] || '';
+	const firstBoard = boards[0] || {};
 
 	useEffect(() => {
-		if (selectedBoard.name === '') {
+		if (!selectedBoard.name) {
 			setSelectedBoard(firstBoard);
-		} else {
-			setSelectedBoard(selectedBoard);
 		}
-	}, [firstBoard, setSelectedBoard, selectedBoard]);
+	}, [firstBoard]);
 
-	const btnBoardsText = selectedBoard.name;
+	const btnBoardsText = selectedBoard.name || '';
+
 	const btnBoardsClass = 'text-l-heading dark:text-white';
 
-	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 enabled:hover:bg-purple-hover ${
-		boardHasColumns ? '' : 'cursor-not-allowed opacity-75'
+	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 ${
+		boardHasColumns
+			? 'enabled:hover:bg-purple-hover'
+			: 'cursor-not-allowed opacity-75'
 	}`;
+
 	const btnAddTaskText = '+ Add New Task';
 
 	const toggleBoardsDropdown = () => {
@@ -136,6 +138,7 @@ const Nav = ({
 						svgComponent={<AddTaskMobile />}
 						buttonClass={btnAddTaskClass}
 						buttonText={btnAddTaskText}
+						disabled={!boardHasColumns}
 					/>
 					<div onClick={handleKebabMenu} className="cursor-pointer">
 						<KebabMenuIcon />
