@@ -8,16 +8,12 @@ import EditBoardModal from '../../components/Boards/EditBoardModal';
 import MainSkeleton from '../../components/SkeletonLoader/MainSkeleton';
 
 import useFetchBoards from '../../hooks/useFetchBoards';
-import useColumnsStore from '../../store/columnsStore';
 
 const Boards = () => {
 	const [isAllBoardsOpen, setIsAllBoardsOpen] = useState(false);
 	const [isAddNewBoardModalOpen, setIsAddNewBoardModalOpen] = useState(false);
 	const [isEditBoardModalOpen, setIsEditBoardModalOpen] = useState(false);
-
-	const columns = useColumnsStore((state) => state.columns);
-
-	const hasNoColumns = columns.length == 0;
+	const [boardHasColumns, setBoardHasColumns] = useState(false);
 
 	const { boards, isLoading, isError } = useFetchBoards();
 
@@ -40,14 +36,14 @@ const Boards = () => {
 			/>
 			<main
 				className={`flex ${
-					hasNoColumns ? 'justify-center' : ''
+					boardHasColumns ? '' : 'justify-center'
 				} gap-5 overflow-x-scroll h-screen w-screen fixed bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
 					isAllBoardsOpen
 						? 'tablet:ml-[16.5rem] transition-all ease-in-out duration-300'
 						: ''
 				}`}
 			>
-				<ColumnsList />
+				<ColumnsList setBoardHasColumns={setBoardHasColumns} />
 			</main>
 			<ToggleSidebar
 				setIsAllBoardsOpen={setIsAllBoardsOpen}
