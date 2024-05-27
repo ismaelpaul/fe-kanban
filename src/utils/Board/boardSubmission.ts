@@ -13,7 +13,6 @@ import { getNewItemsToAdd } from '../utils';
 
 export const addNewBoardSubmission = async (
 	newBoardData: Partial<BoardSubmit>,
-	setBoardId: (id: number) => void,
 	setSelectedBoard: (board: Board) => void,
 	queryClient: QueryClient,
 	toast: IToastTypes
@@ -23,7 +22,6 @@ export const addNewBoardSubmission = async (
 	const newBoard = response.board;
 
 	setSelectedBoard(newBoard);
-	setBoardId(newBoard.board_id);
 
 	toast.success(`${newBoard.name} has been added.`);
 
