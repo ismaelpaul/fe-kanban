@@ -17,12 +17,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import KebabMenuIcon from '../SVGComponents/KebabMenuIcon';
 import UserProfile from '../UserProfile/UserProfile';
-import useColumnsStore from '../../store/columnsStore';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;
 	setIsAllBoardsOpen: (arg: boolean) => void;
 	boards: Board[];
+	boardHasColumns: boolean;
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
 	setIsEditBoardModalOpen: (arg: boolean) => void;
 }
@@ -30,20 +30,18 @@ const Nav = ({
 	isAllBoardsOpen,
 	setIsAllBoardsOpen,
 	boards,
+	boardHasColumns,
 	setIsAddNewBoardModalOpen,
 	setIsEditBoardModalOpen,
 }: NavPros) => {
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
-	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+	const [isKebabMenuModalOpen, setIsKebabMenuModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
 	const boardId = selectedBoard.board_id;
-
-	const columns = useColumnsStore((state) => state.columns);
-	const hasNoColumns = columns.length == 0;
 
 	const queryClient = useQueryClient();
 
@@ -70,7 +68,7 @@ const Nav = ({
 	const btnBoardsClass = 'text-l-heading dark:text-white';
 
 	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 enabled:hover:bg-purple-hover ${
-		hasNoColumns ? 'cursor-not-allowed opacity-75' : ''
+		boardHasColumns ? '' : 'cursor-not-allowed opacity-75'
 	}`;
 	const btnAddTaskText = '+ Add New Task';
 
@@ -83,7 +81,7 @@ const Nav = ({
 	};
 
 	const handleKebabMenu = () => {
-		setIsKebabModalOpen(!isKebabModalOpen);
+		setIsKebabMenuModalOpen(!isKebabMenuModalOpen);
 	};
 
 	const handleDeleteBoard = async (boardId: number) => {
@@ -99,7 +97,7 @@ const Nav = ({
 
 		setSelectedBoard(newBoard);
 
-		setIsKebabModalOpen(false);
+		setIsKebabMenuModalOpen(false);
 
 		queryClient.invalidateQueries(['boards']);
 	};
@@ -142,7 +140,7 @@ const Nav = ({
 					<div onClick={handleKebabMenu} className="cursor-pointer">
 						<KebabMenuIcon />
 					</div>
-					{isKebabModalOpen ? (
+					{isKebabMenuModalOpen ? (
 						<KebabMenuModal
 							editText={kebabMenuEdit}
 							deleteText={kebabMenuDelete}
@@ -150,6 +148,7 @@ const Nav = ({
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsEditBoardModalOpen={setIsEditBoardModalOpen}
 							isParentTaskModal={false}
+							setIsKebabMenuModalOpen={setIsKebabMenuModalOpen}
 						/>
 					) : (
 						<></>
