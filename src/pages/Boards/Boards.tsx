@@ -29,6 +29,7 @@ const Boards = () => {
 		<>
 			<Nav
 				boards={boards}
+				boardHasColumns={boardHasColumns}
 				isAllBoardsOpen={isAllBoardsOpen}
 				setIsAllBoardsOpen={setIsAllBoardsOpen}
 				setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
