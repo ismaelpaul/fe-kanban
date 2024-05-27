@@ -32,9 +32,10 @@ const BoardForm = ({
 	const [columnsInput, setColumnsInput] = useState<ColumnsInput[]>([]);
 	const [columnsToDelete, setColumnsToDelete] = useState<number[]>([]);
 
-	const boardId = useBoardStore((state) => state.boardId);
-	const setBoardId = useBoardStore((state) => state.setBoardId);
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
+
+	const boardId = selectedBoard.board_id;
 
 	const queryClient = useQueryClient();
 
@@ -105,7 +106,6 @@ const BoardForm = ({
 		if (isNewBoard) {
 			await addNewBoardSubmission(
 				newBoardData,
-				setBoardId,
 				setSelectedBoard,
 				queryClient,
 				toast
