@@ -85,6 +85,8 @@ const TaskModal = ({
 			setCompletedSubtasks,
 			patch
 		);
+
+		queryClient.invalidateQueries(['tasks', columnId]);
 	};
 
 	const handleDeleteTask = async (taskId: number) => {
