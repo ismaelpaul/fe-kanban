@@ -166,8 +166,6 @@ const TaskForm = ({
 		}
 	}, [taskData, setValue]);
 
-	console.log(selectedOption, '<<<< selected option');
-
 	return (
 		<>
 			<form id="task-form" onSubmit={onSubmit}>
