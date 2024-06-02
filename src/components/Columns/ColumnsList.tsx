@@ -128,6 +128,7 @@ const ColumnsList = ({ setBoardHasColumns }: ColumnsListProps) => {
 									column={column}
 									isDragging={snapshot.isDraggingOver}
 								/>
+								{provided.placeholder}
 							</div>
 						)}
 					</Droppable>
