@@ -48,14 +48,6 @@ export const editBoardSubmission = async (
 
 		const response = await updateBoardNameById(boardId, updatedBoard);
 
-		const urlSearchParams = new URLSearchParams();
-		urlSearchParams.set('boardName', response.name);
-		window.history.pushState(
-			null,
-			'',
-			`/?boardName=${response.name}&boardID=${response.board_id}`
-		);
-
 		setSelectedBoard(response);
 
 		queryClient.invalidateQueries(['boards']);
@@ -88,6 +80,7 @@ export const editBoardSubmission = async (
 				delete column.placeholder;
 				delete column.is_new;
 			});
+
 			await addNewColumnsByBoardId(boardId, newColumnsToAdd);
 		}
 	}
