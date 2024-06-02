@@ -2,17 +2,15 @@ import React, { useEffect } from 'react';
 import { getTasksByColumnId } from '../../api/kanbanApi';
 import useFetch from '../../hooks/useFetch';
 import Task from './Task';
-import { ITasks } from '../../interfaces/ITask';
-import useTasksStore from '../../store/tasksStore';
+import { ITasks, SingleTask } from '../../interfaces/ITask';
 import CardSkeleton from '../SkeletonLoader/CardSkeleton';
 
 interface TaskListProps {
 	columnId: number;
-	setTasksLength: (taskLenght: number) => void;
+	tasks: { [columnId: number]: SingleTask[] }; // Updated type
+	setTasks: (columnId: number, newTasks: SingleTask[]) => void;
 }
-const TaskList = ({ columnId, setTasksLength }: TaskListProps) => {
-	const { tasks, setTasks } = useTasksStore();
-
+const TaskList = ({ columnId, tasks, setTasks }: TaskListProps) => {
 	const { data, isLoading, isError } = useFetch({
 		queryKey: ['tasks', columnId],
 		queryFn: () => getTasksByColumnId(columnId),
@@ -21,10 +19,9 @@ const TaskList = ({ columnId, setTasksLength }: TaskListProps) => {
 	useEffect(() => {
 		if (!isLoading && !isError && data) {
 			const { tasks: newTasks }: ITasks = data;
-			setTasksLength(newTasks.length);
 			setTasks(columnId, newTasks);
 		}
-	}, [data, isLoading, isError, setTasksLength, setTasks, columnId]);
+	}, [data, isLoading, isError, setTasks, columnId]);
 
 	if (isError) {
 		return <span>Error: </span>;
