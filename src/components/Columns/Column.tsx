@@ -9,7 +9,7 @@ interface ColumnProps {
 	isDragging: boolean;
 }
 const Column = ({ column, index, isDragging }: ColumnProps) => {
-	const { tasks, setTasks } = useTasksStore();
+	const { tasks } = useTasksStore();
 	let dotColor;
 
 	if (index === 0) {
@@ -30,11 +30,7 @@ const Column = ({ column, index, isDragging }: ColumnProps) => {
 						: ''
 				}`}
 			>
-				<TaskList
-					columnId={column.column_id}
-					tasks={tasks}
-					setTasks={setTasks}
-				/>
+				<TaskList columnId={column.column_id} tasks={tasks} />
 			</div>
 		</>
 	);
