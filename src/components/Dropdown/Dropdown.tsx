@@ -31,8 +31,13 @@ const Dropdown = ({
 				type="button"
 				className="flex items-center justify-between border border-medium-grey border-opacity-25 px-4 py-3 rounded w-full focus:border-purple"
 				onClick={() => setIsOpen(!isOpen)}
+				disabled={isParentTaskModal ? true : false}
 			>
-				<span className="text-l-body dark:text-white leading-[100%]">
+				<span
+					className={`text-l-bod leading-[100%] ${
+						isParentTaskModal ? 'text-medium-grey' : 'dark:text-white'
+					}`}
+				>
 					{selectedOption.label}
 				</span>
 				{isOpen ? <ChevronUp /> : <ChevronDown />}

@@ -13,7 +13,6 @@ import { getNewItemsToAdd } from '../utils';
 
 export const addNewBoardSubmission = async (
 	newBoardData: Partial<BoardSubmit>,
-	setBoardId: (id: number) => void,
 	setSelectedBoard: (board: Board) => void,
 	queryClient: QueryClient,
 	toast: IToastTypes
@@ -23,7 +22,6 @@ export const addNewBoardSubmission = async (
 	const newBoard = response.board;
 
 	setSelectedBoard(newBoard);
-	setBoardId(newBoard.board_id);
 
 	toast.success(`${newBoard.name} has been added.`);
 
@@ -49,14 +47,6 @@ export const editBoardSubmission = async (
 		const updatedBoard = { name: newBoardData.name };
 
 		const response = await updateBoardNameById(boardId, updatedBoard);
-
-		const urlSearchParams = new URLSearchParams();
-		urlSearchParams.set('boardName', response.name);
-		window.history.pushState(
-			null,
-			'',
-			`/?boardName=${response.name}&boardID=${response.board_id}`
-		);
 
 		setSelectedBoard(response);
 
@@ -90,6 +80,7 @@ export const editBoardSubmission = async (
 				delete column.placeholder;
 				delete column.is_new;
 			});
+
 			await addNewColumnsByBoardId(boardId, newColumnsToAdd);
 		}
 	}

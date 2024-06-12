@@ -22,15 +22,12 @@ const AllBoards = ({
 }: AllBoardsProps) => {
 	const [isHovering, setIsHovering] = useState(-1);
 
-	const setBoardId = useBoardStore((state) => state.setBoardId);
-
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
 
 	const btnAddTaskClass = 'fill-purple';
 
 	const handleSelectBoard = (board: Board) => {
-		setBoardId(board.board_id);
 		setSelectedBoard(board);
 	};
 

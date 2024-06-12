@@ -1,13 +1,11 @@
-import useKebabMenu from '../../hooks/useKebabMenu';
 import KebabMenuIcon from '../SVGComponents/KebabMenuIcon';
 
 type ModalHeaderProps = {
 	title: string;
+	handleKebabMenu: () => void;
 };
 
-const ModalHeader = ({ title }: ModalHeaderProps) => {
-	const { handleKebabMenu } = useKebabMenu();
-
+const ModalHeader = ({ title, handleKebabMenu }: ModalHeaderProps) => {
 	return (
 		<div className="flex items-center justify-between gap-4">
 			<h1 className="text-l-heading dark:text-white">{title}</h1>

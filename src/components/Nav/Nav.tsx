@@ -22,6 +22,7 @@ interface NavPros {
 	isAllBoardsOpen: boolean;
 	setIsAllBoardsOpen: (arg: boolean) => void;
 	boards: Board[];
+	boardHasColumns: boolean;
 	setIsAddNewBoardModalOpen: (arg: boolean) => void;
 	setIsEditBoardModalOpen: (arg: boolean) => void;
 }
@@ -29,18 +30,18 @@ const Nav = ({
 	isAllBoardsOpen,
 	setIsAllBoardsOpen,
 	boards,
+	boardHasColumns,
 	setIsAddNewBoardModalOpen,
 	setIsEditBoardModalOpen,
 }: NavPros) => {
 	const [isAddNewTaskModalOpen, setIsAddNewTaskModalOpen] = useState(false);
-	const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+	const [isKebabMenuModalOpen, setIsKebabMenuModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-	const boardId = useBoardStore((state) => state.boardId);
-	const setBoardId = useBoardStore((state) => state.setBoardId);
 
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
+
+	const boardId = selectedBoard.board_id;
 
 	const queryClient = useQueryClient();
 
@@ -53,22 +54,24 @@ const Nav = ({
 
 	const { deleteItem } = useDelete();
 
-	const firstBoard = boards[0];
+	const firstBoard = boards[0] || {};
 
 	useEffect(() => {
-		setBoardId(Number(boardId));
-
-		if (selectedBoard.name === '') {
+		if (!selectedBoard.name) {
 			setSelectedBoard(firstBoard);
-		} else {
-			setSelectedBoard(selectedBoard);
 		}
-	}, [firstBoard, setBoardId, setSelectedBoard, boardId, selectedBoard]);
+	}, [firstBoard]);
 
-	const btnBoardsText = selectedBoard.name;
+	const btnBoardsText = selectedBoard.name || '';
+
 	const btnBoardsClass = 'text-l-heading dark:text-white';
 
-	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 hover:bg-purple-hover`;
+	const btnAddTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 ${
+		boardHasColumns
+			? 'enabled:hover:bg-purple-hover'
+			: 'cursor-not-allowed opacity-75'
+	}`;
+
 	const btnAddTaskText = '+ Add New Task';
 
 	const toggleBoardsDropdown = () => {
@@ -80,7 +83,7 @@ const Nav = ({
 	};
 
 	const handleKebabMenu = () => {
-		setIsKebabModalOpen(!isKebabModalOpen);
+		setIsKebabMenuModalOpen(!isKebabMenuModalOpen);
 	};
 
 	const handleDeleteBoard = async (boardId: number) => {
@@ -96,9 +99,7 @@ const Nav = ({
 
 		setSelectedBoard(newBoard);
 
-		setBoardId(Number(newBoard.board_id));
-
-		setIsKebabModalOpen(false);
+		setIsKebabMenuModalOpen(false);
 
 		queryClient.invalidateQueries(['boards']);
 	};
@@ -137,11 +138,12 @@ const Nav = ({
 						svgComponent={<AddTaskMobile />}
 						buttonClass={btnAddTaskClass}
 						buttonText={btnAddTaskText}
+						disabled={!boardHasColumns}
 					/>
 					<div onClick={handleKebabMenu} className="cursor-pointer">
 						<KebabMenuIcon />
 					</div>
-					{isKebabModalOpen ? (
+					{isKebabMenuModalOpen ? (
 						<KebabMenuModal
 							editText={kebabMenuEdit}
 							deleteText={kebabMenuDelete}
@@ -149,6 +151,7 @@ const Nav = ({
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsEditBoardModalOpen={setIsEditBoardModalOpen}
 							isParentTaskModal={false}
+							setIsKebabMenuModalOpen={setIsKebabMenuModalOpen}
 						/>
 					) : (
 						<></>

@@ -9,13 +9,12 @@ import KebabMenuModal from '../KebabMenu/KebabMenuModal';
 import DeleteModal from '../DeleteModal/DeleteModal';
 import useDelete from '../../hooks/useDelete';
 import { useQueryClient } from '@tanstack/react-query';
-import useBoardStore from '../../store/boardStore';
-import { IColumns, SingleColumn } from '../../interfaces/IColumn';
+import { SingleColumn } from '../../interfaces/IColumn';
 import { motion } from 'framer-motion';
-import useKebabMenu from '../../hooks/useKebabMenu';
 import SubtasksList from '../Subtasks/SubtaskList';
 import { handleSubtaskCompletion } from '../../utils/Subtask/SubtaskUtils';
 import ModalHeader from '../ModalHeader/ModalHeader';
+import useColumnsStore from '../../store/columnsStore';
 
 interface TaskModalProps {
 	task: SingleTask;
@@ -40,18 +39,11 @@ const TaskModal = ({
 }: TaskModalProps) => {
 	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-	const { isKebabMenuOpen } = useKebabMenu();
-
-	const boardId = useBoardStore((state) => state.boardId);
-
-	const queryKey = ['columns', boardId];
+	const [isKebabMenuModalOpen, setIsKebabMenuModalOpen] = useState(false);
 
 	const queryClient = useQueryClient();
 
-	const { columns }: IColumns = queryClient.getQueryData(queryKey) || {
-		columns: [],
-	};
+	const columns = useColumnsStore((state) => state.columns);
 
 	const options = columns.map((column: SingleColumn) => {
 		return (
@@ -68,7 +60,7 @@ const TaskModal = ({
 
 	const kebabMenuEdit = 'Edit Task';
 	const kebabMenuDelete = 'Delete Task';
-	const kebabMenuPosition = 'right-8 tablet:right-40 laptop:-right-[4rem]';
+	const kebabMenuPosition = 'right-8 tablet:right-40 laptop:right-4';
 
 	const { patch } = usePatch();
 	const { deleteItem } = useDelete();
@@ -93,6 +85,8 @@ const TaskModal = ({
 			setCompletedSubtasks,
 			patch
 		);
+
+		queryClient.invalidateQueries(['tasks', columnId]);
 	};
 
 	const handleDeleteTask = async (taskId: number) => {
@@ -100,6 +94,10 @@ const TaskModal = ({
 		setIsDeleteModalOpen(false);
 		setIsTaskModalOpen(false);
 		queryClient.invalidateQueries(['tasks', columnId]);
+	};
+
+	const handleKebabMenu = () => {
+		setIsKebabMenuModalOpen(!isKebabMenuModalOpen);
 	};
 
 	return (
@@ -117,8 +115,8 @@ const TaskModal = ({
 					role="dialog"
 					aria-labelledby="modal-heading"
 				>
-					<ModalHeader title={task.title} />
-					{isKebabMenuOpen ? (
+					<ModalHeader title={task.title} handleKebabMenu={handleKebabMenu} />
+					{isKebabMenuModalOpen ? (
 						<KebabMenuModal
 							editText={kebabMenuEdit}
 							deleteText={kebabMenuDelete}
@@ -127,6 +125,7 @@ const TaskModal = ({
 							setIsTaskModalOpen={setIsTaskModalOpen}
 							isParentTaskModal={true}
 							setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+							setIsKebabMenuModalOpen={setIsKebabMenuModalOpen}
 						/>
 					) : (
 						<></>

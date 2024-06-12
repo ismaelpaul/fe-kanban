@@ -11,9 +11,17 @@ import useColumnsStore from '../../store/columnsStore';
 import AddNewColumnModal from './AddNewColumnModal';
 import useFetchColumns from '../../hooks/useFetchColumns';
 
-const ColumnsList = () => {
+type ColumnsListProps = {
+	setBoardHasColumns: (arg: boolean) => void;
+};
+
+const ColumnsList = ({ setBoardHasColumns }: ColumnsListProps) => {
 	const [isAddNewColumnModalOpen, setIsAddNewColumnModalOpen] = useState(false);
-	const boardId = useBoardStore((state) => state.boardId);
+
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
+	const boardId = selectedBoard.board_id;
+
+	const setColumns = useColumnsStore((state) => state.setColumns);
 
 	const queryClient = useQueryClient();
 
@@ -21,14 +29,12 @@ const ColumnsList = () => {
 
 	const { patch } = usePatch();
 
-	const setColumns = useColumnsStore((state) => state.setColumns);
-
 	useEffect(() => {
-		if (columns) {
-			setColumns(columns);
+		if (columns.length > 0) {
+			setBoardHasColumns(true);
 		}
-		queryClient.invalidateQueries(['columns', boardId]);
-	}, [columns, boardId, queryClient, setColumns]);
+		setColumns(columns);
+	}, [columns.length]);
 
 	if (isLoading) {
 		return <span>Loading...</span>;
@@ -40,7 +46,16 @@ const ColumnsList = () => {
 
 	if (!columns.length) {
 		return (
-			<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
+			<>
+				{isAddNewColumnModalOpen ? (
+					<AddNewColumnModal
+						setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
+					/>
+				) : (
+					<></>
+				)}
+				<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
+			</>
 		);
 	}
 
@@ -113,6 +128,7 @@ const ColumnsList = () => {
 									column={column}
 									isDragging={snapshot.isDraggingOver}
 								/>
+								{provided.placeholder}
 							</div>
 						)}
 					</Droppable>

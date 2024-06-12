@@ -6,12 +6,8 @@ import { useEffect } from 'react';
 const useFetchColumns = (boardId: number) => {
 	const queryKey = ['columns', boardId];
 
-	const { data, isLoading, isError, refetch } = useQuery(
-		queryKey,
-		() => getColumnsByBoardId(boardId),
-		{
-			enabled: false,
-		}
+	const { data, isLoading, isError, refetch } = useQuery(queryKey, () =>
+		getColumnsByBoardId(boardId)
 	);
 
 	const { columns } = (data as IColumns) || { columns: [] };

@@ -9,16 +9,21 @@ import { ColumnsInput } from '../../interfaces/IColumn';
 import { addNewColumnsByBoardId } from '../../api/kanbanApi';
 import useBoardStore from '../../store/boardStore';
 import useClickOutside from '../../hooks/useClickOutside';
+import { useQueryClient } from '@tanstack/react-query';
+
 interface AddNewColumnModalPros {
 	setIsAddNewColumnModalOpen: (arg: boolean) => void;
 }
 const AddNewColumnModal = ({
 	setIsAddNewColumnModalOpen,
 }: AddNewColumnModalPros) => {
-	const boardId = useBoardStore((state) => state.boardId);
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
+	const boardId = selectedBoard.board_id;
 
 	const modalRef = useRef(null);
 	useClickOutside(modalRef, () => setIsAddNewColumnModalOpen(false));
+
+	const queryClient = useQueryClient();
 
 	const btnAddNewColumnClass =
 		'bg-purple text-white text-13px font-bold py-2 w-full rounded-full mt-6 hover:bg-purple-hover';
@@ -38,12 +43,13 @@ const AddNewColumnModal = ({
 	});
 
 	const submitData: SubmitHandler<Partial<ColumnsInput>> = async (data) => {
-		const newColumn = data;
+		const newColumn = [data];
 
 		await addNewColumnsByBoardId(boardId, newColumn);
+
 		reset();
 		setIsAddNewColumnModalOpen(false);
-		// to do: invalidate queries to refetch columns
+		queryClient.invalidateQueries(['columns', boardId]);
 	};
 
 	const onSubmit = handleSubmit(submitData);

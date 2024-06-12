@@ -7,7 +7,7 @@ import { SingleColumn } from '../interfaces/IColumn';
 
 const useColumnsStore = create<ColumnsStoreState & ColumnsStoreActions>(
 	(set) => ({
-		columns: [{ column_id: 0, board_id: 0, name: '' }],
+		columns: [],
 		setColumns: (newColumns: SingleColumn[]) => set({ columns: newColumns }),
 	})
 );

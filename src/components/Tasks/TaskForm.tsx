@@ -2,15 +2,12 @@ import { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import Dropdown from '../Dropdown/Dropdown';
 import Cross from '../SVGComponents/Cross';
-import { IColumns, SingleColumn } from '../../interfaces/IColumn';
+import { SingleColumn } from '../../interfaces/IColumn.ts';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { TaskSubmit } from '../../interfaces/ITask';
-import { getColumnsByBoardId } from '../../api/kanbanApi';
-import useFetch from '../../hooks/useFetch';
-import useBoardStore from '../../store/boardStore';
+import { TaskSubmit } from '../../interfaces/ITask.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { SubtaskInput } from '../../interfaces/ISubtask';
+import { SubtaskInput } from '../../interfaces/ISubtask.ts';
 import { TaskSubmitSchema } from '../../models/Task';
 import TextInput from '../Input/TextInput';
 import TextAreaInput from '../Input/TextAreaInput';
@@ -20,6 +17,7 @@ import {
 } from '../../utils/Task/taskSubmission.ts';
 import { IToastTypes } from '../../interfaces/IToast';
 import { useToast } from '../../hooks/useToast';
+import useColumnsStore from '../../store/columnsStore.tsx';
 
 interface TaskFormProps {
 	setIsAddNewTaskModalOpen?: (arg: boolean) => void;
@@ -40,16 +38,7 @@ const TaskForm = ({
 
 	const toast = useToast();
 
-	const boardId = useBoardStore((state) => state.boardId);
-
-	const queryKey = ['columns', boardId];
-
-	const { data } = useFetch({
-		queryKey: queryKey,
-		queryFn: () => getColumnsByBoardId(boardId),
-	});
-
-	const { columns }: IColumns = data || { columns: [] };
+	const columns = useColumnsStore((state) => state.columns);
 
 	const options = columns.map((column: SingleColumn) => {
 		return (
@@ -261,7 +250,7 @@ const TaskForm = ({
 						id="status"
 						type="hidden"
 						{...register('status')}
-						defaultValue={selectedOption.value}
+						defaultValue={selectedOption?.value}
 					/>
 					{errors.status && (
 						<span className={errorClass}>{errors.status.message}</span>

@@ -1,5 +1,3 @@
-import useKebabMenu from '../../hooks/useKebabMenu';
-
 interface KebabMenuProps {
 	editText: string;
 	deleteText: string;
@@ -9,6 +7,7 @@ interface KebabMenuProps {
 	setIsEditBoardModalOpen?: (arg: boolean) => void;
 	setIsEditTaskModalOpen?: (arg: boolean) => void;
 	isParentTaskModal: boolean;
+	setIsKebabMenuModalOpen: (arg: boolean) => void;
 }
 
 const KebabMenuModal = ({
@@ -20,11 +19,10 @@ const KebabMenuModal = ({
 	setIsEditTaskModalOpen,
 	isParentTaskModal,
 	setIsTaskModalOpen,
+	setIsKebabMenuModalOpen,
 }: KebabMenuProps) => {
-	const { setIsKebabMenuOpen } = useKebabMenu();
-
 	const handleDeleteModal = () => {
-		setIsKebabMenuOpen(false);
+		setIsKebabMenuModalOpen(false);
 		setIsDeleteModalOpen(true);
 	};
 
@@ -36,7 +34,7 @@ const KebabMenuModal = ({
 		} else {
 			setIsEditBoardModalOpen!(true);
 		}
-		setIsKebabMenuOpen(false);
+		setIsKebabMenuModalOpen(false);
 	};
 
 	return (
