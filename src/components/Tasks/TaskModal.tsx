@@ -147,7 +147,7 @@ const TaskModal = ({
 							selectedOption={selectedOption}
 							setSelectedOption={setSelectedOption}
 							options={options}
-							isParentTaskModal={true}
+							disabled={true}
 						/>
 					</div>
 				</motion.dialog>
