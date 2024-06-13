@@ -8,18 +8,18 @@ interface DropDownProps {
 	selectedOption: Options;
 	options: Options[];
 	setSelectedOption: (arg: Options) => void;
-	isParentTaskModal: boolean;
+	disabled?: boolean;
 }
 const Dropdown = ({
 	selectedOption,
 	options,
 	setSelectedOption,
-	isParentTaskModal,
+	disabled,
 }: DropDownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOptionClick = (option: Options) => {
-		if (!isParentTaskModal) {
+		if (!disabled) {
 			setSelectedOption(option);
 			setIsOpen(false);
 		}
@@ -31,14 +31,14 @@ const Dropdown = ({
 				type="button"
 				className="flex items-center justify-between border border-medium-grey border-opacity-25 px-4 py-3 rounded w-full focus:border-purple"
 				onClick={() => setIsOpen(!isOpen)}
-				disabled={isParentTaskModal ? true : false}
+				disabled={disabled}
 			>
 				<span
 					className={`text-l-bod leading-[100%] ${
-						isParentTaskModal ? 'text-medium-grey' : 'dark:text-white'
+						disabled ? 'text-medium-grey' : 'dark:text-white'
 					}`}
 				>
-					{selectedOption.label}
+					{selectedOption?.label}
 				</span>
 				{isOpen ? <ChevronUp /> : <ChevronDown />}
 			</button>
@@ -49,7 +49,7 @@ const Dropdown = ({
 							<React.Fragment key={index}>
 								<li
 									className={`text-l-body text-medium-grey ${
-										isParentTaskModal ? 'cursor-not-allowed' : 'cursor-pointer'
+										disabled ? 'cursor-not-allowed' : 'cursor-pointer'
 									}`}
 									onClick={() => handleOptionClick(option)}
 								>
