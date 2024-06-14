@@ -259,7 +259,7 @@ const TaskForm = ({
 						options={options}
 						selectedOption={selectedOption}
 						setSelectedOption={setSelectedOption}
-						isParentTaskModal={false}
+						disabled={false}
 					/>
 				</div>
 			</form>
