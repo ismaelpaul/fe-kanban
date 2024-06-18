@@ -36,40 +36,22 @@
 //   }
 // }
 
-Cypress.Commands.add('loginByGoogleApi', () => {
-	cy.log('Logging in to Google');
-	cy.request({
-		method: 'POST',
-		url: 'https://www.googleapis.com/oauth2/v4/token',
-		body: {
-			grant_type: 'refresh_token',
-			client_id: Cypress.env('googleClientId'),
-			client_secret: Cypress.env('googleClientSecret'),
-			refresh_token: Cypress.env('googleRefreshToken'),
-		},
-	}).then(({ body }) => {
-		const { access_token, id_token } = body;
+// login
 
+Cypress.Commands.add('login', (email, password) => {
+	cy.fixture('loginData').then((loginData) => {
 		cy.request({
-			method: 'GET',
-			url: 'https://www.googleapis.com/oauth2/v3/userinfo',
-			headers: { Authorization: `Bearer ${access_token}` },
-		}).then(({ body }) => {
-			cy.log(body.email);
-			cy.log(body.given_name);
-			cy.log(body.family_name);
-			const userItem = {
-				token: id_token,
-				user: {
-					googleId: body.sub,
-					email: body.email,
-					givenName: body.given_name,
-					familyName: body.family_name,
-					imageUrl: body.picture,
-				},
-			};
-
-			window.localStorage.setItem('googleCypress', JSON.stringify(userItem));
+			method: 'POST',
+			url: loginData.apiLoginEndpoint,
+			body: {
+				email: email,
+				password: password,
+			},
+		}).then((response) => {
+			expect(response.status).to.eq(200);
+			const token = response.body.token;
+			cy.setCookie('token', token);
 		});
 	});
+	cy.visit('/boards');
 });
