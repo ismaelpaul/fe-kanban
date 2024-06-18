@@ -1,0 +1,5 @@
+{
+	"email": "admin@admin.com",
+	"password": "password",
+	"apiLoginEndpoint": "http://localhost:9090/api/user/login"
+}
