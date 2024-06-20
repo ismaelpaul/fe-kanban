@@ -62,12 +62,20 @@ const Toast = ({ message, type, id }: IToast) => {
 			<div className="flex flex-col p-4 gap-2">
 				<div className="flex flex-row items-center gap-2">
 					<span>{icon}</span>
-					<span className={`${titleClass} text-m-heading`}>{title}</span>
+					<span
+						className={`${titleClass} text-m-heading`}
+						data-cy="toast-title"
+					>
+						{title}
+					</span>
 					<button className="ml-auto" onClick={handleClose}>
 						<Cross />
 					</button>
 				</div>
-				<p className="text-m-heading font-regular text-black dark:text-white">
+				<p
+					className="text-m-heading font-regular text-black dark:text-white"
+					data-cy="toast-message"
+				>
 					{message}
 				</p>
 			</div>

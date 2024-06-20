@@ -11,7 +11,10 @@ const Login = () => {
 		<div className="min-h-screen bg-dark-grey flex flex-col items-center justify-center">
 			<Card cardClass={cardClass}>
 				<>
-					<h1 className="text-m-heading text-center mb-4">
+					<h1
+						className="text-m-heading text-center mb-4"
+						data-cy="choose-login"
+					>
 						Choose a Login Method
 					</h1>
 					<div>
@@ -31,7 +34,7 @@ const Login = () => {
 			</Card>
 			<span className="text-13px text-white mt-3">
 				Don't have an account yet?
-				<Link to="/register">
+				<Link to="/register" data-cy="register-link">
 					<strong> Register</strong>
 				</Link>
 			</span>

@@ -29,11 +29,13 @@ const PasswordInput = <T extends FieldValues>({
 				autoComplete="current-password"
 				{...register(name)}
 				{...inputProps}
+				data-cy="password-input"
 			/>
 			<button
 				type="button"
 				className="flex justify-around items-center absolute top-[0.9rem] right-4"
 				onClick={handleToggle}
+				data-cy="hide-show-password"
 			>
 				{isVisible ? <EyeIconShow /> : <EyeIconHide />}
 			</button>

@@ -52,9 +52,13 @@ const LoginForm = () => {
 					errors.email ? 'border border-red/100' : ''
 				}`}
 				placeholder={errors.email ? '' : 'Enter your email'}
+				data-cy="email-input"
 			/>
 			{errors.email && (
-				<span className={`${errorClass} right-6 mt-3`}>
+				<span
+					className={`${errorClass} right-6 mt-3`}
+					data-cy="email-error-message"
+				>
 					{errors.email.message}
 				</span>
 			)}
@@ -71,7 +75,10 @@ const LoginForm = () => {
 				autoComplete="off"
 			/>
 			{errors.password && (
-				<span className={`${errorClass} right-16 top-44`}>
+				<span
+					className={`${errorClass} right-16 top-44`}
+					data-cy="password-error-message"
+				>
 					{errors.password.message}
 				</span>
 			)}
@@ -79,6 +86,7 @@ const LoginForm = () => {
 				type="submit"
 				buttonText={'Login'}
 				buttonClass={`${btnClass} bg-purple hover:bg-purple-hover font-bold`}
+				data-cy="login-btn"
 			/>
 		</form>
 	);

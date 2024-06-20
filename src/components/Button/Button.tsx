@@ -8,6 +8,7 @@ interface ButtonProps {
 	type?: 'button' | 'submit' | 'reset';
 	form?: string;
 	disabled?: boolean;
+	'data-cy'?: string;
 }
 
 const Button = ({
@@ -18,6 +19,7 @@ const Button = ({
 	type,
 	form,
 	disabled,
+	'data-cy': dataCy,
 }: ButtonProps) => {
 	const { width } = useWindowDimensions();
 
@@ -29,6 +31,7 @@ const Button = ({
 			onClick={onClick}
 			className={buttonClass}
 			disabled={disabled}
+			data-cy={dataCy}
 		>
 			{isMobile && svgComponent ? <>{svgComponent}</> : buttonText}
 		</button>
