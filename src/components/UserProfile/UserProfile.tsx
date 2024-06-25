@@ -26,7 +26,8 @@ const UserProfile = () => {
 
 	const handleLogout = async () => {
 		const result = await logoutUser();
-		if (result === 'OK') {
+
+		if (result === 200) {
 			navigate('/login');
 		} else {
 			toast.error('Something went wrong, please try again.');
