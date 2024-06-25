@@ -276,7 +276,7 @@ export const loginUser = async (userData: LoginUser) => {
 export const logoutUser = async () => {
 	try {
 		const response = await kanbanApi.post('/user/logout');
-		return response.statusText;
+		return response.status;
 	} catch (error) {
 		const err = error as AxiosError;
 		console.log(err.response?.data);
