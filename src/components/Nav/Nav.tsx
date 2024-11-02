@@ -57,9 +57,7 @@ const Nav = ({
 	const firstBoard = boards[0] || {};
 
 	useEffect(() => {
-		if (!selectedBoard.name) {
-			setSelectedBoard(firstBoard);
-		}
+		setSelectedBoard(firstBoard);
 	}, [firstBoard]);
 
 	const btnBoardsText = selectedBoard.name || '';
