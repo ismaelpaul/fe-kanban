@@ -34,7 +34,7 @@ const Dropdown = ({
 				disabled={disabled}
 			>
 				<span
-					className={`text-l-bod leading-[100%] ${
+					className={`text-l-body leading-[100%] ${
 						disabled ? 'text-medium-grey' : 'dark:text-white'
 					}`}
 				>
