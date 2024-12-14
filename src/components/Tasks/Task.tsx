@@ -54,7 +54,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 						<Card onClick={handleTaskClick} cardClass={cardClass}>
 							<>
 								<h2
-									className={`text-m-heading transition ease-in-out duration-300  ${
+									className={`text-m-heading transition-[text] ease-in-out duration-300  ${
 										isCardOnHover
 											? ' text-purple'
 											: 'text-black dark:text-white'

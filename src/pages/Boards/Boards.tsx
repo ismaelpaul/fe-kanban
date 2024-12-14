@@ -40,7 +40,7 @@ const Boards = () => {
 					boardHasColumns ? '' : 'justify-center'
 				} gap-5 overflow-x-scroll h-screen w-screen fixed bg-light-bg dark:bg-dark-bg pl-4 pt-8 ${
 					isAllBoardsOpen
-						? 'tablet:ml-[16.5rem] transition-all ease-in-out duration-300'
+						? 'tablet:ml-[16.5rem] transition-[margin] ease-in-out duration-300'
 						: ''
 				}`}
 			>
