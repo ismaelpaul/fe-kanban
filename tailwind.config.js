@@ -55,6 +55,8 @@ export default {
 			success: '#53D768',
 			warning: '#FFD600',
 			error: '#EA5555',
+			'task-completion': '#03ae03',
+			'dark-task-completion': '#51ef98',
 		},
 		extend: {
 			dropShadow: {
