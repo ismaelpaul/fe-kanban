@@ -6,6 +6,7 @@ export interface SingleTask {
 	description: string;
 	status: string;
 	title: string;
+	is_completed: boolean;
 	position: number;
 	subtasks: SingleSubtask[];
 }
