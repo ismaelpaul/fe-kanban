@@ -148,6 +148,7 @@ const TaskModal = ({
 						onClick={() => {
 							handleTaskCompletion(task.task_id);
 						}}
+						data-cy="task-completion-btn"
 					/>
 					<p className="text-l-body text-medium-grey mt-6">
 						{task.description}

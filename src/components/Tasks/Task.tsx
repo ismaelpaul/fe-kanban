@@ -55,6 +55,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 							cardClass={`${
 								isTaskCompleted ? 'opacity-30 hover:opacity-60' : ''
 							} bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg cursor-pointer`}
+							dataCy={`task-card-${task.task_id}`}
 						>
 							<>
 								<h2
