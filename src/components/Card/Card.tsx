@@ -2,11 +2,12 @@ interface CardProps {
 	children: JSX.Element;
 	cardClass: string;
 	onClick?: () => void;
+	dataCy: string;
 }
 
-const Card = ({ children, cardClass, onClick }: CardProps) => {
+const Card = ({ children, cardClass, onClick, dataCy }: CardProps) => {
 	return (
-		<article onClick={onClick} className={`${cardClass}`}>
+		<article onClick={onClick} className={`${cardClass}`} data-cy={dataCy}>
 			{children}
 		</article>
 	);
