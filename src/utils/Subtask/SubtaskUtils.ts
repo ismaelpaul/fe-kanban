@@ -3,7 +3,7 @@ import usePatch from '../../hooks/usePatch';
 
 export const handleSubtaskCompletion = async (
 	subtaskId: number,
-	isCompleted: boolean,
+	isSubtaskCompleted: boolean,
 	updatingSubtask: number | null,
 	completedSubtasks: number,
 	setUpdatingSubtask: (arg: number | null) => void,
@@ -11,9 +11,9 @@ export const handleSubtaskCompletion = async (
 	patch: ReturnType<typeof usePatch>['patch']
 ) => {
 	if (updatingSubtask === subtaskId) {
-		isCompleted = !isCompleted;
+		isSubtaskCompleted = !isSubtaskCompleted;
 
-		const newCompleted = isCompleted
+		const newCompleted = isSubtaskCompleted
 			? completedSubtasks + 1
 			: completedSubtasks - 1;
 
@@ -23,14 +23,14 @@ export const handleSubtaskCompletion = async (
 		setUpdatingSubtask(subtaskId);
 	}
 
-	const newCompleted = isCompleted
+	const newCompleted = isSubtaskCompleted
 		? completedSubtasks - 1
 		: completedSubtasks + 1;
 
 	setCompletedSubtasks(newCompleted);
 
 	const updatedData = {
-		is_completed: !isCompleted,
+		is_completed: !isSubtaskCompleted,
 	};
 	const queryKey = 'subtasks';
 

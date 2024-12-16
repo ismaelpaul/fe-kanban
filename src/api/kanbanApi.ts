@@ -208,6 +208,23 @@ export const updateTaskTitleAndDescription = async (
 	}
 };
 
+export const updateTaskCompletionById = async (
+	taskId: number,
+	taskCompletion: object
+) => {
+	try {
+		const response = await kanbanApi.patch(
+			`/tasks/${taskId}/completion`,
+			taskCompletion
+		);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
 export const addNewSubtaskByTaskId = async (
 	taskId: number,
 	newSubtask: SubtaskSubmit[]
@@ -276,7 +293,7 @@ export const loginUser = async (userData: LoginUser) => {
 export const logoutUser = async () => {
 	try {
 		const response = await kanbanApi.post('/user/logout');
-		return response.statusText;
+		return response.status;
 	} catch (error) {
 		const err = error as AxiosError;
 		console.log(err.response?.data);

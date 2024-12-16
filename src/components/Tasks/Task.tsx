@@ -21,8 +21,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 
 	const subtasks = task.subtasks;
 
-	const cardClass =
-		'bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg cursor-pointer';
+	const isTaskCompleted = task.is_completed;
 
 	const handleTaskClick = () => {
 		setIsTaskModalOpen(true);
@@ -51,10 +50,15 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 							handleMouseOver(index);
 						}}
 					>
-						<Card onClick={handleTaskClick} cardClass={cardClass}>
+						<Card
+							onClick={handleTaskClick}
+							cardClass={`${
+								isTaskCompleted ? 'opacity-30 hover:opacity-60' : ''
+							} bg-white dark:bg-dark-grey drop-shadow-card w-[17.5rem] px-4 py-6 rounded-lg cursor-pointer`}
+						>
 							<>
 								<h2
-									className={`text-m-heading transition ease-in-out duration-300  ${
+									className={`text-m-heading transition-[text] ease-in-out duration-300  ${
 										isCardOnHover
 											? ' text-purple'
 											: 'text-black dark:text-white'
@@ -84,6 +88,7 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 					setCompletedSubtasks={setCompletedSubtasks}
 					setIsTaskModalOpen={setIsTaskModalOpen}
 					setIsEditTaskModalOpen={setIsEditTaskModalOpen}
+					isTaskCompleted={isTaskCompleted}
 				/>
 			) : (
 				<></>

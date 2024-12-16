@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { deleteTaskById } from '../../api/kanbanApi';
+import { deleteTaskById, updateTaskCompletionById } from '../../api/kanbanApi';
 import { SingleSubtask } from '../../interfaces/ISubtask';
 import { SingleTask } from '../../interfaces/ITask';
 import Dropdown from '../Dropdown/Dropdown';
@@ -15,6 +15,7 @@ import SubtasksList from '../Subtasks/SubtaskList';
 import { handleSubtaskCompletion } from '../../utils/Subtask/SubtaskUtils';
 import ModalHeader from '../ModalHeader/ModalHeader';
 import useColumnsStore from '../../store/columnsStore';
+import Button from '../Button/Button';
 
 interface TaskModalProps {
 	task: SingleTask;
@@ -25,6 +26,7 @@ interface TaskModalProps {
 	setCompletedSubtasks: (arg: number) => void;
 	setIsTaskModalOpen: (arg: boolean) => void;
 	setIsEditTaskModalOpen: (arg: boolean) => void;
+	isTaskCompleted: boolean;
 }
 
 const TaskModal = ({
@@ -36,6 +38,7 @@ const TaskModal = ({
 	setCompletedSubtasks,
 	columnId,
 	setIsEditTaskModalOpen,
+	isTaskCompleted,
 }: TaskModalProps) => {
 	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -46,10 +49,9 @@ const TaskModal = ({
 	const columns = useColumnsStore((state) => state.columns);
 
 	const options = columns.map((column: SingleColumn) => {
-		return (
-			{ id: column.column_id, label: column.name, value: column.name } || {}
-		);
+		return { id: column.column_id, label: column.name, value: column.name };
 	});
+
 	const initialSelectedOption = options.find(
 		(option) => option.label === task.status
 	);
@@ -57,10 +59,6 @@ const TaskModal = ({
 	const [selectedOption, setSelectedOption] = useState(
 		initialSelectedOption || options[0]
 	);
-
-	const kebabMenuEdit = 'Edit Task';
-	const kebabMenuDelete = 'Delete Task';
-	const kebabMenuPosition = 'right-8 tablet:right-40 laptop:right-4';
 
 	const { patch } = usePatch();
 	const { deleteItem } = useDelete();
@@ -74,11 +72,11 @@ const TaskModal = ({
 
 	const handleSubtaskToggle = async (
 		subtaskId: number,
-		isCompleted: boolean
+		isSubtasksCompleted: boolean
 	) => {
 		await handleSubtaskCompletion(
 			subtaskId,
-			isCompleted,
+			isSubtasksCompleted,
 			updatingSubtask,
 			completedSubtasks,
 			setUpdatingSubtask,
@@ -100,6 +98,14 @@ const TaskModal = ({
 		setIsKebabMenuModalOpen(!isKebabMenuModalOpen);
 	};
 
+	const handleTaskCompletion = async (taskId: number) => {
+		const taskCompletion = { is_completed: !task.is_completed };
+
+		await updateTaskCompletionById(taskId, taskCompletion);
+
+		queryClient.invalidateQueries(['tasks', columnId]);
+	};
+
 	return (
 		<>
 			<aside className="fixed inset-0 flex items-center justify-center z-40">
@@ -118,9 +124,9 @@ const TaskModal = ({
 					<ModalHeader title={task.title} handleKebabMenu={handleKebabMenu} />
 					{isKebabMenuModalOpen ? (
 						<KebabMenuModal
-							editText={kebabMenuEdit}
-							deleteText={kebabMenuDelete}
-							menuPosition={kebabMenuPosition}
+							editText={'Edit Task'}
+							deleteText={'Delete Task'}
+							menuPosition={'right-8 tablet:right-40 laptop:right-4'}
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsTaskModalOpen={setIsTaskModalOpen}
 							isParentTaskModal={true}
@@ -130,6 +136,19 @@ const TaskModal = ({
 					) : (
 						<></>
 					)}
+					<Button
+						buttonText={`${
+							isTaskCompleted ? 'Mark Incomplete' : 'Mark complete'
+						}`}
+						buttonClass={`${
+							isTaskCompleted
+								? 'bg-task-completion text-white dark:bg-dark-task-completion dark:text-lines-dark'
+								: 'text-task-completion dark:text-dark-task-completion'
+						} text-12px border rounded border-task-completion dark:border-dark-task-completion p-1 mt-6`}
+						onClick={() => {
+							handleTaskCompletion(task.task_id);
+						}}
+					/>
 					<p className="text-l-body text-medium-grey mt-6">
 						{task.description}
 					</p>
