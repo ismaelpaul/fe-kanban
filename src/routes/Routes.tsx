@@ -1,17 +1,17 @@
-import { Switch } from '@headlessui/react';
-import { Route } from 'react-router-dom';
-import Login from '../pages/Auth/Login';
-import Register from '../pages/Auth/Register';
-import Boards from '../pages/Boards/Boards';
+import { Route, Routes } from 'react-router-dom';
 
-const Routes = () => {
+import Boards from '../pages/Boards/Boards';
+import { Login } from '@/pages/Auth/Login';
+import { Register } from '@/pages/Auth/Register';
+
+const AppRoutes = () => {
 	return (
-		<Switch>
-			<Route path="/dashboard" element={<Boards />} />
+		<Routes>
+			<Route path="/boards" element={<Boards />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
-		</Switch>
+		</Routes>
 	);
 };
 
-export { Routes };
+export { AppRoutes };

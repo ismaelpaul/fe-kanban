@@ -1,16 +1,19 @@
-import { BrowserRouter, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+
+import { AppRoutes } from './routes/Routes';
+
 import { WebSocketProvider } from './contexts/WebSocketContext';
 
-function App() {
+const App = () => {
 	return (
 		<>
 			<WebSocketProvider>
 				<BrowserRouter>
-					<Routes />
+					<AppRoutes />
 				</BrowserRouter>
 			</WebSocketProvider>
 		</>
 	);
-}
+};
 
-export default App;
+export { App };
