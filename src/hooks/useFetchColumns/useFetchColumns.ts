@@ -1,7 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { getColumnsByBoardId } from '../api/kanbanApi';
-import { IColumns } from '../interfaces/IColumn';
 import { useEffect } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
+
+import { getColumnsByBoardId } from '@/api/kanbanApi';
+
+import { IColumns } from '@/interfaces/IColumn';
 
 const useFetchColumns = (boardId: number) => {
 	const queryKey = ['columns', boardId];
@@ -19,4 +22,4 @@ const useFetchColumns = (boardId: number) => {
 	return { columns, isLoading, isError };
 };
 
-export default useFetchColumns;
+export { useFetchColumns };

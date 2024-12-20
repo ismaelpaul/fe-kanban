@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSubtasksByTaskId } from '../api/kanbanApi';
-import { ISubtasks } from '../interfaces/ISubtask';
 import { useEffect } from 'react';
+
+import { getSubtasksByTaskId } from '@/api/kanbanApi';
+
+import { ISubtasks } from '@/interfaces/ISubtask';
 
 const useFetchSubtasks = (taskId: number) => {
 	const subtaskQueryKey = `subtasks_${taskId}`;
@@ -23,4 +25,4 @@ const useFetchSubtasks = (taskId: number) => {
 	return { subtasks, isLoading, isError };
 };
 
-export default useFetchSubtasks;
+export { useFetchSubtasks };

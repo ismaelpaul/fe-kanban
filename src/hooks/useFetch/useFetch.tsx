@@ -12,4 +12,4 @@ function useFetch<TData>({
 	return useQuery(queryKey, queryFn);
 }
 
-export default useFetch;
+export { useFetch };

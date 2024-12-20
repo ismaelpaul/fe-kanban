@@ -10,4 +10,4 @@ const useKebabMenu = () => {
 	return { isKebabMenuOpen, handleKebabMenu, setIsKebabMenuOpen };
 };
 
-export default useKebabMenu;
+export { useKebabMenu };

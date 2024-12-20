@@ -1,8 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllBoards } from '../api/kanbanApi';
-import { Boards } from '../interfaces/IBoard';
+
 import { useNavigate } from 'react-router-dom';
-import { useToast } from './useToast';
+
+import { useToast } from '../useToast';
+
+import { getAllBoards } from '@/api/kanbanApi';
+
+import { Boards } from '@/interfaces/IBoard';
 
 const useFetchBoards = () => {
 	const navigate = useNavigate();
@@ -23,4 +27,4 @@ const useFetchBoards = () => {
 	return { boards, isLoading, isError };
 };
 
-export default useFetchBoards;
+export { useFetchBoards };

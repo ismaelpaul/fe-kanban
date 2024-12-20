@@ -19,4 +19,4 @@ const useDelete = () => {
 	return { isDeleting, deleteItem };
 };
 
-export default useDelete;
+export { useDelete };

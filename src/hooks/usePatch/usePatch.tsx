@@ -40,4 +40,4 @@ const usePatch = () => {
 	};
 };
 
-export default usePatch;
+export { usePatch };
