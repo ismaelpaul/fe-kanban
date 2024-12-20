@@ -1,8 +1,8 @@
-import Card from '../../components/Card/Card';
 import { Link } from 'react-router-dom';
-import LoginForm from '../../components/Form/LoginForm';
-import GoogleButton from '../../components/Button/GoogleButton';
-import GithubButton from '../../components/Button/GithubButton';
+
+import { GithubButton, GoogleButton } from '@/components/Button';
+import { Card } from '@/components/Card/Card';
+import { LoginForm } from '@/components/Form/LoginForm';
 
 const Login = () => {
 	const cardClass = 'bg-white drop-shadow-card px-4 py-6 rounded-lg w-[25rem]';
@@ -39,4 +39,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export { Login };

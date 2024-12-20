@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import GithubIcon from '../../components/SVGComponents/GithubIcon';
-import GoogleIcon from '../../components/SVGComponents/GoogleIcon';
-import Card from '../../components/Card/Card';
-import RegisterForm from '../../components/Form/RegisterForm';
+
+import { Card } from '@/components/Card/Card';
+import { RegisterForm } from '@/components/Form/RegisterForm';
+import { GithubIcon } from '@/components/SVGComponents/GithubIcon';
+import { GoogleIcon } from '@/components/SVGComponents/GoogleIcon';
 
 const Register = () => {
 	const cardClass = 'bg-white drop-shadow-card px-4 py-6 rounded-lg w-[50rem]';
@@ -64,4 +65,4 @@ const Register = () => {
 	);
 };
 
-export default Register;
+export { Register };
