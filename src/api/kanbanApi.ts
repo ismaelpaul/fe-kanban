@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { SingleSubtask, SubtaskSubmit } from '../interfaces/ISubtask';
-import { ColumnsInput } from '../interfaces/IColumn';
-import { LoginUser, RegisterUser } from '../interfaces/IAuth';
+
+import { LoginUser, RegisterUser } from '@/interfaces/IAuth';
+import { ColumnsInput } from '@/interfaces/IColumn';
+import { SingleSubtask, SubtaskSubmit } from '@/interfaces/ISubtask';
 
 interface AxiosConfig extends AxiosRequestConfig {
 	credentials?: string;
@@ -14,6 +15,17 @@ const kanbanApi = axios.create({
 	withCredentials: true,
 	credentials: 'include',
 } as AxiosConfig);
+
+export const getTeams = async () => {
+	try {
+		const response = await kanbanApi.get('/teams');
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
 
 export const getAllBoards = async () => {
 	try {
