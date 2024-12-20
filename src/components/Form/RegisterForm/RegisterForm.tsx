@@ -1,11 +1,15 @@
-import TextInput from '../Input/TextInput';
-import PasswordInput from '../Input/PasswordInput';
-import Button from '../Button/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { RegisterSchema } from '../../models/Auth';
-import { RegisterUser } from '../../interfaces/IAuth';
-import { registerUser } from '../../api/kanbanApi';
+
+import { registerUser } from '@/api/kanbanApi';
+
+import { RegisterUser } from '@/interfaces/IAuth';
+
+import { RegisterSchema } from '@/models/Auth';
+
+import { Button } from '@/components/Button';
+import { PasswordInput } from '@/components/Input/PasswordInput';
+import { TextInput } from '@/components/Input/TextInput';
 
 const RegisterForm = () => {
 	const inputClass =
@@ -139,4 +143,4 @@ const RegisterForm = () => {
 	);
 };
 
-export default RegisterForm;
+export { RegisterForm };

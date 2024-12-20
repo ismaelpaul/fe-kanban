@@ -1,4 +1,4 @@
-import Button from '../Button/Button';
+import { Button } from '@/components/Button/Button';
 
 interface EmptyBoardProps {
 	setIsAddNewColumnModalOpen: (arg: boolean) => void;
@@ -22,4 +22,4 @@ const EmptyBoard = ({ setIsAddNewColumnModalOpen }: EmptyBoardProps) => {
 	);
 };
 
-export default EmptyBoard;
+export { EmptyBoard };

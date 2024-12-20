@@ -1,4 +1,4 @@
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { useWindowDimensions } from '@/hooks/useWindowDimensions';
 
 interface ButtonProps {
 	buttonClass: string;
@@ -35,4 +35,4 @@ const Button = ({
 	);
 };
 
-export default Button;
+export { Button };

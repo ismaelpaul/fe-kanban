@@ -1,4 +1,4 @@
-import GoogleIcon from '../SVGComponents/GoogleIcon';
+import { GoogleIcon } from '@/components/SVGComponents/GoogleIcon';
 
 const GoogleButton = () => {
 	const authUrl = import.meta.env.VITE_AUTH_URL;
@@ -22,4 +22,4 @@ const GoogleButton = () => {
 	);
 };
 
-export default GoogleButton;
+export { GoogleButton };

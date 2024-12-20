@@ -1,5 +1,5 @@
-import { SingleColumn } from '../../interfaces/IColumn';
-import { SingleTask } from '../../interfaces/ITask';
+import { SingleColumn } from '@/interfaces/IColumn';
+import { SingleTask } from '@/interfaces/ITask';
 
 interface ColumnHeaderPros {
 	dotColor: string;
@@ -22,4 +22,4 @@ const ColumnHeader = ({ dotColor, column, tasks }: ColumnHeaderPros) => {
 	);
 };
 
-export default ColumnHeader;
+export { ColumnHeader };

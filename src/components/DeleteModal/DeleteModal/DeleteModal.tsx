@@ -1,4 +1,4 @@
-import Button from '../Button/Button';
+import { Button } from '@/components/Button';
 import { motion } from 'framer-motion';
 
 interface DeleteModalPros {
@@ -65,4 +65,4 @@ const DeleteModal = ({
 	);
 };
 
-export default DeleteModal;
+export { DeleteModal };

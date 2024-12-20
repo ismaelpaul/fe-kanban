@@ -1,20 +1,28 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import TextInput from '../Input/TextInput';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import Button from '../Button/Button';
-import { BoardSubmit } from '../../interfaces/IBoard';
-import { BoardSubmitSchema } from '../../models/Board';
-import Cross from '../SVGComponents/Cross';
+
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useQueryClient } from '@tanstack/react-query';
+
+import { BoardSubmit } from '@/interfaces/IBoard';
+import { ColumnsInput } from '@/interfaces/IColumn';
+import { IToastTypes } from '@/interfaces/IToast';
+
+import useBoardStore from '@/store/boardStore';
+
+import { useToast } from '@/hooks';
+
+import { BoardSubmitSchema } from '@/models/Board';
+
 import {
 	addNewBoardSubmission,
 	editBoardSubmission,
-} from '../../utils/Board/boardSubmission.ts';
-import useBoardStore from '../../store/boardStore';
-import { ColumnsInput } from '../../interfaces/IColumn.ts';
-import { useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../hooks/useToast';
-import { IToastTypes } from '../../interfaces/IToast';
+} from '@/utils/Board/boardSubmission';
+
+import { TextInput } from '@/components/Input/TextInput';
+import { Cross } from '@/components/SVGComponents/Cross';
+import { Button } from '@/components/Button/Button';
 
 interface BoardFormProps {
 	setIsAddNewBoardModalOpen?: (arg: boolean) => void;
@@ -212,4 +220,4 @@ const BoardForm = ({
 	);
 };
 
-export default BoardForm;
+export { BoardForm };

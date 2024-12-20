@@ -1,13 +1,18 @@
-import PasswordInput from '../Input/PasswordInput';
-import TextInput from '../Input/TextInput';
-import Button from '../Button/Button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginUser } from '../../interfaces/IAuth';
-import { LoginSchema } from '../../models/Auth';
-import { loginUser } from '../../api/kanbanApi';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '../../hooks/useToast';
+
+import { loginUser } from '@/api/kanbanApi';
+
+import { useToast } from '@/hooks';
+
+import { LoginUser } from '@/interfaces/IAuth';
+
+import { LoginSchema } from '@/models/Auth';
+
+import { TextInput } from '@/components/Input/TextInput';
+import { PasswordInput } from '@/components/Input/PasswordInput';
+import { Button } from '@/components/Button';
 
 const LoginForm = () => {
 	const inputClass =
@@ -84,4 +89,4 @@ const LoginForm = () => {
 	);
 };
 
-export default LoginForm;
+export { LoginForm };

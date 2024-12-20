@@ -1,7 +1,9 @@
-import { SingleColumn } from '../../interfaces/IColumn';
-import useTasksStore from '../../store/tasksStore';
-import TaskList from '../Tasks/TaskList';
-import ColumnHeader from './ColumnHeader';
+import { SingleColumn } from '@/interfaces/IColumn';
+
+import useTasksStore from '@/store/tasksStore';
+
+import { ColumnHeader } from '../ColumnHeader';
+import { TaskList } from '@/components/Tasks/TaskList';
 
 interface ColumnProps {
 	column: SingleColumn;
@@ -36,4 +38,4 @@ const Column = ({ column, index, isDragging }: ColumnProps) => {
 	);
 };
 
-export default Column;
+export { Column };

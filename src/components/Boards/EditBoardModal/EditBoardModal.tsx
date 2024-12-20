@@ -1,10 +1,14 @@
 import { useRef } from 'react';
-import useBoardStore from '../../store/boardStore';
+
 import { motion } from 'framer-motion';
-import Button from '../Button/Button';
-import BoardForm from './BoardForm';
-import useColumnsStore from '../../store/columnsStore';
-import useClickOutside from '../../hooks/useClickOutside';
+
+import useBoardStore from '@/store/boardStore';
+import useColumnsStore from '@/store/columnsStore';
+
+import { useClickOutside } from '@/hooks';
+
+import { BoardForm } from '../BoardForm';
+import { Button } from '@/components/Button/Button';
 
 interface EditBoardModalProps {
 	setIsEditBoardModalOpen: (arg: boolean) => void;
@@ -59,4 +63,4 @@ const EditBoardModal = ({ setIsEditBoardModalOpen }: EditBoardModalProps) => {
 	);
 };
 
-export default EditBoardModal;
+export { EditBoardModal };

@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
-import { updateTaskPositionAndStatus } from '../../api/kanbanApi';
 import { useQueryClient } from '@tanstack/react-query';
-import Column from './Column';
-import EmptyBoard from '../Boards/EmptyBoard';
-import useBoardStore from '../../store/boardStore';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
-import usePatch from '../../hooks/usePatch';
-import useTasksStore from '../../store/tasksStore';
-import useColumnsStore from '../../store/columnsStore';
-import AddNewColumnModal from './AddNewColumnModal';
-import useFetchColumns from '../../hooks/useFetchColumns';
+
+import { updateTaskPositionAndStatus } from '@/api/kanbanApi';
+
+import useBoardStore from '@/store/boardStore';
+import useColumnsStore from '@/store/columnsStore';
+import useTasksStore from '@/store/tasksStore';
+
+import { useFetchColumns, usePatch } from '@/hooks';
+
+import { AddNewColumnModal } from '../AddNewColumnModal';
+import { EmptyBoard } from '@/components/Boards/EmptyBoard';
+import { Column } from '../Column/Column';
 
 type ColumnsListProps = {
 	setBoardHasColumns: (arg: boolean) => void;
@@ -153,4 +156,4 @@ const ColumnsList = ({ setBoardHasColumns }: ColumnsListProps) => {
 	);
 };
 
-export default ColumnsList;
+export { ColumnsList };

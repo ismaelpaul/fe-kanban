@@ -12,4 +12,4 @@ const Card = ({ children, cardClass, onClick }: CardProps) => {
 	);
 };
 
-export default Card;
+export { Card };

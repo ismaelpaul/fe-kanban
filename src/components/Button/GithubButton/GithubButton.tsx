@@ -1,4 +1,4 @@
-import GithubIcon from '../SVGComponents/GithubIcon';
+import { GithubIcon } from '@/components/SVGComponents/GithubIcon';
 
 const GithubButton = () => {
 	const authUrl = import.meta.env.VITE_AUTH_URL;
@@ -22,4 +22,4 @@ const GithubButton = () => {
 	);
 };
 
-export default GithubButton;
+export { GithubButton };

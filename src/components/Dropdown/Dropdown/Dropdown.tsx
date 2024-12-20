@@ -1,8 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
-import ChevronUp from '../SVGComponents/ChevronUp';
-import ChevronDown from '../SVGComponents/ChevronDown';
-import { Options } from '../../interfaces/IOptionsDropdown';
+import React, { useState } from 'react';
+
+import { ChevronDown } from '@/components/SVGComponents/ChevronDown';
+import { ChevronUp } from '@/components/SVGComponents/ChevronUp';
+
+import { Options } from '@/interfaces/IOptionsDropdown';
 
 interface DropDownProps {
 	selectedOption: Options;
@@ -64,4 +65,4 @@ const Dropdown = ({
 	);
 };
 
-export default Dropdown;
+export { Dropdown };

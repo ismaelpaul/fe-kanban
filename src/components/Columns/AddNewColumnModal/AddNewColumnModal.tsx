@@ -1,15 +1,25 @@
 import { useRef } from 'react';
-import { motion } from 'framer-motion';
-import Button from '../Button/Button';
-import TextInput from '../Input/TextInput';
+
 import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { motion } from 'framer-motion';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ColumnSubmit } from '../../models/Column';
-import { ColumnsInput } from '../../interfaces/IColumn';
-import { addNewColumnsByBoardId } from '../../api/kanbanApi';
-import useBoardStore from '../../store/boardStore';
-import useClickOutside from '../../hooks/useClickOutside';
+
 import { useQueryClient } from '@tanstack/react-query';
+
+import { addNewColumnsByBoardId } from '@/api/kanbanApi';
+
+import useBoardStore from '@/store/boardStore';
+
+import { useClickOutside } from '@/hooks';
+
+import { ColumnSubmit } from '@/models/Column';
+
+import { ColumnsInput } from '@/interfaces/IColumn';
+
+import { TextInput } from '@/components/Input/TextInput';
+import { Button } from '@/components/Button';
 
 interface AddNewColumnModalPros {
 	setIsAddNewColumnModalOpen: (arg: boolean) => void;
@@ -100,4 +110,4 @@ const AddNewColumnModal = ({
 	);
 };
 
-export default AddNewColumnModal;
+export { AddNewColumnModal };
