@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { BoardStoreActions, BoardStoreState } from '../interfaces/IBoardStore';
-import { Board } from '../interfaces/IBoard';
+
+import { Board } from '@/interfaces/IBoard';
+import { BoardStoreActions, BoardStoreState } from '@/interfaces/IBoardStore';
 
 const useBoardStore = create<BoardStoreState & BoardStoreActions>((set) => ({
 	selectedBoard: { user_id: 0, board_id: 0, name: '' },
@@ -8,4 +9,4 @@ const useBoardStore = create<BoardStoreState & BoardStoreActions>((set) => ({
 		set({ selectedBoard: newSelectedBoard }),
 }));
 
-export default useBoardStore;
+export { useBoardStore };

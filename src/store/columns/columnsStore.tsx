@@ -1,9 +1,10 @@
 import { create } from 'zustand';
+
+import { SingleColumn } from '@/interfaces/IColumn';
 import {
 	ColumnsStoreActions,
 	ColumnsStoreState,
-} from '../interfaces/IColumnStore';
-import { SingleColumn } from '../interfaces/IColumn';
+} from '@/interfaces/IColumnStore';
 
 const useColumnsStore = create<ColumnsStoreState & ColumnsStoreActions>(
 	(set) => ({
@@ -12,4 +13,4 @@ const useColumnsStore = create<ColumnsStoreState & ColumnsStoreActions>(
 	})
 );
 
-export default useColumnsStore;
+export { useColumnsStore };

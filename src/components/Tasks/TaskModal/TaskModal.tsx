@@ -1,21 +1,20 @@
 import { useRef, useState } from 'react';
-import { deleteTaskById, updateTaskCompletionById } from '../../api/kanbanApi';
-import { SingleSubtask } from '../../interfaces/ISubtask';
-import { SingleTask } from '../../interfaces/ITask';
-import Dropdown from '../Dropdown/Dropdown';
-import useClickOutside from '../../hooks/useClickOutside';
-import usePatch from '../../hooks/usePatch';
-import KebabMenuModal from '../KebabMenu/KebabMenuModal';
-import DeleteModal from '../DeleteModal/DeleteModal';
-import useDelete from '../../hooks/useDelete';
 import { useQueryClient } from '@tanstack/react-query';
-import { SingleColumn } from '../../interfaces/IColumn';
+
 import { motion } from 'framer-motion';
-import SubtasksList from '../Subtasks/SubtaskList';
-import { handleSubtaskCompletion } from '../../utils/Subtask/SubtaskUtils';
-import ModalHeader from '../ModalHeader/ModalHeader';
-import useColumnsStore from '../../store/columnsStore';
-import Button from '../Button/Button';
+import { SingleTask } from '@/interfaces/ITask';
+import { SingleSubtask } from '@/interfaces/ISubtask';
+import { useClickOutside, useDelete, usePatch, useWebSocket } from '@/hooks';
+import useColumnsStore from '@/store/columnsStore';
+import { SingleColumn } from '@/interfaces/IColumn';
+import { handleSubtaskCompletion } from '@/utils/Subtask/SubtaskUtils';
+import { deleteTaskById } from '@/api/kanbanApi';
+import { ModalHeader } from '@/components/ModalHeader/ModalHeader';
+import { KebabMenuModal } from '@/components/KebabMenu/KebabMenuModal';
+import { Button } from '@/components/Button';
+import { SubtasksList } from '@/components/Subtasks/SubtaskList/SubtaskList';
+import { Dropdown } from '@/components/Dropdown/Dropdown';
+import { DeleteModal } from '@/components/DeleteModal/DeleteModal';
 
 interface TaskModalProps {
 	task: SingleTask;
@@ -45,6 +44,8 @@ const TaskModal = ({
 	const [isKebabMenuModalOpen, setIsKebabMenuModalOpen] = useState(false);
 
 	const queryClient = useQueryClient();
+
+	const { sendMessage } = useWebSocket();
 
 	const columns = useColumnsStore((state) => state.columns);
 
@@ -99,9 +100,19 @@ const TaskModal = ({
 	};
 
 	const handleTaskCompletion = async (taskId: number) => {
-		const taskCompletion = { is_completed: !task.is_completed };
+		// const taskCompletion = { is_completed: !task.is_completed };
 
-		await updateTaskCompletionById(taskId, taskCompletion);
+		// await updateTaskCompletionById(taskId, taskCompletion);
+
+		const payload = {
+			type: 'UPDATE_TASK_COMPLETION',
+			payload: {
+				task_id: taskId,
+				is_completed: !task.is_completed,
+			},
+		};
+
+		sendMessage(payload.type, payload.payload);
 
 		queryClient.invalidateQueries(['tasks', columnId]);
 	};
@@ -187,4 +198,4 @@ const TaskModal = ({
 	);
 };
 
-export default TaskModal;
+export { TaskModal };

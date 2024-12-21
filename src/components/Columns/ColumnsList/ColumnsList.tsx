@@ -4,9 +4,9 @@ import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 
 import { updateTaskPositionAndStatus } from '@/api/kanbanApi';
 
-import useBoardStore from '@/store/boardStore';
-import useColumnsStore from '@/store/columnsStore';
-import useTasksStore from '@/store/tasksStore';
+import { useBoardStore } from '@/store/boards';
+import { useColumnsStore } from '@/store/columns';
+import { useTasksStore } from '@/store/tasks';
 
 import { useFetchColumns, usePatch } from '@/hooks';
 

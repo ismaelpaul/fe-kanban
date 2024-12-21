@@ -2,8 +2,8 @@ import { useRef } from 'react';
 
 import { motion } from 'framer-motion';
 
-import useBoardStore from '@/store/boardStore';
-import useColumnsStore from '@/store/columnsStore';
+import { useBoardStore } from '@/store/boards';
+import { useColumnsStore } from '@/store/columns';
 
 import { useClickOutside } from '@/hooks';
 

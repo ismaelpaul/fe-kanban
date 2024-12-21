@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react';
-import Button from '../Button/Button';
-import ChevronDown from '../SVGComponents/ChevronDown';
-import { deleteBoardById } from '../../api/kanbanApi';
-import AddTaskMobile from '../SVGComponents/AddTaskMobile';
-import AllBoards from '../Boards/AllBoards';
-import ChevronUp from '../SVGComponents/ChevronUp';
-import { Board } from '../../interfaces/IBoard';
-import AddNewTaskModal from '../Tasks/AddNewTaskModal';
-import KebabMenuModal from '../KebabMenu/KebabMenuModal';
-import DeleteModal from '../DeleteModal/DeleteModal';
-import useDelete from '../../hooks/useDelete';
-import useBoardStore from '../../store/boardStore';
-import Logo from '../SVGComponents/Logo';
-import LogoMobile from '../SVGComponents/LogoMobile';
+
 import { useQueryClient } from '@tanstack/react-query';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
-import KebabMenuIcon from '../SVGComponents/KebabMenuIcon';
-import UserProfile from '../UserProfile/UserProfile';
+
+import { deleteBoardById } from '@/api/kanbanApi';
+
+import { useBoardStore } from '@/store/boards';
+
+import { useDelete, useWindowDimensions } from '@/hooks';
+
+import { Board } from '@/interfaces/IBoard';
+
+import { LogoMobile } from '@/components/SVGComponents/LogoMobile';
+import { Logo } from '@/components/SVGComponents/Logo';
+import { Button } from '@/components/Button';
+import { ChevronDown } from '@/components/SVGComponents/ChevronDown';
+import { ChevronUp } from '@/components/SVGComponents/ChevronUp';
+import { UserProfile } from '@/components/UserProfile/UserProfile';
+import { AddTaskMobile } from '@/components/SVGComponents/AddTaskMobile';
+import { KebabMenuIcon } from '@/components/SVGComponents/KebabMenuIcon';
+import { KebabMenuModal } from '@/components/KebabMenu/KebabMenuModal';
+import { AllBoards } from '@/components/Boards/AllBoards';
+import { DeleteModal } from '@/components/DeleteModal/DeleteModal';
+import { AddNewTaskModal } from '@/components/Tasks/AddNewTaskModal';
 
 interface NavPros {
 	isAllBoardsOpen: boolean;
@@ -189,4 +194,4 @@ const Nav = ({
 	);
 };
 
-export default Nav;
+export { Nav };

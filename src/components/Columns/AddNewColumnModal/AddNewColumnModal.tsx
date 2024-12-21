@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { addNewColumnsByBoardId } from '@/api/kanbanApi';
 
-import useBoardStore from '@/store/boardStore';
+import { useBoardStore } from '@/store/boards';
 
 import { useClickOutside } from '@/hooks';
 

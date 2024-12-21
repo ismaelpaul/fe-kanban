@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import LightTheme from '../SVGComponents/LightTheme';
-import DarkTheme from '../SVGComponents/DarkTheme';
-import ToggleTheme from '../Toggle/ToggleTheme';
-import { Board } from '../../interfaces/IBoard';
-import BoardIcon from '../SVGComponents/BoardIcon';
-import useBoardStore from '../../store/boardStore';
-import Logo from '../SVGComponents/Logo';
-import HideSidebarIcon from '../SVGComponents/HideSidebarIcon';
+
 import { motion } from 'framer-motion';
+
+import { Board } from '@/interfaces/IBoard';
+
+import { useBoardStore } from '@/store/boards';
+
+import { Logo } from '@/components/SVGComponents/Logo';
+import { BoardIcon } from '@/components/SVGComponents/BoardIcon';
+import { LightTheme } from '@/components/SVGComponents/LightTheme';
+import { ToggleTheme } from '@/components/Toggle/ToggleTheme';
+import { DarkTheme } from '@/components/SVGComponents/DarkTheme';
+import { HideSidebarIcon } from '@/components/SVGComponents/HideSidebarIcon';
 
 interface AllBoardsProps {
 	boards: Board[];
@@ -138,4 +142,4 @@ const AllBoards = ({
 	);
 };
 
-export default AllBoards;
+export { AllBoards };

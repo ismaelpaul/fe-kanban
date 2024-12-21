@@ -1,6 +1,6 @@
 import { SingleColumn } from '@/interfaces/IColumn';
 
-import useTasksStore from '@/store/tasksStore';
+import { useTasksStore } from '@/store/tasks';
 
 import { ColumnHeader } from '../ColumnHeader';
 import { TaskList } from '@/components/Tasks/TaskList';

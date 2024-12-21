@@ -9,7 +9,7 @@ import { BoardSubmit } from '@/interfaces/IBoard';
 import { ColumnsInput } from '@/interfaces/IColumn';
 import { IToastTypes } from '@/interfaces/IToast';
 
-import useBoardStore from '@/store/boardStore';
+import { useBoardStore } from '@/store/boards';
 
 import { useToast } from '@/hooks';
 
