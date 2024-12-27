@@ -37,3 +37,16 @@ export interface UpdatedTaskStatus {
 	newColumnId: number;
 	taskId: number;
 }
+
+export interface TaskCompletionPayload {
+	task_id: number;
+	is_completed: boolean;
+}
+
+export interface TasksStoreState {
+	tasks: { [columnId: number]: SingleTask[] };
+}
+
+export interface TasksStoreActions {
+	setTasks: (columnId: number, newTasks: SingleTask[]) => void;
+}
