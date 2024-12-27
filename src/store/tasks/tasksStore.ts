@@ -1,4 +1,4 @@
-import { TasksStoreActions, TasksStoreState } from '@/interfaces/ITasksStore';
+import { TasksStoreActions, TasksStoreState } from '@/interfaces/ITask';
 import { create } from 'zustand';
 
 const useTasksStore = create<TasksStoreState & TasksStoreActions>((set) => ({
