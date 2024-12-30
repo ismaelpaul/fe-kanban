@@ -3,6 +3,8 @@ export interface SingleSubtask {
 	subtask_id: number;
 	title: string;
 	is_completed: boolean;
+	created_at?: string;
+	column_id?: number;
 }
 
 export interface ISubtasks {
@@ -21,4 +23,14 @@ export interface SubtaskInput {
 	title: string;
 	is_completed: boolean;
 	is_new?: boolean;
+}
+
+export interface SubtasksStoreState {
+	totalSubtasks: { [taskId: number]: number };
+	completedSubtasks: { [taskId: number]: number };
+}
+
+export interface SubtasksStoreActions {
+	setTotalSubtasks: (taskId: number, subtasksCount: number) => void;
+	setCompletedSubtasks: (taskId: number, completedSubtasks: number) => void;
 }
