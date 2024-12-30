@@ -1,11 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { registerUser } from '@/api/kanbanApi';
 
 import { RegisterUser } from '@/interfaces/IAuth';
 
 import { RegisterSchema } from '@/models/Auth';
+
+import { useToast } from '@/hooks';
 
 import { Button } from '@/components/Button';
 import { PasswordInput } from '@/components/Input/PasswordInput';
@@ -19,6 +22,9 @@ const RegisterForm = () => {
 	const btnClass =
 		'text-white text-13px py-2 w-full rounded-full transition ease-in duration-200';
 
+	const navigate = useNavigate();
+	const toast = useToast();
+
 	const {
 		register,
 		handleSubmit,
@@ -29,8 +35,15 @@ const RegisterForm = () => {
 	});
 
 	const submitData: SubmitHandler<RegisterUser> = async (data) => {
-		await registerUser(data);
-		reset();
+		try {
+			await registerUser(data);
+			navigate('/dashboard');
+			reset();
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message);
+			}
+		}
 	};
 
 	const onSubmit = handleSubmit(submitData);
