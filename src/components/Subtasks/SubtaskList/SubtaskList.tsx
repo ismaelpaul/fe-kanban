@@ -5,14 +5,12 @@ type SubtasksListProps = {
 	completedSubtasks: number;
 	totalSubtasks: number;
 	subtasks: SingleSubtask[];
-	handleSubtaskToggle: (subtaskId: number, isCompleted: boolean) => void;
 };
 
 const SubtasksList = ({
 	completedSubtasks,
 	totalSubtasks,
 	subtasks,
-	handleSubtaskToggle,
 }: SubtasksListProps) => {
 	return (
 		<>
@@ -20,11 +18,7 @@ const SubtasksList = ({
 				Subtasks ({completedSubtasks} of {totalSubtasks})
 			</span>
 			{subtasks.map((subtask: SingleSubtask) => (
-				<SubtaskItem
-					key={subtask.subtask_id}
-					subtask={subtask}
-					handleSubtaskToggle={handleSubtaskToggle}
-				/>
+				<SubtaskItem key={subtask.subtask_id} subtask={subtask} />
 			))}
 		</>
 	);
