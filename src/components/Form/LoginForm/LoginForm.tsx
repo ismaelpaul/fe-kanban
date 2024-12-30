@@ -36,7 +36,7 @@ const LoginForm = () => {
 	const submitData: SubmitHandler<LoginUser> = async (data) => {
 		try {
 			await loginUser(data);
-			navigate('/boards');
+			navigate('/dashboard');
 			reset();
 		} catch (error) {
 			if (error instanceof Error) {
