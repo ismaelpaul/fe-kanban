@@ -22,6 +22,20 @@ export const getTeams = async () => {
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
+		if (err.response?.status === 401) {
+			throw new Error('Not authorized, please log in.');
+		} else {
+			return err.response?.data;
+		}
+	}
+};
+
+export const getTeamMembersByTeamId = async (teamId: number) => {
+	try {
+		const response = await kanbanApi.get(`/users/team_members/${teamId}`);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
 		console.log(err.response?.data);
 		return err.response?.data;
 	}
@@ -41,9 +55,10 @@ export const getAllBoards = async () => {
 	}
 };
 
-export const getBoardByBoardId = async (boardId: number) => {
+export const getBoardsByTeamId = async (teamId: number) => {
 	try {
-		const response = await kanbanApi.get(`/boards/${boardId}`);
+		const response = await kanbanApi.get(`/teams/${teamId}/boards`);
+
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -290,7 +305,7 @@ export const addNewColumnsByBoardId = async (
 
 export const loginUser = async (userData: LoginUser) => {
 	try {
-		const response = await kanbanApi.post('user/login', userData);
+		const response = await kanbanApi.post('users/login', userData);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -304,7 +319,7 @@ export const loginUser = async (userData: LoginUser) => {
 
 export const logoutUser = async () => {
 	try {
-		const response = await kanbanApi.post('/user/logout');
+		const response = await kanbanApi.post('/users/logout');
 		return response.status;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -315,7 +330,7 @@ export const logoutUser = async () => {
 
 export const registerUser = async (userData: RegisterUser) => {
 	try {
-		const response = await kanbanApi.post('/user/register', userData);
+		const response = await kanbanApi.post('/users/register', userData);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -326,7 +341,7 @@ export const registerUser = async (userData: RegisterUser) => {
 
 export const emailExists = async (email: string) => {
 	try {
-		const response = await kanbanApi.get(`/user/check-email?email=${email}`);
+		const response = await kanbanApi.get(`/users/check-email?email=${email}`);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -337,7 +352,7 @@ export const emailExists = async (email: string) => {
 
 export const getUser = async () => {
 	try {
-		const response = await kanbanApi.get('/user');
+		const response = await kanbanApi.get('/users');
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
