@@ -4,23 +4,29 @@ import { useNavigate } from 'react-router-dom';
 
 import { useToast } from '../useToast';
 
-import { getAllBoards } from '@/api/kanbanApi';
+import { getBoardsByTeamId } from '@/api/kanbanApi';
 
 import { Boards } from '@/interfaces/IBoard';
 
-const useFetchBoards = () => {
+const useFetchBoards = (teamId: number) => {
 	const navigate = useNavigate();
 	const toast = useToast();
-	const queryKey = ['boards'];
+	const queryKey = ['boards', teamId];
 
-	const { data, isLoading, isError } = useQuery(queryKey, getAllBoards, {
-		onError: (err) => {
-			if (err instanceof Error) {
-				toast.error(err.message);
-			}
-			navigate('/login');
-		},
-	});
+	const { data, isLoading, isError } = useQuery(
+		queryKey,
+		() => (teamId ? getBoardsByTeamId(teamId) : null),
+
+		{
+			enabled: teamId !== 0,
+			onError: (err) => {
+				if (err instanceof Error) {
+					toast.error(err.message);
+				}
+				navigate('/login');
+			},
+		}
+	);
 
 	const { boards } = (data as Boards) || { boards: [] };
 
