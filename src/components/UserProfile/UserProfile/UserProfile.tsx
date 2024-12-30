@@ -5,7 +5,7 @@ import { logoutUser } from '@/api/kanbanApi';
 
 import { useFetchUser, useToast } from '@/hooks';
 
-import useUserStore from '@/store/userStore';
+import { useUserStore } from '@/store/users';
 
 import { Button } from '@/components/Button';
 import { ChevronDown } from '@/components/SVGComponents/ChevronDown';
@@ -49,7 +49,7 @@ const UserProfile = () => {
 	return (
 		<>
 			<div className="flex items-center gap-2">
-				<div className="h-12 w-12 overflow-hidden rounded-full border-2 border-purple">
+				<div className="ml-auto h-12 w-12 overflow-hidden rounded-full border-2 border-purple">
 					<img src={user.avatar} alt="Profile image" />
 				</div>
 				<Button
