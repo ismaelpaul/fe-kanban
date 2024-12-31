@@ -14,13 +14,19 @@ const TeamMembers = ({ teamId }: TeamMembersProps) => {
 
 	return (
 		<div className="flex">
-			{teamMembers.map((member: TeamMember) => {
+			{teamMembers.map((member: TeamMember, index: number) => {
 				return (
 					<div
 						key={member.user_id}
-						className="h-12 w-12 overflow-hidden rounded-full border-2 border-purple"
+						className={`relative h-8 w-8 tablet:h-10 tablet:w-10 laptop:h-12 laptop:w-12 overflow-hidden rounded-full border-2 border-white dark:border-dark-grey ${
+							index > 0 ? '-ml-4 tablet:-ml-3' : 'z-10'
+						}`}
 					>
-						<img src={member.avatar} alt="Profile image" />
+						<img
+							src={member.avatar}
+							alt="Profile image"
+							className="h-full w-full object-cover"
+						/>
 					</div>
 				);
 			})}
