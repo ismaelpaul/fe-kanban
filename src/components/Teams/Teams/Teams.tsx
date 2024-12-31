@@ -5,7 +5,7 @@ type TeamsProps = {
 };
 
 const Teams = ({ selectedTeam }: TeamsProps) => {
-	return <div className="text-white">{selectedTeam.name}</div>;
+	return <div className="text-black dark:text-white">{selectedTeam.name}</div>;
 };
 
 export { Teams };
