@@ -49,7 +49,7 @@ const UserProfile = () => {
 	return (
 		<>
 			<div className="flex items-center gap-2">
-				<div className="ml-auto h-12 w-12 overflow-hidden rounded-full border-2 border-purple">
+				<div className="ml-auto h-8 w-8 tablet:h-10 tablet:w-10 laptop:h-12 laptop:w-12 overflow-hidden rounded-full border-2 border-purple">
 					<img src={user.avatar} alt="Profile image" />
 				</div>
 				<Button
