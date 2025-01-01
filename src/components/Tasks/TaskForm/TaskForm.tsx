@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -9,21 +9,17 @@ import { SubtaskInput } from '@/interfaces/ISubtask';
 import { IToastTypes } from '@/interfaces/IToast';
 import { SingleColumn } from '@/interfaces/IColumn';
 
-import { useToast } from '@/hooks';
-
-import useColumnsStore from '@/store/columnsStore';
+import { useToast, useWebSocket } from '@/hooks';
 
 import { TaskSubmitSchema } from '@/models/Task';
-import {
-	addNewTaskSubmission,
-	editTaskSubmission,
-} from '@/utils/Task/taskSubmission';
+import { editTaskSubmission } from '@/utils/Task/taskSubmission';
 
 import { TextInput } from '@/components/Input/TextInput';
 import { TextAreaInput } from '@/components/Input/TextAreaInput';
 import { Cross } from '@/components/SVGComponents/Cross';
 import { Button } from '@/components/Button';
 import { Dropdown } from '@/components/Dropdown/Dropdown';
+import { useBoardStore } from '@/store/boards';
 
 interface TaskFormProps {
 	setIsAddNewTaskModalOpen?: (arg: boolean) => void;
@@ -42,15 +38,27 @@ const TaskForm = ({
 
 	const queryClient = useQueryClient();
 
+	const { sendMessage } = useWebSocket();
+
 	const toast = useToast();
 
-	const columns = useColumnsStore((state) => state.columns);
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 
-	const options = columns.map((column: SingleColumn) => {
-		return (
-			{ id: column.column_id, label: column.name, value: column.name } || {}
+	const boardId = selectedBoard.board_id;
+
+	const options = useMemo(() => {
+		const cachedColumns = queryClient.getQueryData<{ columns: SingleColumn[] }>(
+			['columns', boardId]
 		);
-	});
+
+		const columns = cachedColumns?.columns || [];
+
+		return columns.map((column: SingleColumn) => ({
+			id: column.column_id,
+			label: column.name,
+			value: column.name,
+		}));
+	}, [boardId]);
 
 	const [selectedOption, setSelectedOption] = useState(options[0]);
 
@@ -69,17 +77,25 @@ const TaskForm = ({
 		newTaskData
 	) => {
 		if (isNewTask) {
-			addNewTaskSubmission(newTaskData, selectedOption, queryClient);
+			const payload = {
+				type: 'ADD_NEW_TASK',
+				payload: {
+					task: newTaskData,
+					column_id: selectedOption.id,
+				},
+			};
+			sendMessage(payload.type, payload.payload);
 			setIsAddNewTaskModalOpen!(false);
 		} else {
-			editTaskSubmission(
+			const payload = editTaskSubmission(
 				newTaskData,
 				selectedOption,
 				taskData,
-				queryClient,
-				subtasksToDelete,
-				setSubtasksToDelete
+				subtasksToDelete
 			);
+
+			sendMessage(payload.type, payload.payload);
+
 			setIsEditTaskModalOpen!(false);
 		}
 
