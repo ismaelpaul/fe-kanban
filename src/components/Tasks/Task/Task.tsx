@@ -7,6 +7,7 @@ import { Card } from '@/components/Card/Card';
 import { SubtasksCount } from '@/components/Subtasks/SubtasksCount';
 import { TaskModal } from '../TaskModal';
 import { EditTaskModal } from '../EditTaskModal';
+import { useSubtasksStore } from '@/store/subtasks';
 
 interface TaskProps {
 	task: SingleTask;
@@ -17,13 +18,21 @@ interface TaskProps {
 const Task = ({ task, columnId, index }: TaskProps) => {
 	const [isHovering, setIsHovering] = useState(-1);
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-	const [totalSubtasks, setTotalSubtasks] = useState(0);
-	const [completedSubtasks, setCompletedSubtasks] = useState(0);
 	const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
 
 	const subtasks = task.subtasks;
-
 	const isTaskCompleted = task.is_completed;
+
+	const totalSubtasks = useSubtasksStore(
+		(state) => state.totalSubtasks[task.task_id] || 0
+	);
+	const completedSubtasks = useSubtasksStore(
+		(state) => state.completedSubtasks[task.task_id] || 0
+	);
+	const setTotalSubtasks = useSubtasksStore((state) => state.setTotalSubtasks);
+	const setCompletedSubtasks = useSubtasksStore(
+		(state) => state.setCompletedSubtasks
+	);
 
 	const handleTaskClick = () => {
 		setIsTaskModalOpen(true);
@@ -69,11 +78,12 @@ const Task = ({ task, columnId, index }: TaskProps) => {
 									{task.title}
 								</h2>
 								<SubtasksCount
+									taskId={task.task_id}
+									subtasks={subtasks}
 									totalSubtasks={totalSubtasks}
 									setTotalSubtasks={setTotalSubtasks}
 									setCompletedSubtasks={setCompletedSubtasks}
 									completedSubtasks={completedSubtasks}
-									subtasks={subtasks}
 								/>
 							</>
 						</Card>
