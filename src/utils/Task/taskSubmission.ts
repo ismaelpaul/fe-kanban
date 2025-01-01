@@ -1,75 +1,81 @@
-import { QueryClient } from '@tanstack/react-query';
-import {
-	addNewSubtaskByTaskId,
-	addNewTask,
-	deleteSubtask,
-	updateSubtaskTitleByid,
-	updateTaskPositionAndStatus,
-	updateTaskTitleAndDescription,
-} from '../../api/kanbanApi';
 import { TaskStatusDropdown, TaskSubmit } from '../../interfaces/ITask';
 import { SubtaskInput } from '../../interfaces/ISubtask';
 import { getNewItemsToAdd } from '../utils';
 
-type UpdatedTaskTitleAndDescription = {
-	title?: string;
-	description?: string;
+type Payload = {
+	type: string;
+	payload: {
+		task: {
+			task_id: number;
+			column_id: number | null;
+			title: string;
+			description: string;
+			positionAndStatus: {
+				currentColumnId: number | null;
+				newColumnId: number | null;
+				currentTaskPosition: number | null;
+				newTaskPosition: number | null;
+				newStatus: string | null;
+			};
+		};
+		subtasks: {
+			toAdd: Array<Partial<SubtaskInput>>;
+			toEdit: Array<{ id: number; title: string }>;
+			toDelete: number[];
+		};
+	};
 };
 
-export const addNewTaskSubmission = async (
-	newTaskData: Partial<TaskSubmit>,
-	selectedOption: TaskStatusDropdown,
-	queryClient: QueryClient
-) => {
-	newTaskData.column_id = selectedOption.id;
-	newTaskData.status = selectedOption.value;
-
-	const subtasks = newTaskData.subtasks;
-	subtasks?.forEach((subtask) => {
-		delete subtask.placeholder;
-		delete subtask.is_new;
-	});
-
-	await addNewTask(newTaskData);
-
-	const columnId = selectedOption.id;
-	queryClient.invalidateQueries(['tasks', columnId]);
-};
-
-export const editTaskSubmission = async (
+export const editTaskSubmission = (
 	newTaskData: Partial<TaskSubmit>,
 	selectedOption: TaskStatusDropdown,
 	taskData: Partial<TaskSubmit> | undefined,
-	queryClient: QueryClient,
-	subtasksToDelete: number[],
-	setSubtasksToDelete: (arg: number[]) => void
+	subtasksToDelete: number[]
 ) => {
 	const taskId: number = taskData?.task_id ?? 0;
+	const columnId = taskData?.column_id;
+
+	const payload: Payload = {
+		type: 'UPDATE_TASK_INFO',
+		payload: {
+			task: {
+				task_id: taskId,
+				column_id: columnId ?? null,
+				title: '',
+				description: '',
+				positionAndStatus: {
+					currentColumnId: null,
+					newColumnId: null,
+					currentTaskPosition: null,
+					newTaskPosition: null,
+					newStatus: null,
+				},
+			},
+			subtasks: { toAdd: [], toEdit: [], toDelete: [] },
+		},
+	};
 
 	newTaskData.status = selectedOption.value;
 
 	// Edit title and description
-	const updatedTaskTitleAndDescription: UpdatedTaskTitleAndDescription = {};
 	if (newTaskData.title !== taskData?.title) {
-		updatedTaskTitleAndDescription.title = newTaskData.title;
+		payload.payload.task.title = newTaskData.title ?? '';
 	}
 	if (newTaskData.description !== taskData?.description) {
-		updatedTaskTitleAndDescription.description = newTaskData.description;
+		payload.payload.task.description = newTaskData.description ?? '';
 	}
-
-	await updateTaskTitleAndDescription(taskId, updatedTaskTitleAndDescription);
 
 	// Edit position and status
 	if (newTaskData.status !== taskData?.status) {
-		const columnId = newTaskData.column_id;
-		const positionAndStatusData = {
-			currentColumnId: columnId,
-			newColumnId: selectedOption.id,
-			currentTaskPosition: taskData?.position,
+		const newColumnId = selectedOption.id ?? null;
+		const newStatus = newTaskData.status ?? null;
+		payload.payload.task.positionAndStatus = {
+			currentColumnId: columnId ?? null,
+			newColumnId: newColumnId,
+			currentTaskPosition: taskData?.position ?? null,
 			newTaskPosition: null,
-			newStatus: newTaskData.status,
+			newStatus: newStatus,
 		};
-		await updateTaskPositionAndStatus(taskId, positionAndStatusData);
 	}
 
 	const subtasks = taskData?.subtasks;
@@ -79,42 +85,34 @@ export const editTaskSubmission = async (
 
 	if (subtasksHaveChanged) {
 		if (subtasksToDelete.length > 0) {
-			await deleteSubtask(subtasksToDelete);
-			setSubtasksToDelete([]);
+			payload.payload.subtasks.toDelete = subtasksToDelete;
 		}
 
 		// Edit subtasks
 		const editedSubtasks = getEditedSubtask(subtasks, newSubtasks);
 
 		if (editedSubtasks.length > 0) {
-			editedSubtasks.forEach((subtask) => {
-				const subtaskId = subtask.subtask_id || 0;
-				updateSubtaskTitleByid(subtaskId, subtask);
-			});
+			payload.payload.subtasks.toEdit = editedSubtasks.map((subtask) => ({
+				id: subtask.subtask_id,
+				title: subtask.title,
+			}));
 		}
 
 		// Add new subtasks
 		const newSubtasksToAdd = getNewItemsToAdd<SubtaskInput>(newSubtasks || []);
 
 		if (newSubtasksToAdd.length > 0) {
-			newSubtasksToAdd.forEach((subtask: SubtaskInput) => {
-				delete subtask.placeholder;
-				delete subtask.is_new;
-			});
-			await addNewSubtaskByTaskId(taskId, newSubtasksToAdd);
+			payload.payload.subtasks.toAdd = newSubtasksToAdd.map(
+				(subtask: SubtaskInput) => {
+					delete subtask.placeholder;
+					delete subtask.is_new;
+					return subtask;
+				}
+			);
 		}
 	}
 
-	const queryKey = 'tasks';
-
-	const columnId = taskData?.column_id;
-	const newColumnId = selectedOption.id;
-
-	if (newColumnId !== columnId) {
-		queryClient.invalidateQueries([queryKey, newColumnId]);
-	}
-
-	queryClient.invalidateQueries([queryKey, columnId]);
+	return payload;
 };
 
 const getEditedSubtask = (
