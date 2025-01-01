@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { getTasksByColumnId } from '@/api/kanbanApi';
 
-import useTasksStore from '@/store/tasksStore';
+import { useTasksStore } from '@/store/tasks';
 
 import { useFetch } from '@/hooks';
 
