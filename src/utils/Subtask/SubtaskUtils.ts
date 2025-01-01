@@ -1,5 +1,5 @@
+import { usePatch } from '@/hooks';
 import { updateSubtaskCompletionById } from '../../api/kanbanApi';
-import usePatch from '../../hooks/usePatch';
 
 export const handleSubtaskCompletion = async (
 	subtaskId: number,
