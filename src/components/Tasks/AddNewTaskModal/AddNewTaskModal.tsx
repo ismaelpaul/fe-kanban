@@ -15,10 +15,6 @@ const AddNewTaskModal = ({
 	const modalRef = useRef(null);
 	useClickOutside(modalRef, () => setIsAddNewTaskModalOpen(false));
 
-	const btnCreateTaskClass =
-		'bg-purple text-white text-13px font-bold py-2 w-full rounded-full';
-	const btnCreateTaskText = 'Create Task';
-
 	return (
 		<aside className="fixed inset-0 flex items-center justify-center z-40">
 			<div className="fixed inset-0 bg-black opacity-50"></div>
@@ -43,8 +39,10 @@ const AddNewTaskModal = ({
 				<Button
 					form={'task-form'}
 					type="submit"
-					buttonClass={btnCreateTaskClass}
-					buttonText={btnCreateTaskText}
+					buttonClass={
+						'bg-purple text-white text-13px font-bold py-2 w-full rounded-full'
+					}
+					buttonText={'Create Task'}
 				/>
 			</motion.dialog>
 		</aside>
