@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Switch } from '@headlessui/react';
 import { useColorMode } from '@/hooks';
 
-const ToggleTheme = () => {
+const SwitchButton = () => {
 	const [colorMode, setColorMode] = useColorMode();
 
 	const [enabled, setEnabled] = useState(colorMode === 'dark' ? true : false);
@@ -29,4 +29,4 @@ const ToggleTheme = () => {
 	);
 };
 
-export { ToggleTheme };
+export { SwitchButton };
