@@ -5,15 +5,13 @@ import { useClickOutside } from '@/hooks';
 
 import { TaskForm } from '../TaskForm';
 import { Button } from '@/components/Button';
+import { useModalStore } from '@/store/modals';
 
-interface AddNewTaskModalProps {
-	setIsAddNewTaskModalOpen: (arg: boolean) => void;
-}
-const AddNewTaskModal = ({
-	setIsAddNewTaskModalOpen,
-}: AddNewTaskModalProps) => {
+const AddNewTaskModal = () => {
+	const { closeModal } = useModalStore();
+
 	const modalRef = useRef(null);
-	useClickOutside(modalRef, () => setIsAddNewTaskModalOpen(false));
+	useClickOutside(modalRef, () => closeModal('addNewTaskModal'));
 
 	return (
 		<aside className="fixed inset-0 flex items-center justify-center z-40">
@@ -32,10 +30,7 @@ const AddNewTaskModal = ({
 				<h1 id="modal-heading" className="text-l-heading mb-6 dark:text-white">
 					Add New Task
 				</h1>
-				<TaskForm
-					setIsAddNewTaskModalOpen={setIsAddNewTaskModalOpen}
-					isNewTask={true}
-				/>
+				<TaskForm isNewTask={true} />
 				<Button
 					form={'task-form'}
 					type="submit"
