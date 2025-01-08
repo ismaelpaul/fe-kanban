@@ -16,7 +16,7 @@ const HideSidebarNav = () => {
 			}}
 			onMouseEnter={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
-			className="cursor-pointer hidden tablet:flex items-center gap-3 pl-6 w-60 h-12 rounded-e-full transition ease-in-out duration-300 hover:bg-purple/10 dark:hover:bg-white hover:text-purple"
+			className="cursor-pointer hidden tablet:flex items-center gap-3 mt-auto pl-6 w-60 h-12 rounded-e-full transition ease-in-out duration-300 hover:bg-purple/10 dark:hover:bg-white hover:text-purple"
 		>
 			<HideSidebarIcon
 				iconClass={`${
