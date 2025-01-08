@@ -25,11 +25,11 @@ const BoardItem = memo(
 			: '';
 
 		return (
-			<div
+			<nav
 				onMouseOut={onMouseOut}
 				onMouseOver={onMouseOver}
 				onClick={onSelect}
-				className={`flex items-center gap-3 h-12 text-m-heading pl-6 mr-6 rounded-e-full cursor-pointer transition ease-in-out duration-300 hover:bg-purple/10 dark:hover:bg-white ${
+				className={`flex items-center gap-3 h-12 text-m-heading pl-6 rounded-e-full cursor-pointer transition ease-in-out duration-300 hover:bg-purple/10 dark:hover:bg-white ${
 					isSelected ? 'bg-purple pointer-events-none' : ''
 				}`}
 			>
@@ -47,7 +47,7 @@ const BoardItem = memo(
 				>
 					{board.name}
 				</nav>
-			</div>
+			</nav>
 		);
 	}
 );
