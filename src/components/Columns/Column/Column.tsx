@@ -26,7 +26,7 @@ const Column = ({ column, index, isDragging }: ColumnProps) => {
 		<>
 			<ColumnHeader dotColor={dotColor} column={column} tasks={tasks} />
 			<div
-				className={` flex flex-col items-center py-1 gap-5 w-[18rem] mb-4 max-h-[80vh] overflow-y-scroll no-scrollbar ${
+				className={` flex flex-col items-center py-1 gap-5 w-[18rem] mb-4 overflow-y-scroll no-scrollbar h-[75vh] ${
 					isDragging
 						? 'bg-purple/20 border-dashed border-2 border-purple-hover rounded-md h-full'
 						: ''
