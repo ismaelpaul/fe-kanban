@@ -8,6 +8,7 @@ interface ButtonProps {
 	type?: 'button' | 'submit' | 'reset';
 	form?: string;
 	disabled?: boolean;
+	title?: string;
 }
 
 const Button = ({
@@ -18,6 +19,7 @@ const Button = ({
 	type,
 	form,
 	disabled,
+	title,
 }: ButtonProps) => {
 	const { width } = useWindowDimensions();
 
@@ -29,6 +31,7 @@ const Button = ({
 			onClick={onClick}
 			className={buttonClass}
 			disabled={disabled}
+			title={title}
 		>
 			{isMobile && svgComponent ? <>{svgComponent}</> : buttonText}
 		</button>
