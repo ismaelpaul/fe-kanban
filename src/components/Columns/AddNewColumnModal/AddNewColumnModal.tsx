@@ -20,6 +20,7 @@ import { ColumnsInput } from '@/interfaces/IColumn';
 
 import { TextInput } from '@/components/Input/TextInput';
 import { Button } from '@/components/Button';
+import { Overlay } from '@/components/Overlay';
 
 interface AddNewColumnModalPros {
 	setIsAddNewColumnModalOpen: (arg: boolean) => void;
@@ -65,8 +66,7 @@ const AddNewColumnModal = ({
 	const onSubmit = handleSubmit(submitData);
 
 	return (
-		<aside className="fixed inset-0 flex items-center justify-center z-40">
-			<div className="fixed inset-0 bg-black opacity-50"></div>
+		<Overlay>
 			<motion.dialog
 				aria-modal="true"
 				open
@@ -106,7 +106,7 @@ const AddNewColumnModal = ({
 					type="submit"
 				/>
 			</motion.dialog>
-		</aside>
+		</Overlay>
 	);
 };
 

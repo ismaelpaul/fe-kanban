@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button';
+import { Overlay } from '@/components/Overlay';
 import { motion } from 'framer-motion';
 
 interface DeleteModalPros {
@@ -29,8 +30,7 @@ const DeleteModal = ({
 			: 'task and its subtasks? This action ';
 
 	return (
-		<aside className="fixed inset-0 flex items-center justify-center z-40">
-			<div className="fixed inset-0 bg-black opacity-50"></div>
+		<Overlay>
 			<motion.dialog
 				aria-modal="true"
 				open
@@ -61,7 +61,7 @@ const DeleteModal = ({
 					/>
 				</div>
 			</motion.dialog>
-		</aside>
+		</Overlay>
 	);
 };
 

@@ -9,6 +9,7 @@ import { SingleTask, TaskSubmit } from '@/interfaces/ITask';
 
 import { TaskForm } from '../TaskForm';
 import { Button } from '@/components/Button';
+import { Overlay } from '@/components/Overlay';
 
 interface EditTaskModalProps {
 	setIsEditTaskModalOpen: (arg: boolean) => void;
@@ -40,8 +41,7 @@ const EditTaskModal = ({
 	const btnSaveChangesText = 'Save Changes';
 
 	return (
-		<aside className="fixed inset-0 flex items-center justify-center z-40">
-			<div className="fixed inset-0 bg-black opacity-50"></div>
+		<Overlay>
 			<motion.dialog
 				aria-modal="true"
 				open
@@ -68,7 +68,7 @@ const EditTaskModal = ({
 					buttonText={btnSaveChangesText}
 				/>
 			</motion.dialog>
-		</aside>
+		</Overlay>
 	);
 };
 

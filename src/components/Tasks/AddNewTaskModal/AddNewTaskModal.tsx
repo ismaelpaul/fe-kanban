@@ -6,6 +6,7 @@ import { useClickOutside } from '@/hooks';
 import { TaskForm } from '../TaskForm';
 import { Button } from '@/components/Button';
 import { useModalStore } from '@/store/modals';
+import { Overlay } from '@/components/Overlay';
 
 const AddNewTaskModal = () => {
 	const { closeModal } = useModalStore();
@@ -14,8 +15,7 @@ const AddNewTaskModal = () => {
 	useClickOutside(modalRef, () => closeModal('addNewTaskModal'));
 
 	return (
-		<aside className="fixed inset-0 flex items-center justify-center z-40">
-			<div className="fixed inset-0 bg-black opacity-50"></div>
+		<Overlay>
 			<motion.dialog
 				aria-modal="true"
 				open
@@ -40,7 +40,7 @@ const AddNewTaskModal = () => {
 					buttonText={'Create Task'}
 				/>
 			</motion.dialog>
-		</aside>
+		</Overlay>
 	);
 };
 
