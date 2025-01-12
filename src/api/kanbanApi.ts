@@ -360,3 +360,15 @@ export const getUser = async () => {
 		return err.response?.data;
 	}
 };
+
+export const getTaskCommentsByTaskId = async (taskId: number) => {
+	try {
+		const response = await kanbanApi.get(`tasks/${taskId}/comments`);
+
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
