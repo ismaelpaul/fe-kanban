@@ -17,7 +17,7 @@ type DropDownProps = {
 	options: Options[];
 	setSelectedOption?: (arg: Options) => void;
 	disabled?: boolean;
-	actions: Action[];
+	actions?: Action[];
 };
 
 const Dropdown = ({
@@ -55,10 +55,11 @@ const Dropdown = ({
 						setSelectedOption={setSelectedOption}
 					/>
 
-					<hr className="border-medium-grey/30" />
-
-					{actions.length > 0 && (
-						<DropdownActions setIsOpen={setIsOpen} actions={actions} />
+					{actions && (
+						<>
+							<hr className="border-medium-grey/30" />
+							<DropdownActions setIsOpen={setIsOpen} actions={actions} />
+						</>
 					)}
 				</ul>
 			)}
