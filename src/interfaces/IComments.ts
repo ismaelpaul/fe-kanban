@@ -6,6 +6,7 @@ export interface SingleComment {
 	avatar: string;
 	first_name: string;
 	last_name: string;
+	task_id?: number;
 }
 
 export interface CommentSubmit {
