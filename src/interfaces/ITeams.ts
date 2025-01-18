@@ -16,6 +16,10 @@ export interface TeamMember {
 	role: string;
 }
 
+export interface TeamSubmit {
+	name: string;
+}
+
 export interface TeamMembers {
 	teamMembers: TeamMember[];
 }
