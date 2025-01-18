@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { logoutUser } from '@/api/kanbanApi';
 
 import { useFetchUser, useToast } from '@/hooks';
-
-import { useUserStore } from '@/store/users';
 
 import { Button } from '@/components/Button';
 import { ChevronDown } from '@/components/SVGComponents/ChevronDown';
@@ -13,16 +11,8 @@ import { ChevronUp } from '@/components/SVGComponents/ChevronUp';
 
 const UserProfile = () => {
 	const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+
 	const { user, isLoading } = useFetchUser();
-
-	const setUser = useUserStore((state) => state.setUser);
-
-	useEffect(() => {
-		if (user) {
-			setUser(user);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user]);
 
 	const navigate = useNavigate();
 	const toast = useToast();
