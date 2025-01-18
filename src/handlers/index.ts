@@ -1,5 +1,6 @@
 import { boardAddedHandler } from './boards/boardAddedHandler';
 import { boardEditedHandler } from './boards/boardEditedHandler';
+import { commentAddedHandler } from './comments/commentAddedHandler';
 import { updateSubtaskCompletionHandler } from './subtasks/updateSubtaskCompletion';
 import { TaskAddedAndDeleteHandler } from './tasks/taskAddedHandler';
 import { TaskEditHandler } from './tasks/taskEditHandler';
@@ -14,6 +15,7 @@ const handlers = {
 	SUBTASK_COMPLETION_UPDATED: updateSubtaskCompletionHandler,
 	BOARD_ADDED: boardAddedHandler,
 	BOARD_INFO_UPDATED: boardEditedHandler,
+	COMMENT_ADDED: commentAddedHandler,
 };
 
 export { handlers };
