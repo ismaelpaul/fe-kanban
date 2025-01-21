@@ -41,6 +41,16 @@ export const addNewTeam = async (teamData: object) => {
 	}
 };
 
+export const editTeamName = async (teamId: number, teamData: object) => {
+	try {
+		const response = await kanbanApi.patch(`/teams/${teamId}`, teamData);
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+	}
+};
+
 export const getTeamMembersByTeamId = async (teamId: number) => {
 	try {
 		const response = await kanbanApi.get(`/users/team_members/${teamId}`);
