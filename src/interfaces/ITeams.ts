@@ -17,6 +17,7 @@ export interface TeamMember {
 }
 
 export interface TeamSubmit {
+	team_id?: number;
 	name: string;
 }
 
