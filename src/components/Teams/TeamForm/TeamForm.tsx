@@ -11,9 +11,17 @@ import { TeamNameSchema } from '@/models/Teams';
 import { useModalStore } from '@/store/modals';
 
 import { TextInput } from '@/components/Input/TextInput';
+import { useWebSocket } from '@/hooks';
 
-const TeamForm = () => {
+type TeamFormProps = {
+	isNewTeam?: boolean;
+	selectedTeam?: TeamSubmit;
+};
+
+const TeamForm = ({ selectedTeam, isNewTeam }: TeamFormProps) => {
 	const { closeModal } = useModalStore();
+
+	const { sendMessage } = useWebSocket();
 
 	const queryClient = useQueryClient();
 
@@ -32,13 +40,28 @@ const TeamForm = () => {
 	});
 
 	const submitData: SubmitHandler<TeamSubmit> = async (newTeamData) => {
-		await addNewTeam(newTeamData);
+		if (isNewTeam) {
+			await addNewTeam(newTeamData);
 
-		closeModal('addNewTeamModal');
+			closeModal('addNewTeamModal');
 
-		queryClient.invalidateQueries(['teams']);
+			queryClient.invalidateQueries(['teams']);
 
-		reset();
+			reset();
+		} else {
+			const payload = {
+				type: 'UPDATE_TEAM',
+				payload: {
+					team: { team_id: selectedTeam?.team_id, ...newTeamData },
+				},
+			};
+
+			sendMessage(payload.type, payload.payload);
+
+			closeModal('editTeamModal');
+
+			reset();
+		}
 	};
 
 	const onSubmit = handleSubmit(submitData);
@@ -56,7 +79,7 @@ const TeamForm = () => {
 						errors.name ? 'border border-red/100' : ''
 					}`}
 					placeholder="e.g. Development Team"
-					// defaultValue={taskData?.title}
+					defaultValue={selectedTeam?.name}
 				/>
 				{errors.name && (
 					<span className={`${errorClass} right-6 mt-[2.1rem]`}>
