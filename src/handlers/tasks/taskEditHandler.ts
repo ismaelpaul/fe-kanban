@@ -5,7 +5,7 @@ type TaskEditHandler = {
 	newColumn_id: number | null;
 	column_id: number;
 };
-export const TaskEditHandler = (
+export const taskEditHandler = (
 	data: TaskEditHandler,
 	queryClient: QueryClient
 ) => {

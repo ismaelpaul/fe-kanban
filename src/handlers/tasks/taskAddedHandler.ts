@@ -5,7 +5,7 @@ type TaskAddedHandler = {
 	type: string;
 	task: SingleTask;
 };
-export const TaskAddedAndDeleteHandler = (
+export const taskAddedAndDeleteHandler = (
 	data: TaskAddedHandler,
 	queryClient: QueryClient
 ) => {
