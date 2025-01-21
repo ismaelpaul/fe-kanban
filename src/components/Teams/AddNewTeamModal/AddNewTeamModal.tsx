@@ -26,7 +26,7 @@ const AddNewTeamModal = () => {
 				aria-labelledby="modal-heading"
 			>
 				<ModalHeader title={'Create New Team'} />
-				<TeamForm />
+				<TeamForm isNewTeam={true} />
 				<p className="text-body text-medium-grey dark:text-white mb-6">
 					A new Board will be added by default
 				</p>
