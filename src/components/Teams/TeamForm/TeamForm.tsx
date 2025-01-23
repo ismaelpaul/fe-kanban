@@ -10,8 +10,9 @@ import { TeamNameSchema } from '@/models/Teams';
 
 import { useModalStore } from '@/store/modals';
 
-import { TextInput } from '@/components/Input/TextInput';
 import { useWebSocket } from '@/hooks';
+
+import { InputField } from '@/components/InputField';
 
 type TeamFormProps = {
 	isNewTeam?: boolean;
@@ -24,11 +25,6 @@ const TeamForm = ({ selectedTeam, isNewTeam }: TeamFormProps) => {
 	const { sendMessage } = useWebSocket();
 
 	const queryClient = useQueryClient();
-
-	const labelClass = 'text-body text-medium-grey dark:text-white font-bold';
-	const inputClass =
-		'dark:bg-dark-grey dark:text-white border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full cursor-pointer hover:border-purple focus:outline-none';
-	const errorClass = 'text-red text-l-body absolute ';
 
 	const {
 		register,
@@ -68,25 +64,16 @@ const TeamForm = ({ selectedTeam, isNewTeam }: TeamFormProps) => {
 
 	return (
 		<form id="team-form" onSubmit={onSubmit}>
-			<div className="flex flex-col gap-2 mb-6 relative">
-				<label htmlFor="name" className={labelClass}>
-					Team name
-				</label>
-				<TextInput
-					register={register}
-					name="name"
-					className={`${inputClass} ${
-						errors.name ? 'border border-red/100' : ''
-					}`}
-					placeholder="e.g. Development Team"
-					defaultValue={selectedTeam?.name}
-				/>
-				{errors.name && (
-					<span className={`${errorClass} right-6 mt-[2.1rem]`}>
-						{errors.name.message}
-					</span>
-				)}
-			</div>
+			<InputField
+				register={register}
+				name="name"
+				label="Team name"
+				placeholder="e.g. Development Team"
+				defaultValue={selectedTeam?.name}
+				errors={errors.name}
+				errorPosition="right-6 mt-[2.1rem]"
+				type="text"
+			/>
 		</form>
 	);
 };
