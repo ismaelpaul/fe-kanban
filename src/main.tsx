@@ -1,9 +1,10 @@
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+
 import './index.css';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ToastContextProvider } from './contexts/ToastContext.tsx';
+import { ToastContextProvider } from './contexts/ToastContext/ToastContext.tsx';
+import { App } from './App.tsx';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
