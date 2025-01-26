@@ -1,20 +1,24 @@
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-
 import { motion } from 'framer-motion';
+
+import { useClickOutside, useWebSocket } from '@/hooks';
+
+import { useBoardStore } from '@/store/boards';
+
+import { IColumns, SingleColumn } from '@/interfaces/IColumn';
 import { SingleTask } from '@/interfaces/ITask';
 import { SingleSubtask } from '@/interfaces/ISubtask';
-import { useClickOutside, useDelete, usePatch, useWebSocket } from '@/hooks';
-import useColumnsStore from '@/store/columnsStore';
-import { SingleColumn } from '@/interfaces/IColumn';
-import { handleSubtaskCompletion } from '@/utils/Subtask/SubtaskUtils';
-import { deleteTaskById } from '@/api/kanbanApi';
+
 import { ModalHeader } from '@/components/ModalHeader/ModalHeader';
 import { KebabMenuModal } from '@/components/KebabMenu/KebabMenuModal';
-import { Button } from '@/components/Button';
-import { SubtasksList } from '@/components/Subtasks/SubtaskList/SubtaskList';
-import { Dropdown } from '@/components/Dropdown/Dropdown';
 import { DeleteModal } from '@/components/DeleteModal/DeleteModal';
+import { TaskDetails } from '../TaskDetails';
+import { TaskActions } from '../TaskActions';
+import { Overlay } from '@/components/Overlay';
+import { TaskCommentsList } from '../TaskComments/TaskCommentsList';
+import { AddNewComment } from '../TaskComments/AddNewComment';
+import { Button } from '@/components/Button';
 
 interface TaskModalProps {
 	task: SingleTask;
@@ -22,7 +26,7 @@ interface TaskModalProps {
 	totalSubtasks: number;
 	completedSubtasks: number;
 	columnId: number;
-	setCompletedSubtasks: (arg: number) => void;
+	setCompletedSubtasks: (taskId: number, subtasksCount: number) => void;
 	setIsTaskModalOpen: (arg: boolean) => void;
 	setIsEditTaskModalOpen: (arg: boolean) => void;
 	isTaskCompleted: boolean;
@@ -34,12 +38,9 @@ const TaskModal = ({
 	subtasks,
 	totalSubtasks,
 	completedSubtasks,
-	setCompletedSubtasks,
-	columnId,
 	setIsEditTaskModalOpen,
 	isTaskCompleted,
 }: TaskModalProps) => {
-	const [updatingSubtask, setUpdatingSubtask] = useState<number | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 	const [isKebabMenuModalOpen, setIsKebabMenuModalOpen] = useState(false);
 
@@ -47,22 +48,27 @@ const TaskModal = ({
 
 	const { sendMessage } = useWebSocket();
 
-	const columns = useColumnsStore((state) => state.columns);
+	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 
-	const options = columns.map((column: SingleColumn) => {
-		return { id: column.column_id, label: column.name, value: column.name };
-	});
+	const boardId = selectedBoard.board_id;
+
+	const data = queryClient.getQueryData<IColumns>(['columns', boardId]);
+
+	const columns = useMemo(() => data?.columns || [], [data]);
+
+	const options = useMemo(
+		() =>
+			columns.map((column: SingleColumn) => ({
+				id: column.column_id,
+				label: column.name,
+				value: column.name,
+			})),
+		[columns]
+	);
 
 	const initialSelectedOption = options.find(
 		(option) => option.label === task.status
 	);
-
-	const [selectedOption, setSelectedOption] = useState(
-		initialSelectedOption || options[0]
-	);
-
-	const { patch } = usePatch();
-	const { deleteItem } = useDelete();
 
 	const modalRef = useRef(null);
 	useClickOutside(modalRef, () => {
@@ -71,68 +77,42 @@ const TaskModal = ({
 		}
 	});
 
-	const handleSubtaskToggle = async (
-		subtaskId: number,
-		isSubtasksCompleted: boolean
-	) => {
-		await handleSubtaskCompletion(
-			subtaskId,
-			isSubtasksCompleted,
-			updatingSubtask,
-			completedSubtasks,
-			setUpdatingSubtask,
-			setCompletedSubtasks,
-			patch
-		);
-
-		queryClient.invalidateQueries(['tasks', columnId]);
-	};
-
-	const handleDeleteTask = async (taskId: number) => {
-		await deleteItem(() => deleteTaskById(taskId));
-		setIsDeleteModalOpen(false);
-		setIsTaskModalOpen(false);
-		queryClient.invalidateQueries(['tasks', columnId]);
-	};
+	const handleDeleteTask = useCallback(
+		(taskId: number) => {
+			sendMessage('DELETE_TASK', { task_id: taskId });
+			setIsDeleteModalOpen(false);
+			setIsTaskModalOpen(false);
+		},
+		[sendMessage, setIsTaskModalOpen]
+	);
 
 	const handleKebabMenu = () => {
 		setIsKebabMenuModalOpen(!isKebabMenuModalOpen);
 	};
 
-	const handleTaskCompletion = async (taskId: number) => {
-		// const taskCompletion = { is_completed: !task.is_completed };
-
-		// await updateTaskCompletionById(taskId, taskCompletion);
-
-		const payload = {
-			type: 'UPDATE_TASK_COMPLETION',
-			payload: {
-				task_id: taskId,
-				is_completed: !task.is_completed,
-			},
-		};
-
-		sendMessage(payload.type, payload.payload);
-
-		queryClient.invalidateQueries(['tasks', columnId]);
-	};
+	const handleToggleCompletion = useCallback(() => {
+		sendMessage('UPDATE_TASK_COMPLETION', {
+			task_id: task.task_id,
+			is_completed: !task.is_completed,
+		});
+	}, [sendMessage, task.task_id, task.is_completed]);
 
 	return (
 		<>
-			<aside className="fixed inset-0 flex items-center justify-center z-40">
-				<div className="fixed inset-0 bg-black opacity-50"></div>
+			<Overlay>
 				<motion.dialog
 					aria-modal="true"
 					open
 					initial={{ scale: 0.7 }}
 					animate={{ scale: 1 }}
 					transition={{ duration: 0.2 }}
-					className="bg-white dark:bg-dark-grey p-6 rounded-md z-50 mx-auto w-screen tablet:w-[30rem] max-h-[80vh] overflow-y-scroll no-scrollbar"
+					className="bg-white dark:bg-dark-grey p-6 rounded-md laptop:rounded-none z-50 mx-auto laptop:mx-0 laptop:ml-auto w-screen tablet:w-[30rem] h-[86vh] overflow-y-scroll no-scrollbar"
 					ref={modalRef}
 					role="dialog"
 					aria-labelledby="modal-heading"
 				>
 					<ModalHeader title={task.title} handleKebabMenu={handleKebabMenu} />
+
 					{isKebabMenuModalOpen ? (
 						<KebabMenuModal
 							editText={'Edit Task'}
@@ -147,41 +127,35 @@ const TaskModal = ({
 					) : (
 						<></>
 					)}
-					<Button
-						buttonText={`${
-							isTaskCompleted ? 'Mark Incomplete' : 'Mark complete'
-						}`}
-						buttonClass={`${
-							isTaskCompleted
-								? 'bg-task-completion text-white dark:bg-dark-task-completion dark:text-lines-dark'
-								: 'text-task-completion dark:text-dark-task-completion'
-						} text-12px border rounded border-task-completion dark:border-dark-task-completion p-1 mt-6`}
-						onClick={() => {
-							handleTaskCompletion(task.task_id);
-						}}
+
+					<TaskActions
+						isTaskCompleted={isTaskCompleted}
+						onToggleCompletion={handleToggleCompletion}
 					/>
-					<p className="text-l-body text-medium-grey mt-6">
-						{task.description}
-					</p>
-					<SubtasksList
+
+					<TaskDetails
+						description={task.description}
+						subtasks={subtasks}
 						completedSubtasks={completedSubtasks}
 						totalSubtasks={totalSubtasks}
-						subtasks={subtasks}
-						handleSubtaskToggle={handleSubtaskToggle}
+						selectedOption={initialSelectedOption || options[0]}
+						options={options}
 					/>
-					<div className="mt-6">
-						<span className="text-12px text-medium-grey dark:text-white font-bold inline-block mb-2">
-							Current Status
-						</span>
-						<Dropdown
-							selectedOption={selectedOption}
-							setSelectedOption={setSelectedOption}
-							options={options}
-							disabled={true}
-						/>
-					</div>
+
+					<hr className="my-5 border-medium-grey/30" />
+
+					<TaskCommentsList taskId={task.task_id} />
+					<AddNewComment taskId={task.task_id} />
+					<Button
+						form={'task-comment-form'}
+						type="submit"
+						buttonClass={
+							'bg-purple text-white text-13px font-bold py-2 w-full rounded-full'
+						}
+						buttonText={'Add comment'}
+					/>
 				</motion.dialog>
-			</aside>
+			</Overlay>
 			{isDeleteModalOpen ? (
 				<DeleteModal
 					onClick={() => {
