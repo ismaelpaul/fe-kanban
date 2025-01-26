@@ -5,7 +5,6 @@ import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import { updateTaskPositionAndStatus } from '@/api/kanbanApi';
 
 import { useBoardStore } from '@/store/boards';
-import { useColumnsStore } from '@/store/columns';
 import { useTasksStore } from '@/store/tasks';
 
 import { useFetchColumns, usePatch } from '@/hooks';
@@ -16,15 +15,17 @@ import { Column } from '../Column/Column';
 
 type ColumnsListProps = {
 	setBoardHasColumns: (arg: boolean) => void;
+	boardHasColumns: boolean;
 };
 
-const ColumnsList = ({ setBoardHasColumns }: ColumnsListProps) => {
+const ColumnsList = ({
+	boardHasColumns,
+	setBoardHasColumns,
+}: ColumnsListProps) => {
 	const [isAddNewColumnModalOpen, setIsAddNewColumnModalOpen] = useState(false);
 
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const boardId = selectedBoard.board_id;
-
-	const setColumns = useColumnsStore((state) => state.setColumns);
 
 	const queryClient = useQueryClient();
 
@@ -33,34 +34,8 @@ const ColumnsList = ({ setBoardHasColumns }: ColumnsListProps) => {
 	const { patch } = usePatch();
 
 	useEffect(() => {
-		if (columns.length > 0) {
-			setBoardHasColumns(true);
-		}
-		setColumns(columns);
+		columns.length > 0 ? setBoardHasColumns(true) : setBoardHasColumns(false);
 	}, [columns.length]);
-
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
-	if (isError) {
-		return <span>Error: </span>;
-	}
-
-	if (!columns.length) {
-		return (
-			<>
-				{isAddNewColumnModalOpen ? (
-					<AddNewColumnModal
-						setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
-					/>
-				) : (
-					<></>
-				)}
-				<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
-			</>
-		);
-	}
 
 	const handleDragAndDrop = async (result: DropResult) => {
 		const { source, destination } = result;
@@ -115,43 +90,64 @@ const ColumnsList = ({ setBoardHasColumns }: ColumnsListProps) => {
 		queryClient.invalidateQueries([queryKey, columnId]);
 	};
 
+	if (!boardHasColumns) {
+		return (
+			<>
+				{isAddNewColumnModalOpen ? (
+					<AddNewColumnModal
+						setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
+					/>
+				) : (
+					<></>
+				)}
+				<div className="flex justify-center my-auto">
+					<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
+				</div>
+			</>
+		);
+	}
+
 	return (
 		<>
-			<DragDropContext onDragEnd={handleDragAndDrop}>
-				{columns.map((column, index) => (
-					<Droppable
-						key={column.column_id}
-						droppableId={column.column_id.toString()}
-						type="group"
+			{isLoading && <span>Loading..</span>}
+			{isError && <span>Error: </span>}
+			<div className="flex gap-4">
+				<DragDropContext onDragEnd={handleDragAndDrop}>
+					{columns.map((column, index) => (
+						<Droppable
+							key={column.column_id}
+							droppableId={column.column_id.toString()}
+							type="group"
+						>
+							{(provided, snapshot) => (
+								<div ref={provided.innerRef} {...provided.droppableProps}>
+									<Column
+										index={index}
+										column={column}
+										isDragging={snapshot.isDraggingOver}
+									/>
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+					))}
+					<div
+						onClick={() => setIsAddNewColumnModalOpen(true)}
+						className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12"
 					>
-						{(provided, snapshot) => (
-							<div ref={provided.innerRef} {...provided.droppableProps}>
-								<Column
-									index={index}
-									column={column}
-									isDragging={snapshot.isDraggingOver}
-								/>
-								{provided.placeholder}
-							</div>
-						)}
-					</Droppable>
-				))}
-				<div
-					onClick={() => setIsAddNewColumnModalOpen(true)}
-					className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12"
-				>
-					<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center cursor-pointer transition ease-in-out duration-300 hover:text-purple">
-						+ New Column
-					</span>
-				</div>
-			</DragDropContext>
-			{isAddNewColumnModalOpen ? (
-				<AddNewColumnModal
-					setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
-				/>
-			) : (
-				<></>
-			)}
+						<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center cursor-pointer transition ease-in-out duration-300 hover:text-purple">
+							+ New Column
+						</span>
+					</div>
+				</DragDropContext>
+				{isAddNewColumnModalOpen ? (
+					<AddNewColumnModal
+						setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
+					/>
+				) : (
+					<></>
+				)}
+			</div>
 		</>
 	);
 };
