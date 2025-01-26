@@ -29,8 +29,9 @@ const useFetchBoards = (teamId: number) => {
 	);
 
 	const { boards } = (data as Boards) || { boards: [] };
+	const loading = teamId === 0 ? false : isLoading;
 
-	return { boards, isLoading, isError };
+	return { boards, isLoading: loading, isError };
 };
 
 export { useFetchBoards };
