@@ -71,7 +71,6 @@ const TeamForm = ({ selectedTeam, isNewTeam }: TeamFormProps) => {
 				placeholder="e.g. Development Team"
 				defaultValue={selectedTeam?.name}
 				errors={errors.name}
-				errorPosition="right-6 mt-[2.1rem]"
 				type="text"
 			/>
 		</form>
