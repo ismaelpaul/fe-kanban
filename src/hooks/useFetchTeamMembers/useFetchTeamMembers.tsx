@@ -11,8 +11,9 @@ const useFetchTeamMembers = (teamId: number) => {
 
 	const { data, isLoading, isError } = useQuery(
 		queryKey,
-		() => getTeamMembersByTeamId(teamId),
+		() => (teamId ? getTeamMembersByTeamId(teamId) : null),
 		{
+			enabled: teamId !== 0,
 			onError: (err) => {
 				if (err instanceof Error) {
 					toast.error(err.message);
@@ -22,7 +23,7 @@ const useFetchTeamMembers = (teamId: number) => {
 		}
 	);
 
-	const { teamMembers } = (data as TeamMembers) || { team: [] };
+	const { teamMembers } = (data as TeamMembers) || { teamMembers: [] };
 
 	return { teamMembers, isLoading, isError };
 };
