@@ -1,5 +1,6 @@
 import { useFetchTeamMembers } from '@/hooks/useFetchTeamMembers';
 import { TeamMember } from '@/interfaces/ITeams';
+import { TeamMembersSkeleton } from '@/components/SkeletonLoader/TeamMembersSkeleton';
 
 type TeamMembersProps = {
 	teamId: number;
@@ -8,12 +9,9 @@ type TeamMembersProps = {
 const TeamMembers = ({ teamId }: TeamMembersProps) => {
 	const { teamMembers, isLoading } = useFetchTeamMembers(teamId);
 
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
-
 	return (
 		<div className="flex">
+			{isLoading && <TeamMembersSkeleton />}
 			{teamMembers.map((member: TeamMember, index: number) => {
 				return (
 					<div
