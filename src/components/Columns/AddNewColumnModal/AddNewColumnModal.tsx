@@ -6,13 +6,10 @@ import { motion } from 'framer-motion';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useQueryClient } from '@tanstack/react-query';
-
-import { addNewColumnsByBoardId } from '@/api/kanbanApi';
-
 import { useBoardStore } from '@/store/boards';
+import { useModalStore } from '@/store/modals';
 
-import { useClickOutside } from '@/hooks';
+import { useClickOutside, useWebSocket } from '@/hooks';
 
 import { ColumnSubmit } from '@/models/Column';
 
@@ -22,19 +19,16 @@ import { TextInput } from '@/components/Input/TextInput';
 import { Button } from '@/components/Button';
 import { Overlay } from '@/components/Overlay';
 
-interface AddNewColumnModalPros {
-	setIsAddNewColumnModalOpen: (arg: boolean) => void;
-}
-const AddNewColumnModal = ({
-	setIsAddNewColumnModalOpen,
-}: AddNewColumnModalPros) => {
+const AddNewColumnModal = () => {
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const boardId = selectedBoard.board_id;
 
-	const modalRef = useRef(null);
-	useClickOutside(modalRef, () => setIsAddNewColumnModalOpen(false));
+	const { closeModal } = useModalStore();
 
-	const queryClient = useQueryClient();
+	const { sendMessage } = useWebSocket();
+
+	const modalRef = useRef(null);
+	useClickOutside(modalRef, () => closeModal('addNewColumnModal'));
 
 	const btnAddNewColumnClass =
 		'bg-purple text-white text-13px font-bold py-2 w-full rounded-full mt-6 hover:bg-purple-hover';
@@ -56,11 +50,19 @@ const AddNewColumnModal = ({
 	const submitData: SubmitHandler<Partial<ColumnsInput>> = async (data) => {
 		const newColumn = [data];
 
-		await addNewColumnsByBoardId(boardId, newColumn);
+		const payload = {
+			type: 'ADD_NEW_COLUMN',
+			payload: {
+				boardId: boardId,
+				column: newColumn[0].name,
+			},
+		};
+
+		sendMessage(payload.type, payload.payload);
 
 		reset();
-		setIsAddNewColumnModalOpen(false);
-		queryClient.invalidateQueries(['columns', boardId]);
+
+		closeModal('addNewColumnModal');
 	};
 
 	const onSubmit = handleSubmit(submitData);
