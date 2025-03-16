@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { Options } from '@/interfaces/IOptionsDropdown';
+
+import { useClickOutside } from '@/hooks';
 
 import { ChevronDown } from '@/components/SVGComponents/ChevronDown';
 import { ChevronUp } from '@/components/SVGComponents/ChevronUp';
@@ -29,8 +31,14 @@ const Dropdown = ({
 }: DropDownProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const modalRef = useRef(null);
+	useClickOutside(modalRef, () => setIsOpen(false));
+
 	return (
-		<div className="flex items-center gap-2 relative cursor-pointer mt-2">
+		<div
+			ref={modalRef}
+			className="flex items-center gap-2 relative cursor-pointer mt-2"
+		>
 			<button
 				type="button"
 				className="flex items-center justify-between border border-medium-grey border-opacity-25 px-4 py-3 gap-2 rounded w-full focus:border-purple"
