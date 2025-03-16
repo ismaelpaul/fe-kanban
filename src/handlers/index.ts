@@ -1,5 +1,6 @@
 import { boardAddedHandler } from './boards/boardAddedHandler';
 import { boardEditedHandler } from './boards/boardEditedHandler';
+import { columnAddedHandler } from './columns/columnAddedHandler';
 import { commentAddedHandler } from './comments/commentAddedHandler';
 import { updateSubtaskCompletionHandler } from './subtasks/updateSubtaskCompletion';
 import { taskAddedAndDeleteHandler } from './tasks/taskAddedHandler';
@@ -18,6 +19,7 @@ const handlers = {
 	BOARD_INFO_UPDATED: boardEditedHandler,
 	COMMENT_ADDED: commentAddedHandler,
 	TEAM_UPDATED: teamUpdatedHandler,
+	COLUMN_ADDED: columnAddedHandler,
 };
 
 export { handlers };
