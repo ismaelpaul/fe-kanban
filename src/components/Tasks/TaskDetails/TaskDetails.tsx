@@ -28,8 +28,8 @@ const TaskDetails = ({
 				totalSubtasks={totalSubtasks}
 				subtasks={subtasks}
 			/>
-			<div className="mt-6">
-				<span className="text-12px text-medium-grey dark:text-white font-bold inline-block mb-2">
+			<div className="flex flex-col gap-2 mt-6">
+				<span className="text-12px text-medium-grey dark:text-white font-bold">
 					Current Status
 				</span>
 				<Dropdown
