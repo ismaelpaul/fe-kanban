@@ -14,7 +14,7 @@ const TeamMembers = ({ teamId }: TeamMembersProps) => {
 	};
 
 	return (
-		<div className="flex">
+		<div className="flex items-center justify-center">
 			{isLoading && <TeamMembersSkeleton />}
 			{teamMembers.map((member: TeamMember, index: number) => {
 				return (
