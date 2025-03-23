@@ -37,7 +37,7 @@ const Dashboard = () => {
 		}
 	}, [selectedTeam, boards, setSelectedBoard]);
 
-	const btnAddNewTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 grow-1 ml-auto ${
+	const btnAddNewTaskClass = `bg-purple py-2.5 px-5 rounded-full text-white tablet:text-m-heading transition ease-in-out duration-300 grow-1 basis-full tablet:basis-auto tablet:ml-auto ${
 		boardHasColumns
 			? 'enabled:hover:bg-purple-hover'
 			: 'cursor-not-allowed opacity-75'
@@ -45,16 +45,10 @@ const Dashboard = () => {
 
 	const openAddNewTaskModal = () => openModal('addNewTaskModal');
 
-	if (isLoading) {
-		return (
-			<div>
-				<MainSkeleton />
-			</div>
-		);
-	}
-
 	return (
 		<>
+			{isLoading && <MainSkeleton />}
+
 			{modals.editBoardModal && <EditBoardModal />}
 			{modals.addNewBoardModal && <AddNewBoardModal />}
 			{modals.addNewTaskModal && <AddNewTaskModal />}
@@ -63,7 +57,7 @@ const Dashboard = () => {
 			{modals.addNewTeamModal && <AddNewTeamModal />}
 
 			<div className="flex flex-col px-6 overflow-x-scroll no-scrollbar w-full bg-light-bg dark:bg-dark-bg">
-				<div className="flex items-center gap-4 my-4">
+				<div className="flex items-center justify-between flex-wrap tablet:flex-nowrap gap-4 my-4">
 					<SelectedBoard selectedBoard={selectedBoard} />
 					<Button
 						onClick={openAddNewTaskModal}
