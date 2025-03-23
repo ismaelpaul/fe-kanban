@@ -1,11 +1,11 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useWebSocket } from '@/hooks';
 
 import { CommentSubmit } from '@/interfaces/IComments';
-
-import { useUserStore } from '@/store/users';
+import { User } from '@/interfaces/IUser';
 
 import { CommentSubmitSchema } from '@/models/Comment';
 
@@ -21,14 +21,25 @@ const AddNewComment = ({ taskId }: AddNewCommentProps) => {
 	const inputClass =
 		'dark:bg-dark-grey dark:text-white border border-medium-grey border-opacity-25 rounded px-4 py-2 text-l-body w-full cursor-pointer hover:border-purple focus:outline-none';
 
-	const userId = useUserStore.getState().user.user_id;
-	const userProfileImg = useUserStore.getState().user.avatar;
+	const queryClient = useQueryClient();
+
+	const userDataCache = queryClient.getQueryData<User>(['user']);
+
+	const user = userDataCache?.user ?? {
+		user_id: 0,
+		avatar: 'https://i.ibb.co/4pDNDk1/avatar.png',
+		first_name: '',
+		last_name: '',
+		email: '',
+	};
+
+	const userId = user.user_id;
+	const userProfileImg = user.avatar;
 
 	const {
 		register,
 		handleSubmit,
 		reset,
-
 		formState: { errors },
 	} = useForm<CommentSubmit>({
 		resolver: zodResolver(CommentSubmitSchema),
