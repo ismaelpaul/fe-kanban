@@ -13,12 +13,17 @@ const TaskComment = ({ comment }: TaskCommentProps) => {
 
 	const userFullName = `${comment.first_name} ${comment.last_name}`;
 
+	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+		e.currentTarget.src = 'https://i.ibb.co/4pDNDk1/avatar.png';
+	};
+
 	return (
 		<div className="flex items-center gap-2 text-body my-2">
 			<img
-				className="laptop:h-8 laptop:w-8"
+				className="rounded-full h-8 w-8 laptop:h-10 laptop:w-10"
 				src={comment.avatar}
 				alt="Commentor profile image"
+				onError={handleImageError}
 			/>
 			<div className="w-full">
 				<div className="flex gap-2 font-bold text-medium-grey">

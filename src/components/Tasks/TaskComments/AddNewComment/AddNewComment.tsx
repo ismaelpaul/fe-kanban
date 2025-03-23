@@ -62,6 +62,10 @@ const AddNewComment = ({ taskId }: AddNewCommentProps) => {
 
 	const onSubmit = handleSubmit(submitData);
 
+	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+		e.currentTarget.src = 'https://i.ibb.co/4pDNDk1/avatar.png';
+	};
+
 	return (
 		<form id="task-comment-form" onSubmit={onSubmit}>
 			<div className="flex flex-col gap-2 mb-6 relative">
@@ -69,9 +73,10 @@ const AddNewComment = ({ taskId }: AddNewCommentProps) => {
 				<input type="hidden" {...register('user_id')} defaultValue={userId} />
 				<div className="flex items-center gap-2">
 					<img
-						className="laptop:h-8 laptop:w-8"
+						className="rounded-full h-8 w-8 laptop:h-10 laptop:w-10"
 						src={userProfileImg}
 						alt="profile image"
+						onError={handleImageError}
 					/>
 					<TextAreaInput
 						register={register}
