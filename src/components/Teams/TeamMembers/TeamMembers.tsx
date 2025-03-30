@@ -1,5 +1,6 @@
 import { useFetchTeamMembers } from '@/hooks/useFetchTeamMembers';
 import { TeamMember } from '@/interfaces/ITeams';
+import { TeamMembersSkeleton } from '@/components/SkeletonLoader/TeamMembersSkeleton';
 
 type TeamMembersProps = {
 	teamId: number;
@@ -8,12 +9,13 @@ type TeamMembersProps = {
 const TeamMembers = ({ teamId }: TeamMembersProps) => {
 	const { teamMembers, isLoading } = useFetchTeamMembers(teamId);
 
-	if (isLoading) {
-		return <span>Loading...</span>;
-	}
+	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+		e.currentTarget.src = 'https://i.ibb.co/4pDNDk1/avatar.png';
+	};
 
 	return (
-		<div className="flex">
+		<div className="flex items-center justify-center">
+			{isLoading && <TeamMembersSkeleton />}
 			{teamMembers.map((member: TeamMember, index: number) => {
 				return (
 					<div
@@ -26,6 +28,7 @@ const TeamMembers = ({ teamId }: TeamMembersProps) => {
 							src={member.avatar}
 							alt="Profile image"
 							className="h-full w-full object-cover"
+							onError={handleImageError}
 						/>
 					</div>
 				);

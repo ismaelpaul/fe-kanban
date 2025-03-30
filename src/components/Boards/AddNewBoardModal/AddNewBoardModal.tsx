@@ -4,26 +4,24 @@ import { motion } from 'framer-motion';
 
 import { useClickOutside } from '@/hooks';
 
+import { useModalStore } from '@/store/modals';
+
 import { Button } from '@/components/Button/Button';
 import { BoardForm } from '../BoardForm';
+import { Overlay } from '@/components/Overlay';
 
-interface AddNewBoardModalProps {
-	setIsAddNewBoardModalOpen: (arg: boolean) => void;
-}
+const AddNewBoardModal = () => {
+	const { closeModal } = useModalStore();
 
-const AddNewBoardModal = ({
-	setIsAddNewBoardModalOpen,
-}: AddNewBoardModalProps) => {
 	const modalRef = useRef(null);
-	useClickOutside(modalRef, () => setIsAddNewBoardModalOpen(false));
+	useClickOutside(modalRef, () => closeModal('addNewBoardModal'));
 
 	const btnAddNewBoardClass =
 		'bg-purple text-white text-13px font-bold py-2 w-full rounded-full mt-6 hover:bg-purple-hover';
 	const btnAddNewBoardText = 'Create New Board';
 
 	return (
-		<aside className="fixed inset-0 flex items-center justify-center z-40">
-			<div className="fixed inset-0 bg-black opacity-50"></div>
+		<Overlay>
 			<motion.dialog
 				aria-modal="true"
 				open
@@ -38,10 +36,7 @@ const AddNewBoardModal = ({
 				<h1 id="modal-heading" className="text-l-heading mb-6 dark:text-white">
 					Add New Board
 				</h1>
-				<BoardForm
-					setIsAddNewBoardModalOpen={setIsAddNewBoardModalOpen}
-					isNewBoard={true}
-				/>
+				<BoardForm isNewBoard={true} />
 				<Button
 					form={'board-form'}
 					buttonClass={btnAddNewBoardClass}
@@ -49,7 +44,7 @@ const AddNewBoardModal = ({
 					type="submit"
 				/>
 			</motion.dialog>
-		</aside>
+		</Overlay>
 	);
 };
 

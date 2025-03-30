@@ -106,7 +106,7 @@ const TaskModal = ({
 					initial={{ scale: 0.7 }}
 					animate={{ scale: 1 }}
 					transition={{ duration: 0.2 }}
-					className="bg-white dark:bg-dark-grey p-6 rounded-md laptop:rounded-none z-50 mx-auto laptop:mx-0 laptop:ml-auto w-screen tablet:w-[30rem] h-[86vh] overflow-y-scroll no-scrollbar"
+					className="bg-white dark:bg-dark-grey p-6 h-[86vh] w-[18rem] max-w-[90vw] overflow-y-scroll no-scrollbar z-50 tablet:w-[30rem] tablet:ml-auto laptop:rounded-none laptop:mx-0 laptop:ml-auto"
 					ref={modalRef}
 					role="dialog"
 					aria-labelledby="modal-heading"
@@ -117,12 +117,11 @@ const TaskModal = ({
 						<KebabMenuModal
 							editText={'Edit Task'}
 							deleteText={'Delete Task'}
-							menuPosition={'right-8 tablet:right-40 laptop:right-4'}
+							menuPosition={'right-6 tablet:right-4'}
 							setIsDeleteModalOpen={setIsDeleteModalOpen}
 							setIsTaskModalOpen={setIsTaskModalOpen}
 							isParentTaskModal={true}
 							setIsEditTaskModalOpen={setIsEditTaskModalOpen}
-							setIsKebabMenuModalOpen={setIsKebabMenuModalOpen}
 						/>
 					) : (
 						<></>
@@ -162,7 +161,7 @@ const TaskModal = ({
 						handleDeleteTask(task.task_id);
 					}}
 					itemName={task.title}
-					parentComponent="TaskModal"
+					itemType="task"
 					setIsDeleteModalOpen={setIsDeleteModalOpen}
 				/>
 			) : (

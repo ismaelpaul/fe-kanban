@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 
@@ -12,6 +12,7 @@ import { useFetchColumns, usePatch } from '@/hooks';
 import { AddNewColumnModal } from '../AddNewColumnModal';
 import { EmptyBoard } from '@/components/Boards/EmptyBoard';
 import { Column } from '../Column/Column';
+import { useModalStore } from '@/store/modals';
 
 type ColumnsListProps = {
 	setBoardHasColumns: (arg: boolean) => void;
@@ -22,10 +23,10 @@ const ColumnsList = ({
 	boardHasColumns,
 	setBoardHasColumns,
 }: ColumnsListProps) => {
-	const [isAddNewColumnModalOpen, setIsAddNewColumnModalOpen] = useState(false);
-
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
 	const boardId = selectedBoard.board_id;
+
+	const { modals, openModal } = useModalStore();
 
 	const queryClient = useQueryClient();
 
@@ -93,15 +94,10 @@ const ColumnsList = ({
 	if (!boardHasColumns) {
 		return (
 			<>
-				{isAddNewColumnModalOpen ? (
-					<AddNewColumnModal
-						setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
-					/>
-				) : (
-					<></>
-				)}
+				{modals.addNewColumnModal && <AddNewColumnModal />}
+
 				<div className="flex justify-center my-auto">
-					<EmptyBoard setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen} />
+					<EmptyBoard />
 				</div>
 			</>
 		);
@@ -111,6 +107,9 @@ const ColumnsList = ({
 		<>
 			{isLoading && <span>Loading..</span>}
 			{isError && <span>Error: </span>}
+
+			{modals.addNewColumnModal && <AddNewColumnModal />}
+
 			<div className="flex gap-4">
 				<DragDropContext onDragEnd={handleDragAndDrop}>
 					{columns.map((column, index) => (
@@ -132,7 +131,7 @@ const ColumnsList = ({
 						</Droppable>
 					))}
 					<div
-						onClick={() => setIsAddNewColumnModalOpen(true)}
+						onClick={() => openModal('addNewColumnModal')}
 						className="bg-gradient-to-b from-linear to-linear-50 dark:from-dark-grey dark:to-dark-grey-50 w-[17.5rem] flex items-center rounded-md mt-12"
 					>
 						<span className="text-l-heading block w-[17.5rem] text-medium-grey text-center cursor-pointer transition ease-in-out duration-300 hover:text-purple">
@@ -140,13 +139,6 @@ const ColumnsList = ({
 						</span>
 					</div>
 				</DragDropContext>
-				{isAddNewColumnModalOpen ? (
-					<AddNewColumnModal
-						setIsAddNewColumnModalOpen={setIsAddNewColumnModalOpen}
-					/>
-				) : (
-					<></>
-				)}
 			</div>
 		</>
 	);

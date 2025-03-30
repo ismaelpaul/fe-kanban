@@ -14,7 +14,7 @@ const TextInput = <T extends FieldValues>({
 	name,
 	...inputProps
 }: TextInputProps<T>) => {
-	return <input type="text" {...register(name)} {...inputProps} />;
+	return <input id={name} type="text" {...register(name)} {...inputProps} />;
 };
 
 export { TextInput };
