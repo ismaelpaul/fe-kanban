@@ -107,6 +107,9 @@ const ColumnsList = ({
 		<>
 			{isLoading && <span>Loading..</span>}
 			{isError && <span>Error: </span>}
+
+			{modals.addNewColumnModal && <AddNewColumnModal />}
+
 			<div className="flex gap-4">
 				<DragDropContext onDragEnd={handleDragAndDrop}>
 					{columns.map((column, index) => (
@@ -136,7 +139,6 @@ const ColumnsList = ({
 						</span>
 					</div>
 				</DragDropContext>
-				{modals.addNewColumnModal && <AddNewColumnModal />}
 			</div>
 		</>
 	);
