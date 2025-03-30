@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { useFetchBoards } from '@/hooks';
+import { motion } from 'framer-motion';
+
+import { useFetchBoards, useWindowDimensions } from '@/hooks';
 
 import { useTeamsStore } from '@/store/teams';
 import { useBoardStore } from '@/store/boards';
@@ -20,6 +22,9 @@ import { AddNewTeamModal } from '@/components/Teams/AddNewTeamModal';
 
 const Dashboard = () => {
 	const [boardHasColumns, setBoardHasColumns] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
+
+	const { width } = useWindowDimensions();
 
 	const { modals, openModal } = useModalStore();
 
@@ -45,6 +50,15 @@ const Dashboard = () => {
 
 	const openAddNewTaskModal = () => openModal('addNewTaskModal');
 
+	const isSidebarOpen = useModalStore((state) => state.modals.sidebarNav);
+
+	useEffect(() => {
+		const isMobileScreen = width < 768;
+		if (isMobileScreen !== isMobile) {
+			setIsMobile(isMobileScreen);
+		}
+	}, [width, isMobile]);
+
 	return (
 		<>
 			{isLoading && <MainSkeleton />}
@@ -52,11 +66,23 @@ const Dashboard = () => {
 			{modals.editBoardModal && <EditBoardModal />}
 			{modals.addNewBoardModal && <AddNewBoardModal />}
 			{modals.addNewTaskModal && <AddNewTaskModal />}
-			{modals.sidebarNav && <SidebarNav />}
+
 			{modals.editTeamModal && <EditTeamModal />}
 			{modals.addNewTeamModal && <AddNewTeamModal />}
 
-			<div className="flex flex-col px-6 overflow-x-scroll no-scrollbar w-full bg-light-bg dark:bg-dark-bg">
+			<SidebarNav />
+
+			<motion.div
+				animate={{
+					marginLeft: isMobile ? '0rem' : isSidebarOpen ? '16.5rem' : '0rem', // Don't move on mobile
+				}}
+				transition={{
+					duration: 0.25,
+					ease: 'easeInOut',
+					delay: modals.sidebarNav ? 0 : -0.01,
+				}}
+				className="flex flex-col px-6 overflow-x-scroll no-scrollbar w-full bg-light-bg dark:bg-dark-bg"
+			>
 				<div className="flex items-center justify-between flex-wrap tablet:flex-nowrap gap-4 my-4">
 					<SelectedBoard selectedBoard={selectedBoard} />
 					<Button
@@ -69,7 +95,7 @@ const Dashboard = () => {
 					boardHasColumns={boardHasColumns}
 					setBoardHasColumns={setBoardHasColumns}
 				/>
-			</div>
+			</motion.div>
 			<ToggleNav />
 		</>
 	);
