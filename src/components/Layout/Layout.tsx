@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { DashboardNav } from '../Nav/Nav/DashboardNav';
+import { DashboardNav } from '../Nav/DashboardNav';
+import { Footer } from '../Footer';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -7,13 +8,13 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
 	return (
-		<div className="h-screen">
+		<>
 			<DashboardNav />
-			<section className="flex h-[90vh] bg-light-bg dark:bg-dark-bg ">
+			<main className="flex relative h-[83vh] overflow-y-hidden no-scrollbar::-webkit-scrollbar">
 				{children}
-			</section>
-			<div>footer</div>
-		</div>
+			</main>
+			<Footer />
+		</>
 	);
 };
 
