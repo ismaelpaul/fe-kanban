@@ -41,8 +41,8 @@ export const editTaskSubmission = (
 			task: {
 				task_id: taskId,
 				column_id: columnId ?? null,
-				title: '',
-				description: '',
+				title: taskData?.title ?? '',
+				description: taskData?.description ?? '',
 				positionAndStatus: {
 					currentColumnId: null,
 					newColumnId: null,
@@ -58,11 +58,16 @@ export const editTaskSubmission = (
 	newTaskData.status = selectedOption.value;
 
 	// Edit title and description
-	if (newTaskData.title !== taskData?.title) {
-		payload.payload.task.title = newTaskData.title ?? '';
+	if (newTaskData.title && newTaskData.title !== taskData?.title) {
+		payload.payload.task.title = newTaskData.title;
 	}
-	if (newTaskData.description !== taskData?.description) {
-		payload.payload.task.description = newTaskData.description ?? '';
+
+	// Edit description if it's different from the original description
+	if (
+		newTaskData.description &&
+		newTaskData.description !== taskData?.description
+	) {
+		payload.payload.task.description = newTaskData.description;
 	}
 
 	// Edit position and status
@@ -111,6 +116,7 @@ export const editTaskSubmission = (
 			);
 		}
 	}
+	console.log(payload.payload.task, '<<<<<< payload');
 
 	return payload;
 };
