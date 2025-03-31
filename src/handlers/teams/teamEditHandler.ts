@@ -7,8 +7,6 @@ type TeamUpdatedHandler = {
 };
 
 export const teamUpdatedHandler = (data: TeamUpdatedHandler) => {
-	console.log(data);
-
 	const { setSelectedTeam } = useTeamsStore.getState();
 
 	setSelectedTeam(data.team);
