@@ -3,6 +3,15 @@ import { createContext, useState, useEffect, ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { WebSocketContextType } from '@/interfaces/IWebSocket';
 
+import { handlers } from '@/handlers';
+
+export type WebSocketMessageType = keyof typeof handlers;
+
+export interface WebSocketMessage<T = unknown> {
+	type: WebSocketMessageType;
+	payload: T;
+}
+
 const defaultWebSocketContextValue: WebSocketContextType = {
 	ws: null,
 	sendMessage: () => {},
@@ -15,7 +24,6 @@ const WebSocketContext = createContext<WebSocketContextType>(
 
 const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 	const [ws, setWs] = useState<WebSocket | null>(null);
-	// const [messages, setMessages] = useState<WebSocketMessage[]>([]);
 	const [isConnected, setIsConnected] = useState(false);
 
 	const queryClient = useQueryClient();
@@ -31,13 +39,14 @@ const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 
 		socket.onmessage = (event) => {
 			const data = JSON.parse(event.data);
-			console.log('Message from server:', data);
 
-			// const columnId = data.task[0].column_id;
+			const handler = handlers[data.type as WebSocketMessageType];
 
-			// console.log(columnId, '<<< id');
-
-			// queryClient.invalidateQueries(['tasks', columnId]);
+			if (handler) {
+				handler(data, queryClient);
+			} else {
+				console.warn(`No handler for message type: ${data.type}`);
+			}
 		};
 
 		socket.onerror = (error) => {

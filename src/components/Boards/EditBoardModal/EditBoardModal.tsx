@@ -3,36 +3,37 @@ import { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 import { useBoardStore } from '@/store/boards';
-import { useColumnsStore } from '@/store/columns';
+import { useModalStore } from '@/store/modals';
 
 import { useClickOutside } from '@/hooks';
+import { useCache } from '@/hooks/useCache';
+
+import { IColumns } from '@/interfaces/IColumn';
 
 import { BoardForm } from '../BoardForm';
 import { Button } from '@/components/Button/Button';
+import { Overlay } from '@/components/Overlay';
 
-interface EditBoardModalProps {
-	setIsEditBoardModalOpen: (arg: boolean) => void;
-}
-
-const EditBoardModal = ({ setIsEditBoardModalOpen }: EditBoardModalProps) => {
+const EditBoardModal = () => {
+	const { closeModal } = useModalStore();
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
-	const columns = useColumnsStore((state) => state.columns);
+
+	const boardId = selectedBoard.board_id;
+
+	const cachedData = useCache<IColumns>(['columns', boardId]);
+
+	const columns = cachedData?.columns;
 
 	const boardData = {
 		...selectedBoard,
 		columns,
 	};
 
-	const btnSaveChangesClass =
-		'bg-purple text-white text-13px font-bold py-2 w-full rounded-full';
-	const btnSaveChangesText = 'Save Changes';
-
 	const modalRef = useRef(null);
-	useClickOutside(modalRef, () => setIsEditBoardModalOpen(false));
+	useClickOutside(modalRef, () => closeModal('editBoardModal'));
 
 	return (
-		<aside className="fixed inset-0 flex items-center justify-center z-40">
-			<div className="fixed inset-0 bg-black opacity-50"></div>
+		<Overlay>
 			<motion.dialog
 				aria-modal="true"
 				open
@@ -47,19 +48,17 @@ const EditBoardModal = ({ setIsEditBoardModalOpen }: EditBoardModalProps) => {
 				<h1 id="modal-heading" className="text-l-heading mb-6 dark:text-white">
 					Edit Board
 				</h1>
-				<BoardForm
-					boardData={boardData}
-					isNewBoard={false}
-					setIsEditBoardModalOpen={setIsEditBoardModalOpen}
-				/>
+				<BoardForm boardData={boardData} isNewBoard={false} />
 				<Button
 					form={'board-form'}
 					type="submit"
-					buttonClass={btnSaveChangesClass}
-					buttonText={btnSaveChangesText}
+					buttonClass={
+						'bg-purple text-white text-13px font-bold py-2 w-full rounded-full'
+					}
+					buttonText={'Save Changes'}
 				/>
 			</motion.dialog>
-		</aside>
+		</Overlay>
 	);
 };
 

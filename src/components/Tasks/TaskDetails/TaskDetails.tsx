@@ -2,7 +2,7 @@ import { Options } from '@/interfaces/IOptionsDropdown';
 import { SingleSubtask } from '@/interfaces/ISubtask';
 
 import { Dropdown } from '@/components/Dropdown/Dropdown';
-import { SubtasksList } from '@/components/Subtasks/SubtaskList/SubtaskList';
+import { SubtasksList } from '@/components/Subtasks/SubtasksList/SubtasksList';
 
 type TaskDetailsProps = {
 	description: string;

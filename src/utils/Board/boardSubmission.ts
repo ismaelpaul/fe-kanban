@@ -1,56 +1,48 @@
-import { QueryClient } from '@tanstack/react-query';
-import {
-	addNewBoard,
-	addNewColumnsByBoardId,
-	deleteColumnsById,
-	updateBoardNameById,
-	updateColumnsByBoardId,
-} from '../../api/kanbanApi';
-import { Board, BoardSubmit } from '../../interfaces/IBoard';
+import { BoardSubmit } from '../../interfaces/IBoard';
 import { ColumnsInput } from '../../interfaces/IColumn';
 import { IToastTypes } from '../../interfaces/IToast';
 import { getNewItemsToAdd } from '../utils';
 
-export const addNewBoardSubmission = async (
-	newBoardData: Partial<BoardSubmit>,
-	setSelectedBoard: (board: Board) => void,
-	queryClient: QueryClient,
-	toast: IToastTypes
-) => {
-	const response = await addNewBoard(newBoardData);
-
-	const newBoard = response.board;
-
-	setSelectedBoard(newBoard);
-
-	toast.success(`${newBoard.name} has been added.`);
-
-	queryClient.invalidateQueries(['boards']);
+type Payload = {
+	type: string;
+	payload: {
+		board: {
+			board_id: number;
+			name: string;
+		};
+		columns: {
+			toAdd: Array<Partial<ColumnsInput>>;
+			toEdit: Array<{ column_id: number; name: string }>;
+			toDelete: number[];
+		};
+	};
 };
 
 export const editBoardSubmission = async (
 	newBoardData: Partial<BoardSubmit>,
 	boardData: Partial<BoardSubmit> | undefined,
 	columnsToDelete: number[],
-	setColumnsToDelete: (arg: number[]) => void,
-	setSelectedBoard: (board: Board) => void,
-	queryClient: QueryClient,
 	boardId: number,
 	toast: IToastTypes
 ) => {
 	if (!boardData) {
 		toast.error('Something went wrong, please try again.');
-		return;
+		return null;
 	}
 
+	let boardHasChanges: boolean = false;
+
+	const payload: Payload = {
+		type: 'UPDATE_BOARD_INFO',
+		payload: {
+			board: { board_id: boardId, name: '' },
+			columns: { toAdd: [], toEdit: [], toDelete: [] },
+		},
+	};
+
 	if (newBoardData.name !== boardData?.name) {
-		const updatedBoard = { name: newBoardData.name };
-
-		const response = await updateBoardNameById(boardId, updatedBoard);
-
-		setSelectedBoard(response);
-
-		queryClient.invalidateQueries(['boards']);
+		payload.payload.board.name = newBoardData.name ?? '';
+		boardHasChanges = true;
 	}
 
 	const columns = boardData?.columns;
@@ -61,30 +53,35 @@ export const editBoardSubmission = async (
 	if (columnsHaveChanges) {
 		// Delete columns
 		if (columnsToDelete.length > 0) {
-			await deleteColumnsById(columnsToDelete);
-			setColumnsToDelete([]);
+			payload.payload.columns.toDelete = columnsToDelete;
 		}
 
 		// Edit columns
 		const columnsToEdit = getEditedColumns(columns, newColumns);
 
 		if (columnsToEdit.length > 0) {
-			await updateColumnsByBoardId(boardId, columnsToEdit);
+			payload.payload.columns.toEdit = columnsToEdit;
 		}
 
 		// Add new columns
 		const newColumnsToAdd = getNewItemsToAdd<ColumnsInput>(newColumns || []);
 
 		if (newColumnsToAdd.length > 0) {
-			newColumnsToAdd.forEach((column: ColumnsInput) => {
-				delete column.placeholder;
-				delete column.is_new;
-			});
-
-			await addNewColumnsByBoardId(boardId, newColumnsToAdd);
+			payload.payload.columns.toAdd = newColumnsToAdd.map(
+				(column: ColumnsInput) => {
+					delete column.placeholder;
+					delete column.is_new;
+					return column;
+				}
+			);
 		}
 	}
-	queryClient.invalidateQueries(['columns', boardId]);
+
+	if (!boardHasChanges && !columnsHaveChanges) {
+		return null;
+	}
+
+	return payload;
 };
 
 const getEditedColumns = (

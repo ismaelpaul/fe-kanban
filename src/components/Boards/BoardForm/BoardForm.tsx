@@ -3,49 +3,43 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import { BoardSubmit } from '@/interfaces/IBoard';
 import { ColumnsInput } from '@/interfaces/IColumn';
 import { IToastTypes } from '@/interfaces/IToast';
 
 import { useBoardStore } from '@/store/boards';
+import { useTeamsStore } from '@/store/teams';
+import { useModalStore } from '@/store/modals';
 
-import { useToast } from '@/hooks';
+import { useToast, useWebSocket } from '@/hooks';
 
 import { BoardSubmitSchema } from '@/models/Board';
 
-import {
-	addNewBoardSubmission,
-	editBoardSubmission,
-} from '@/utils/Board/boardSubmission';
+import { editBoardSubmission } from '@/utils/Board/boardSubmission';
 
 import { TextInput } from '@/components/Input/TextInput';
 import { Cross } from '@/components/SVGComponents/Cross';
 import { Button } from '@/components/Button/Button';
+import { InputField } from '@/components/InputField';
 
 interface BoardFormProps {
-	setIsAddNewBoardModalOpen?: (arg: boolean) => void;
-	setIsEditBoardModalOpen?: (arg: boolean) => void;
 	isNewBoard: boolean;
 	boardData?: Partial<BoardSubmit>;
 }
 
-const BoardForm = ({
-	boardData,
-	setIsAddNewBoardModalOpen,
-	setIsEditBoardModalOpen,
-	isNewBoard,
-}: BoardFormProps) => {
+const BoardForm = ({ boardData, isNewBoard }: BoardFormProps) => {
 	const [columnsInput, setColumnsInput] = useState<ColumnsInput[]>([]);
 	const [columnsToDelete, setColumnsToDelete] = useState<number[]>([]);
 
+	const { closeModal } = useModalStore();
+
+	const { sendMessage } = useWebSocket();
+
 	const selectedBoard = useBoardStore((state) => state.selectedBoard);
-	const setSelectedBoard = useBoardStore((state) => state.setSelectedBoard);
+
+	const selectedTeam = useTeamsStore((state) => state.selectedTeam);
 
 	const boardId = selectedBoard.board_id;
-
-	const queryClient = useQueryClient();
 
 	const toast = useToast();
 
@@ -112,25 +106,30 @@ const BoardForm = ({
 
 	const submitData: SubmitHandler<BoardSubmit> = async (newBoardData) => {
 		if (isNewBoard) {
-			await addNewBoardSubmission(
-				newBoardData,
-				setSelectedBoard,
-				queryClient,
-				toast
-			);
-			setIsAddNewBoardModalOpen!(false);
+			const payload = {
+				type: 'ADD_NEW_BOARD',
+				payload: {
+					board: newBoardData,
+					team_id: selectedTeam.team_id,
+				},
+			};
+
+			sendMessage(payload.type, payload.payload);
+
+			closeModal('addNewBoardModal');
 		} else {
-			await editBoardSubmission(
+			const payload = await editBoardSubmission(
 				newBoardData,
 				boardData,
 				columnsToDelete,
-				setColumnsToDelete,
-				setSelectedBoard,
-				queryClient,
 				boardId,
 				toast
 			);
-			setIsEditBoardModalOpen!(false);
+			if (payload && Object.keys(payload).length > 0) {
+				sendMessage(payload.type, payload.payload);
+			}
+
+			closeModal('editBoardModal');
 		}
 
 		reset();
@@ -138,7 +137,7 @@ const BoardForm = ({
 
 	const onSubmit = handleSubmit(submitData);
 
-	useEffect(() => {
+	const initializeBoardData = () => {
 		if (boardData?.columns) {
 			setColumnsInput(boardData.columns);
 			setValue('name', boardData.name || '');
@@ -148,30 +147,24 @@ const BoardForm = ({
 				{ column_id: 2, name: '', placeholder: 'eg. Doing' },
 			]);
 		}
+	};
+
+	useEffect(() => {
+		initializeBoardData();
 	}, [boardData?.columns, setValue, boardData?.name]);
 
 	return (
 		<>
 			<form id="board-form" onSubmit={onSubmit}>
-				<div className="flex flex-col gap-2 mb-6 relative">
-					<label htmlFor="board_name" className={labelClass}>
-						Board Name
-					</label>
-					<TextInput
-						register={register}
-						name="name"
-						className={`${inputClass} ${
-							errors.name ? 'border border-red/100' : ''
-						}`}
-						placeholder={'e.g. Web Design'}
-						defaultValue={boardData?.name}
-					/>
-					{errors.name && (
-						<span className={`${errorClass} right-6 mt-[2.2rem]`}>
-							{errors.name.message}
-						</span>
-					)}
-				</div>
+				<InputField
+					register={register}
+					name="name"
+					label="Board Name"
+					placeholder="e.g. Web Design"
+					defaultValue={boardData?.name}
+					errors={errors.name}
+					type="text"
+				/>
 				<div>
 					<label className={`${labelClass} inline-block mb-2`}>
 						Board Columns
