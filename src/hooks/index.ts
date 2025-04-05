@@ -1,3 +1,4 @@
+import { useAuth } from './useAuth';
 import { useDelete } from './useDelete';
 import { useClickOutside } from './useClickOutside';
 import { useColorMode } from './useColorMode';
@@ -15,6 +16,7 @@ import { useWebSocket } from './useWebSocket';
 import { useWindowDimensions } from './useWindowDimensions';
 
 export {
+	useAuth,
 	useDelete,
 	useClickOutside,
 	useColorMode,
