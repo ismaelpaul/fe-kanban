@@ -15,8 +15,6 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const { user, isLoading, isError } = useFetchUser();
 
-	console.log('AuthProvider: user', user);
-
 	const value = {
 		user: user ?? null,
 		isLoading,
