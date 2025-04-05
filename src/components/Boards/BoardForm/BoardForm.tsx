@@ -154,62 +154,60 @@ const BoardForm = ({ boardData, isNewBoard }: BoardFormProps) => {
 	}, [boardData?.columns, setValue, boardData?.name]);
 
 	return (
-		<>
-			<form id="board-form" onSubmit={onSubmit}>
-				<InputField
-					register={register}
-					name="name"
-					label="Board Name"
-					placeholder="e.g. Web Design"
-					defaultValue={boardData?.name}
-					errors={errors.name}
-					type="text"
-				/>
-				<div>
-					<label className={`${labelClass} inline-block mb-2`}>
-						Board Columns
-					</label>
-					{columnsInput.map((column, idx) => {
-						return (
-							<div key={idx} className="flex items-center gap-4 mb-3 relative">
-								<input
-									{...register(`columns.${idx}.column_id`, {
-										valueAsNumber: true,
-									})}
-									defaultValue={Number(column.column_id)}
-									type="hidden"
-								/>
-								<TextInput
-									register={register}
-									name={`columns.${idx}.name`}
-									className={`${inputClass} ${
-										errors.columns?.[idx] ? 'border border-red/100' : ''
-									}`}
-									placeholder={column.placeholder}
-									defaultValue={column.name}
-								/>
-								{errors.columns && (
-									<span className={`${errorClass} right-14`}>
-										{errors.columns[idx]?.name?.message}
-									</span>
-								)}
-								<div
-									onClick={() => removeInputField(idx, column.column_id, toast)}
-								>
-									<Cross isError={errors.columns?.[idx] != null} />
-								</div>
+		<form id="board-form" onSubmit={onSubmit}>
+			<InputField
+				register={register}
+				name="name"
+				label="Board Name"
+				placeholder="e.g. Web Design"
+				defaultValue={boardData?.name}
+				errors={errors.name}
+				type="text"
+			/>
+			<div>
+				<label className={`${labelClass} inline-block mb-2`}>
+					Board Columns
+				</label>
+				{columnsInput.map((column, idx) => {
+					return (
+						<div key={idx} className="flex items-center gap-4 mb-3 relative">
+							<input
+								{...register(`columns.${idx}.column_id`, {
+									valueAsNumber: true,
+								})}
+								defaultValue={Number(column.column_id)}
+								type="hidden"
+							/>
+							<TextInput
+								register={register}
+								name={`columns.${idx}.name`}
+								className={`${inputClass} ${
+									errors.columns?.[idx] ? 'border border-red/100' : ''
+								}`}
+								placeholder={column.placeholder}
+								defaultValue={column.name}
+							/>
+							{errors.columns && (
+								<span className={`${errorClass} right-14`}>
+									{errors.columns[idx]?.name?.message}
+								</span>
+							)}
+							<div
+								onClick={() => removeInputField(idx, column.column_id, toast)}
+							>
+								<Cross isError={errors.columns?.[idx] != null} />
 							</div>
-						);
-					})}
-				</div>
-				<Button
-					onClick={addInputField}
-					type={'button'}
-					buttonClass={btnAddColumnClass}
-					buttonText={btnAddColumnText}
-				/>
-			</form>
-		</>
+						</div>
+					);
+				})}
+			</div>
+			<Button
+				onClick={addInputField}
+				type={'button'}
+				buttonClass={btnAddColumnClass}
+				buttonText={btnAddColumnText}
+			/>
+		</form>
 	);
 };
 
