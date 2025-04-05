@@ -44,27 +44,25 @@ const KebabMenuModal = ({
 	};
 
 	return (
-		<>
-			<div
-				className={`flex flex-col gap-4 px-4 py-[1.375rem] w-48 bg-white dark:bg-dark-bg rounded-lg absolute z-50 drop-shadow-card top-[4rem] ${menuPosition}`}
-				ref={modalRef}
+		<div
+			className={`flex flex-col gap-4 px-4 py-[1.375rem] w-48 bg-white dark:bg-dark-bg rounded-lg absolute z-50 drop-shadow-card top-[4rem] ${menuPosition}`}
+			ref={modalRef}
+		>
+			<span
+				onClick={(e) => {
+					handleEditModal(e);
+				}}
+				className="text-l-body text-medium-grey cursor-pointer hover:text-light-bg"
 			>
-				<span
-					onClick={(e) => {
-						handleEditModal(e);
-					}}
-					className="text-l-body text-medium-grey cursor-pointer hover:text-light-bg"
-				>
-					{editText}
-				</span>
-				<span
-					onClick={handleDeleteModal}
-					className="text-l-body text-red cursor-pointer hover:text-light-bg"
-				>
-					{deleteText}
-				</span>
-			</div>
-		</>
+				{editText}
+			</span>
+			<span
+				onClick={handleDeleteModal}
+				className="text-l-body text-red cursor-pointer hover:text-light-bg"
+			>
+				{deleteText}
+			</span>
+		</div>
 	);
 };
 

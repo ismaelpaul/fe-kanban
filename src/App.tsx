@@ -6,13 +6,11 @@ import { WebSocketProvider } from './contexts/WebSocketContext';
 
 const App = () => {
 	return (
-		<>
-			<WebSocketProvider>
-				<BrowserRouter>
-					<AppRoutes />
-				</BrowserRouter>
-			</WebSocketProvider>
-		</>
+		<WebSocketProvider>
+			<BrowserRouter>
+				<AppRoutes />
+			</BrowserRouter>
+		</WebSocketProvider>
 	);
 };
 
