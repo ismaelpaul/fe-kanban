@@ -5,6 +5,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContextProvider } from './contexts/ToastContext/ToastContext.tsx';
 import { App } from './App.tsx';
+import { AuthProvider } from './contexts/AuthContext/AuthContext.tsx';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -17,9 +18,11 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<QueryClientProvider client={queryClient}>
-		<ToastContextProvider>
-			<App />
-		</ToastContextProvider>
+		<AuthProvider>
+			<ToastContextProvider>
+				<App />
+			</ToastContextProvider>
+		</AuthProvider>
 		<ReactQueryDevtools initialIsOpen={true} />
 	</QueryClientProvider>
 );
