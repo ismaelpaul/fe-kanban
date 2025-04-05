@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { logoutUser } from '@/api/kanbanApi';
 
-import { useFetchUser, useToast } from '@/hooks';
+import { useAuth, useToast } from '@/hooks';
 
 import { Button } from '@/components/Button';
 import { ChevronDown } from '@/components/SVGComponents/ChevronDown';
@@ -13,7 +13,7 @@ import { UserProfileSkeleton } from '@/components/SkeletonLoader/UserProfileSkel
 const UserProfile = () => {
 	const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
-	const { user, isLoading } = useFetchUser();
+	const { user, isLoading } = useAuth();
 
 	const navigate = useNavigate();
 	const toast = useToast();
@@ -24,10 +24,6 @@ const UserProfile = () => {
 	const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
 		e.currentTarget.src = 'https://i.ibb.co/4pDNDk1/avatar.png';
 	};
-
-	const profileBtnClass = 'text-m-heading text-black dark:text-white';
-	const logoutBtnClass =
-		'absolute px-4 py-[1.375rem] top-[4.2rem] bg-white dark:bg-dark-grey rounded-lg text-l-body text-medium-grey cursor-pointer w-32';
 
 	const handleLogout = async () => {
 		const result = await logoutUser();
@@ -47,7 +43,7 @@ const UserProfile = () => {
 					<img src={avatar} alt="Profile image" onError={handleImageError} />
 				</div>
 				<Button
-					buttonClass={profileBtnClass}
+					buttonClass={'text-m-heading text-black dark:text-white'}
 					buttonText={name}
 					onClick={() => {
 						setIsLogoutOpen(!isLogoutOpen);
@@ -56,7 +52,9 @@ const UserProfile = () => {
 				{isLogoutOpen ? <ChevronUp /> : <ChevronDown />}
 				{isLogoutOpen && (
 					<Button
-						buttonClass={logoutBtnClass}
+						buttonClass={
+							'absolute px-4 py-[1.375rem] top-[4.2rem] bg-white dark:bg-dark-grey rounded-lg text-l-body text-medium-grey cursor-pointer w-32'
+						}
 						buttonText={'Log out'}
 						onClick={handleLogout}
 					/>
