@@ -29,7 +29,11 @@ const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		const socket = new WebSocket('ws://localhost:9090/ws');
+		const baseApiUrl = import.meta.env.VITE_BASE_URL;
+		const wsUrl =
+			baseApiUrl.replace(/^http/, 'ws').replace(/\/api\/?$/, '') + '/ws';
+
+		const socket = new WebSocket(wsUrl);
 
 		socket.onopen = () => {
 			console.log('WebSocket connected');
