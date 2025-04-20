@@ -51,6 +51,22 @@ export const editTeamName = async (teamId: number, teamData: object) => {
 	}
 };
 
+export const inviteUserToTeam = async (teamId: number, email: string) => {
+	try {
+		const response = await kanbanApi.post(`/teams/${teamId}/invitations`, {
+			email,
+		});
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError<{ message?: string }>;
+		console.log(err.response?.data);
+		throw new Error(
+			err.response?.data?.message ||
+				'Failed to invite user due to a server error.'
+		);
+	}
+};
+
 export const getTeamMembersByTeamId = async (teamId: number) => {
 	try {
 		const response = await kanbanApi.get(`/users/team_members/${teamId}`);
@@ -326,7 +342,7 @@ export const addNewColumnsByBoardId = async (
 
 export const loginUser = async (userData: LoginUser) => {
 	try {
-		const response = await kanbanApi.post('users/login', userData);
+		const response = await kanbanApi.post('/users/login', userData);
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
@@ -386,6 +402,37 @@ export const getTaskCommentsByTaskId = async (taskId: number) => {
 	try {
 		const response = await kanbanApi.get(`tasks/${taskId}/comments`);
 
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const verifyInvitationToken = async (token: string) => {
+	console.log('token', token);
+
+	try {
+		const response = await kanbanApi.get(`/invitations/verify/${token}`);
+		console.log('>>>>>>>>>> response', response.data);
+
+		return response.data;
+	} catch (error) {
+		const err = error as AxiosError;
+		console.log(err.response?.data);
+		return err.response?.data;
+	}
+};
+
+export const handleInvitationAction = async (
+	action: 'accept' | 'decline',
+	token: string
+) => {
+	try {
+		const response = await kanbanApi.post(`/invitations/${token}/${action}`, {
+			token,
+		});
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
