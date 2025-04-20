@@ -411,12 +411,8 @@ export const getTaskCommentsByTaskId = async (taskId: number) => {
 };
 
 export const verifyInvitationToken = async (token: string) => {
-	console.log('token', token);
-
 	try {
 		const response = await kanbanApi.get(`/invitations/verify/${token}`);
-		console.log('>>>>>>>>>> response', response.data);
-
 		return response.data;
 	} catch (error) {
 		const err = error as AxiosError;
