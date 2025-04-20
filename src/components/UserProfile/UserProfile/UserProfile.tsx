@@ -13,7 +13,7 @@ import { UserProfileSkeleton } from '@/components/SkeletonLoader/UserProfileSkel
 const UserProfile = () => {
 	const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
-	const { user, isLoading } = useAuth();
+	const { user, isAuthLoading } = useAuth();
 
 	const navigate = useNavigate();
 	const toast = useToast();
@@ -37,7 +37,7 @@ const UserProfile = () => {
 
 	return (
 		<>
-			{isLoading && <UserProfileSkeleton />}
+			{isAuthLoading && <UserProfileSkeleton />}
 			<div className="flex items-center gap-2">
 				<div className="ml-auto h-8 w-8 tablet:h-10 tablet:w-10 laptop:h-12 laptop:w-12 overflow-hidden rounded-full border-2 border-purple">
 					<img src={avatar} alt="Profile image" onError={handleImageError} />
