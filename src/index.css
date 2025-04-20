@@ -29,6 +29,13 @@ li {
 			system-ui,
 			sans-serif;
 	}
+	body {
+		@apply bg-light-bg text-black;
+	}
+
+	body.dark {
+		@apply bg-dark-bg text-white;
+	}
 }
 
 @layer utilities {
