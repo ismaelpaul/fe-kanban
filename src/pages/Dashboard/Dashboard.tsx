@@ -19,6 +19,7 @@ import { EditBoardModal } from '@/components/Boards/EditBoardModal';
 import { MainSkeleton } from '@/components/SkeletonLoader/MainSkeleton';
 import { EditTeamModal } from '@/components/Teams/EditTeamModal';
 import { AddNewTeamModal } from '@/components/Teams/AddNewTeamModal';
+import { TeamInvitationModal } from '@/components/Teams/TeamInvitationModal/TeamInvitationModal';
 
 const Dashboard = () => {
 	const [boardHasColumns, setBoardHasColumns] = useState(false);
@@ -69,6 +70,7 @@ const Dashboard = () => {
 
 			{modals.editTeamModal && <EditTeamModal />}
 			{modals.addNewTeamModal && <AddNewTeamModal />}
+			{modals.teamInvitationModal && <TeamInvitationModal />}
 
 			<SidebarNav />
 

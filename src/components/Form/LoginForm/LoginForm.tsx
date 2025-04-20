@@ -16,7 +16,7 @@ import { Button } from '@/components/Button';
 
 const LoginForm = () => {
 	const inputClass =
-		' border border-medium-grey border-opacity-25 rounded px-4 py-2 mt-1 mb-2 text-l-body w-full cursor-pointer hover:border-purple focus:outline-none';
+		' border border-medium-grey border-opacity-25 rounded px-4 py-2 mt-1 mb-2 text-l-body text-dark-grey w-full cursor-pointer hover:border-purple focus:outline-none';
 	const labelClass = 'text-s-heading text-black font-medium';
 	const errorClass = 'text-red text-l-body absolute';
 	const btnClass =

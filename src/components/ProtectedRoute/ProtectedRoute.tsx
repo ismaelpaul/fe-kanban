@@ -9,10 +9,10 @@ type ProtectedRouteProps = {
 };
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps): JSX.Element => {
-	const { user, isLoading, isError } = useAuth();
+	const { user, isAuthLoading, isError } = useAuth();
 	const location = useLocation();
 
-	if (isLoading) {
+	if (isAuthLoading) {
 		return <MainSkeleton />;
 	}
 

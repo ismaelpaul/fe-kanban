@@ -37,7 +37,7 @@ const Dropdown = ({
 	return (
 		<div
 			ref={modalRef}
-			className="flex items-center gap-2 relative cursor-pointer mt-2"
+			className="flex items-center gap-2 relative cursor-pointer"
 		>
 			<button
 				type="button"

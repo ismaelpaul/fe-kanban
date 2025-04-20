@@ -7,5 +7,5 @@ export const BoardSchema = z.object({
 });
 
 export const BoardSubmitSchema = BoardSchema.extend({
-	columns: z.array(ColumnSchema),
+	columns: z.array(ColumnSchema).optional().default([]),
 });
