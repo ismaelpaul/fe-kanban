@@ -29,3 +29,7 @@ export interface ITeamsStore {
 	selectedTeam: Team;
 	setSelectedTeam: (newSelectedTeam: Team) => void;
 }
+
+export interface TeamInvitationSubmit {
+	email: string;
+}
