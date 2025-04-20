@@ -23,6 +23,7 @@ const TeamMembers = ({ teamId }: TeamMembersProps) => {
 						className={`relative h-8 w-8 tablet:h-10 tablet:w-10 laptop:h-12 laptop:w-12 overflow-hidden rounded-full border-2 border-white dark:border-dark-grey ${
 							index > 0 ? '-ml-4 tablet:-ml-3' : 'z-10'
 						}`}
+						style={{ zIndex: teamMembers.length - index }}
 					>
 						<img
 							src={member.avatar}
