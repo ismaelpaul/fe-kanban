@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { WebSocketContextType } from '@/interfaces/IWebSocket';
 
 import { handlers } from '@/handlers';
+import { useAuth } from '@/hooks';
 
 export type WebSocketMessageType = keyof typeof handlers;
 
@@ -27,8 +28,11 @@ const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 	const [isConnected, setIsConnected] = useState(false);
 
 	const queryClient = useQueryClient();
+	const { isAuthenticated } = useAuth();
 
 	useEffect(() => {
+		if (!isAuthenticated) return;
+
 		const baseApiUrl = import.meta.env.VITE_BASE_URL;
 		const wsUrl =
 			baseApiUrl.replace(/^http/, 'ws').replace(/\/api\/?$/, '') + '/ws';
@@ -65,7 +69,7 @@ const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 		return () => {
 			socket.close();
 		};
-	}, []);
+	}, [isAuthenticated, queryClient]);
 
 	const sendMessage = (type: string, payload: object) => {
 		if (ws && ws.readyState === WebSocket.OPEN) {
