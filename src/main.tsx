@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContextProvider } from './contexts/ToastContext/ToastContext.tsx';
 import { App } from './App.tsx';
 import { AuthProvider } from './contexts/AuthContext/AuthContext.tsx';
+import { BrowserRouter } from 'react-router-dom';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -18,11 +19,13 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<QueryClientProvider client={queryClient}>
-		<AuthProvider>
-			<ToastContextProvider>
-				<App />
-			</ToastContextProvider>
-		</AuthProvider>
+		<BrowserRouter>
+			<AuthProvider>
+				<ToastContextProvider>
+					<App />
+				</ToastContextProvider>
+			</AuthProvider>
+		</BrowserRouter>
 		<ReactQueryDevtools initialIsOpen={true} />
 	</QueryClientProvider>
 );
